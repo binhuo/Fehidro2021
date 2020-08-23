@@ -14,38 +14,37 @@
 		<!-- Sidebar  -->
 		<nav id="sidebar">
 		<div class="sidebar-header">
-			<h3>Portal Fehidro</h3>
+			<h3>Portal CBH-BS</h3>
 		</div>
 
 		<ul id="lstMenus" class="list-unstyled components">
-			<p>Bem-vindo!</p>
-<!-- 			<li id="menuHome"><a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">Home</a></li> -->
-			<li id="menuCriterioAvaliacao">
-				<h:outputLink value="../criterioAvaliacao/index.xhtml">Critério de Avaliação</h:outputLink>
-			</li>
+			<p>Bem-vindo(a)!</p>
 			<li id="menuDeliberacao">
-				<h:outputLink value="../deliberacao/index.xhtml">Deliberações</h:outputLink>
+				<h:outputLink value="../deliberacao/index.xhtml" rendered="#{baseBean.isSecExecutiva}">Deliberações</h:outputLink>
 			</li>
 			<li id="menuInstituicao">
-				<h:outputLink value="../instituicao/index.xhtml">Instituições</h:outputLink>
+				<h:outputLink value="../instituicao/index.xhtml" rendered="#{baseBean.isSecExecutiva}">Instituições</h:outputLink>
 			</li>
 			<li id="menuPDC">
-				<h:outputLink value="../pdc/index.xhtml">PDCs e SubPDCs</h:outputLink>
+				<h:outputLink value="../pdc/index.xhtml" rendered="#{baseBean.isSecExecutiva}">PDCs e SubPDCs</h:outputLink>
 			</li>
-			<li id="menuProposta">				
-				<h:outputLink value="../proposta/index.xhtml">Propostas</h:outputLink>
+			<li id="menuCriterioAvaliacao">
+				<h:outputLink value="../criterioAvaliacao/index.xhtml" rendered="#{baseBean.isSecExecutiva}">Critério de Avaliação</h:outputLink>
 			</li>
 			<li id="menuTipoProposta">				
-				<h:outputLink value="../tipoProposta/index.xhtml">Tipos de Propostas</h:outputLink>
+				<h:outputLink value="../tipoProposta/index.xhtml" rendered="#{baseBean.isSecExecutiva}">Tipos de Propostas</h:outputLink>
 			</li>
-			<li id="menuUsuario">
-				<h:outputLink value="../usuario/index.xhtml">Usuários</h:outputLink>
+			<li id="menuProposta">				
+				<h:outputLink value="../proposta/index.xhtml" rendered="#{baseBean.isSecExecutiva or baseBean.isAvaliadorCtpg}">Propostas</h:outputLink>
 			</li>
 			<li id="menuAvaliacao">				
-				<h:outputLink value="../avaliacao/cadastro.xhtml">Avaliacao</h:outputLink>
+				<h:outputLink value="../avaliacao/cadastro.xhtml" rendered="#{baseBean.isSecExecutiva or baseBean.isAvaliadorCtpg}">Avaliação</h:outputLink>
 			</li>
 			<li id="menuRelatorio">
-				<h:outputLink value="../relatorio/index.xhtml">Relatorio</h:outputLink>
+				<h:outputLink value="../relatorio/index.xhtml" rendered="#{baseBean.isSecExecutiva}">Relatório</h:outputLink>
+			</li>
+			<li id="menuUsuario">
+				<h:outputLink value="../usuario/index.xhtml" rendered="#{baseBean.isSecExecutiva}">Usuários</h:outputLink>
 			</li>
 		</ul>
 		</nav>

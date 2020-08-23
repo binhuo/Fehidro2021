@@ -11,6 +11,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import fehidro.model.Usuario;
+import fehidro.model.enums.CodigoPerfilAcessoEnum;
 import fehidro.rest.client.UsuarioRESTClient;
 import fehidro.util.SessionContext;
 
@@ -48,7 +49,15 @@ public class LoginBean implements Serializable {
 				if (user != null && confereSenha(usuario.getSenha(), user.getSenha())) 
 				{
 					SessionContext.getInstance().setAttribute("usuarioLogado", user);
-					return "/deliberacao/index?faces-redirect=true";
+					if (user.getPerfilAcesso() == CodigoPerfilAcessoEnum.SecretariaExecutiva.getCodigo()) 
+					{
+						return "/deliberacao/index?faces-redirect=true";	
+					}
+					else if (user.getPerfilAcesso() == CodigoPerfilAcessoEnum.AvaliadorCtpg.getCodigo())
+					{
+						return "/avaliacao/cadastro?faces-redirect=true";
+					}
+					
 				} 
 				else 
 				{
