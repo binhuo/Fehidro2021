@@ -5,13 +5,14 @@ import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 
 import fehidro.model.Avaliacao;
 import fehidro.model.Relatorio;
 import fehidro.rest.client.AvaliacaoRESTClient;
 
 @ManagedBean(name="relatorioFinal")
-@SessionScoped
+@ViewScoped
 public class RelatorioFinalBean implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -30,14 +31,8 @@ public class RelatorioFinalBean implements Serializable {
 	public RelatorioFinalBean() {
 		relatorio = new Relatorio();
 		rest  = new AvaliacaoRESTClient();
-		System.out.println("===========Metodo gerar - R Final===============");
-		List<Avaliacao> avaliacoes = rest.findAll();//FIXME: Substituir por metodo mais apropriado + considerar data
+		List<Avaliacao> avaliacoes = rest.findAll();//TODO: Considerar armazenar desclassificacao no BD e pegar somente os classificados via REST.
 		
-//		if(avaliacoes == null)
-//		{
-//			System.out.println("TESTE");
-//		}
-//		System.out.println("> "+avaliacoes.toString());
 		this.relatorio.setItensRelatorio(avaliacoes);
 	}
 

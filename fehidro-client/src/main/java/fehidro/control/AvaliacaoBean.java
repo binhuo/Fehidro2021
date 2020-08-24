@@ -1,20 +1,27 @@
 package fehidro.control;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
 
 import fehidro.model.Avaliacao;
 import fehidro.model.CriterioAvaliacao;
 import fehidro.model.Pontuacao;
 import fehidro.model.Proposta;
 import fehidro.model.SubcriterioAvaliacao;
+import fehidro.model.Usuario;
+//import fehidro.model.SubcriterioAvaliacao;
+import fehidro.model.dto.SubcriterioExibicaoDTO;
 import fehidro.rest.client.AvaliacaoRESTClient;
 import fehidro.rest.client.CriterioAvaliacaoRESTClient;
+import fehidro.rest.client.PontuacaoRESTClient;
 import fehidro.rest.client.PropostaRESTClient;
+import fehidro.rest.client.SubcriterioAvaliacaoRESTClient;
+import fehidro.util.SessionContext;
 
 @ManagedBean
 @SessionScoped
@@ -23,103 +30,188 @@ public class AvaliacaoBean implements Serializable {
 
 	//Proposta
 	private PropostaRESTClient restProposta;
-	private List<Proposta> propostas;
-	private Proposta proposta;
+	private List<SelectItem> propostas;
 	//Subcriterio
-	private List<SubcriterioAvaliacao> subcriterios;
-	private SubcriterioAvaliacao subcriterio;
+	private SubcriterioAvaliacaoRESTClient restSubcriterio;
+	private List<SelectItem> subcriterios;
 	//Criterio
 	private CriterioAvaliacaoRESTClient restCriterio;
-	private List<CriterioAvaliacao> criterios;
-	private CriterioAvaliacao criterio;
+	private List<SelectItem> criterios;
 	//Pontuacao
-	private List<Pontuacao> pontuacoesSubcriterio;
-	private Pontuacao pontuacao;
+	private PontuacaoRESTClient restPontuacao;
+	private List<SelectItem> pontuacoes;
 	
+	//Avaliacao
 	private AvaliacaoRESTClient restAvaliacao;
 	private Avaliacao avaliacao;
 	private List<Avaliacao> avaliacoes;
 	
+//	private long idSubcriteiro;
+	private String consulta;
 	
-	//CONSTRUTOR
+//	public long getIdSubcriteiro() {
+//		return idSubcriteiro;
+//	}
+//
+//	public void setIdSubcriteiro(long idSubcriteiro) {
+//		this.idSubcriteiro = idSubcriteiro;
+//		this.avaliacao.getSubcriterio().setId(idSubcriteiro );
+//	}
+
+	public String getConsulta() {
+		return consulta;
+	}
+
+	public void setConsulta(String consulta) {
+		this.consulta = consulta;
+	}
+	
 	public AvaliacaoBean() {
-		this.restProposta = new PropostaRESTClient();
-		this.restCriterio = new CriterioAvaliacaoRESTClient();
-		
-		this.proposta = new Proposta();
-		this.criterio = new CriterioAvaliacao();
-		this.subcriterio = new SubcriterioAvaliacao();
-		this.pontuacao = new Pontuacao();
-		
-		//REST
-		setPropostas(restProposta.findAll());
-		setCriterios(restCriterio.findAll());
+		startView(true);
 	}
 	
-	public List<CriterioAvaliacao> getCriterios() {
-		return criterios;
-	}
-	public void setCriterios(List<CriterioAvaliacao> criterios) {
-		this.criterios = criterios;
-	}
-
-	public CriterioAvaliacao getCriterio() {
-		return criterio;
-	}
-	public void setCriterio(CriterioAvaliacao criterio) {
-		this.criterio = criterio;
-	}
-
-	//List pontuacoes
-	public List<Pontuacao> getPontuacoesSubcriterio() {
-		return pontuacoesSubcriterio;
-	}
-	public void setPontuacoesSubcriterio(List<Pontuacao> pontuacoesSubcriterio) {
-		this.pontuacoesSubcriterio = pontuacoesSubcriterio;
+	public String index() {
+		startView(true);
+		return "/avaliacao/index?faces-redirect=true"; 
 	}
 	
-	//Pontuacao
-	public Pontuacao getPontuacao() {
-		return pontuacao;
+	private void startView(boolean setInfo) {
+		this.restAvaliacao = new AvaliacaoRESTClient();
+		this.avaliacao = new Avaliacao();
+		this.avaliacao.setProposta(new Proposta());
+		this.avaliacao.setCriterio(new CriterioAvaliacao());
+		this.avaliacao.setSubcriterio(new SubcriterioAvaliacao());
+		ArrayList<Pontuacao> p = new ArrayList<Pontuacao>();
+		p.add(new Pontuacao());
+		this.avaliacao.getSubcriterio().setPontuacoes(p);
+		this.avaliacao.setNota(new Pontuacao());
+			
+		if (setInfo)
+			setInfo();
 	}
-	public void setPontuacao(Pontuacao pontuacao) {
-		this.pontuacao = pontuacao;
+	
+	private void setInfo() {
+		this.setAvaliacoes(this.restAvaliacao.findAll());
+		this.setPropostas();
+		this.setCriterios();
+		this.setSubcriterios();
+		this.setPontuacoes();
+	}
+	
+	public String cadastro() {
+		startView(true);
+		return "/avaliacao/cadastro?faces-redirect=true";
 	}
 
-	//Lista subcriterios
-	public List<SubcriterioAvaliacao> getSubcriterios() {
-		return subcriterios;
+	public String editar() 
+	{
+		if (avaliacao.getId() != null) {
+
+			Avaliacao a = this.restAvaliacao.find(avaliacao.getId());
+			setAvaliacao(a);
+		}
+		setInfo();
+
+		return "/avaliacao/cadastro?faces-redirect=true";
 	}
-	public void setSubcriterios(List<SubcriterioAvaliacao> subcriteriosProposta) {
-		this.subcriterios = subcriteriosProposta;
+	
+	public String salvar() {
+		
+		//this.avaliacao.setAvaliador( (Usuario)SessionContext.getInstance().getAttribute("usuarioLogado") ); //Cadastro do avaliador
+		
+		if ( this.avaliacao.getId() == null) {
+			this.restAvaliacao.create(this.avaliacao);
+		}
+		else {
+			this.restAvaliacao.edit(this.avaliacao);
+		}
+		startView(true);
+
+		return null;
 	}
 
-	//Subcriterio
-	public SubcriterioAvaliacao getSubcriterio() {
-		return subcriterio;
-	}
-	public void setSubcriterio(SubcriterioAvaliacao subcriterio) {
-		this.subcriterio = subcriterio;
-		this.pontuacao = null;//Reset, para evitar passar valor errado
-		this.pontuacoesSubcriterio = subcriterio.getPontuacoes();//Atualiza pontuacoes de acordo com o subcriterio
-	}
-
-	//Lista de propostas
-	public List<Proposta> getPropostas() {
+	//Propostas
+	public List<SelectItem> getPropostas() {
 		return propostas;
 	}
-	public void setPropostas(List<Proposta> propostas) {
+	public void setPropostas() {
+		this.restProposta = new PropostaRESTClient();
+		List<Proposta> propostasBase = this.restProposta.findAll();
+		List<SelectItem> propostas = new ArrayList<>();
+
+		for (Proposta i : propostasBase) 
+		{
+			propostas.add(new SelectItem(i.getId(), i.getNomeProjeto()));
+		}
+		
 		this.propostas = propostas;
 	}
-	
-	//Proposta
-	public Proposta getProposta() {
-		return proposta;
+	//Criterios
+	public List<SelectItem> getCriterios() {
+		return criterios;
 	}
-	public void setProposta(Proposta proposta) {
-		this.proposta = proposta;
+	public void setCriterios() {
+		this.restCriterio = new CriterioAvaliacaoRESTClient();
+		List<CriterioAvaliacao> criteriosBase = this.restCriterio.findAll();
+		List<SelectItem> criterios = new ArrayList<>();
+
+		for (CriterioAvaliacao i : criteriosBase) 
+		{
+			criterios.add(new SelectItem(i.getId(), i.getTitulo()));
+		}
+		
+		this.criterios = criterios;
+	}
+	//Pontuacoes
+	public List<SelectItem> getPontuacoes() {
+		return pontuacoes;
+	}
+	
+	public void setPontuacoes() {
+		this.restPontuacao = new PontuacaoRESTClient();
+		List<Pontuacao> pontuacaoBase = this.restPontuacao.findAll();
+		List<SelectItem> pontuacoes = new ArrayList<>();
+
+		for (Pontuacao i : pontuacaoBase) 
+		{
+			pontuacoes.add(new SelectItem(i.getId(), i.getTitulo()));
+		}
+		
+		this.pontuacoes = pontuacoes;
 	}
 
+	//Subcriterios
+	public List<SelectItem> getSubcriterios() {
+		return subcriterios;
+	}
+	public void setSubcriterios() {
+		this.restSubcriterio = new SubcriterioAvaliacaoRESTClient();
+		List<SubcriterioExibicaoDTO> dtos = restSubcriterio.obterSubcriteriosDTO();
+		List<SubcriterioAvaliacao> subcriteriosBase = new ArrayList<SubcriterioAvaliacao>();
+		
+		SubcriterioAvaliacao aux;
+		if(dtos != null) {
+			for(int i =0;i<dtos.size();i++)
+			{
+				aux = new SubcriterioAvaliacao();
+				aux.setId(dtos.get(i).getId());
+				aux.setLetra(dtos.get(i).getLetra());
+				aux.setNumero(dtos.get(i).getNumero());
+				aux.setTitulo(dtos.get(i).getTitulo());
+				subcriteriosBase.add(aux);
+			}
+		
+			System.out.println("Size = "+subcriteriosBase.size());
+			List<SelectItem> subcriterios = new ArrayList<>();
+	
+			for (SubcriterioAvaliacao i:subcriteriosBase ) 
+			{
+				subcriterios.add(new SelectItem( i.getId() , i.getTitulo() ) );
+			}
+			
+			this.subcriterios = subcriterios;
+		}
+	}
 
 	//Avaliacao
 	public Avaliacao getAvaliacao() {
@@ -128,7 +220,6 @@ public class AvaliacaoBean implements Serializable {
 	public void setAvaliacao(Avaliacao avaliacao) {
 		this.avaliacao = avaliacao;
 	}
-	
 	//List Avaliacoes
 	public List<Avaliacao> getAvaliacoes() {
 		return avaliacoes;
@@ -137,27 +228,4 @@ public class AvaliacaoBean implements Serializable {
 		this.avaliacoes = avaliacoes;
 	}
 
-	public String salvar()
-	{
-		avaliacao.setCriterio(criterio);
-		avaliacao.setSubcriterio(subcriterio);
-		avaliacao.setNota(pontuacao);
-		avaliacao.setProposta(proposta);
-		if(this.avaliacao.getId() == null)
-		{
-			//Não existe? Cria.
-			this.restAvaliacao.create(avaliacao);
-		}
-		else
-		{
-			//Ja existe? Edita.
-			this.restAvaliacao.edit(avaliacao);
-		}
-		
-		this.setAvaliacao(new Avaliacao());
-		this.setAvaliacoes(this.restAvaliacao.findAll());//TODO: possivelmente desnecessario
-		
-		return null;
-	}
-	
 }

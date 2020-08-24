@@ -73,7 +73,6 @@
 							</h:panelGroup>
 							
 							<h:panelGroup layout="block" class="form-group row">
-
 								<h:panelGroup layout="block" class="col align-self-center">
 								<h:panelGroup layout="block" class="custom-control custom-checkbox">
 									<h:selectBooleanCheckbox
@@ -164,6 +163,7 @@
 									<h:panelGroup layout="block" class="col-md-4">
 										<h:outputLabel for="txtPontuacaoSubcriterioPontos"
 											value="Ponto(s)" />
+											
 										<h:inputText id="txtPontuacaoSubcriterioPontos"
 											value="#{ps.pontos}" class="form-control" required="true"
 											requiredMessage="Informe o número de pontos dessa pontuação!">
@@ -172,6 +172,17 @@
 										</h:inputText>
 									</h:panelGroup>
 								</h:panelGroup>
+									<h:panelGroup layout="block" class="form-group row">
+										<h:panelGroup layout="block" class="col align-self-center">
+										<h:panelGroup layout="block" class="custom-control custom-checkbox">
+											<h:selectBooleanCheckbox
+												id="btPontuacaoSubcriterioDesclassificavel"
+												value="#{ps.desclassificavel}" class="custom-control-input" />
+											<h:outputLabel class="custom-control-label"
+												for="btPontuacaoSubcriterioDesclassificavel">Desclassificação automática</h:outputLabel>
+										</h:panelGroup>
+										</h:panelGroup>
+									</h:panelGroup>
 							</ui:repeat>
 						</h:panelGroup>
 					</ui:repeat>

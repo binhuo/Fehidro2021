@@ -2,8 +2,12 @@ package br.unisantos.fehidro.model.dao;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+
 import br.unisantos.fehidro.model.CriterioAvaliacao;
 import br.unisantos.fehidro.model.SubcriterioAvaliacao;
+import br.unisantos.fehidro.util.jpa.JPAEntityManager;
 
 public class CriterioAvaliacaoDAO extends DAOFactory<CriterioAvaliacao> {
 	
@@ -13,6 +17,18 @@ public class CriterioAvaliacaoDAO extends DAOFactory<CriterioAvaliacao> {
 	
 	public void cadastrar(CriterioAvaliacao criterioAvaliacao) {
 		adicionar(criterioAvaliacao);
+	}
+	
+	
+	public List<SubcriterioAvaliacao> obterSubcriterios(long id)
+	{
+		String query = "CriterioAvaliacao.obterSubcriterios";
+		EntityManager manager = JPAEntityManager.getEntityManager();
+		TypedQuery<SubcriterioAvaliacao> q = manager.createNamedQuery(query, SubcriterioAvaliacao.class);
+		q.setParameter(1, id);
+		List<SubcriterioAvaliacao> lista = q.getResultList();
+		//manager.close();//FIXME
+		return lista;
 	}
 	
 	public void atualizar(CriterioAvaliacao criterioAvaliacao) {

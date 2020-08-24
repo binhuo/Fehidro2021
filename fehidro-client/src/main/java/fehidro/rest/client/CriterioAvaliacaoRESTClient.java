@@ -9,6 +9,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import fehidro.model.CriterioAvaliacao;
+import fehidro.model.SubcriterioAvaliacao;
 
 public class CriterioAvaliacaoRESTClient implements RESTClientInterface<CriterioAvaliacao> {
 	@Override
@@ -18,6 +19,17 @@ public class CriterioAvaliacaoRESTClient implements RESTClientInterface<Criterio
 				target(REST_WEBSERVICE_URL + REST_CRITERIO_URL).
 				request(MediaType.APPLICATION_JSON).get().
 				readEntity(new GenericType<List<CriterioAvaliacao>> () {});
+		
+		return criterios;
+	}
+	
+	
+	public List<SubcriterioAvaliacao> obterSubcriterios(long id) {
+		List<SubcriterioAvaliacao> criterios  = 
+				ClientBuilder.newClient().
+				target(REST_WEBSERVICE_URL + REST_CRITERIO_URL + "subcriterios/" + id).
+				request(MediaType.APPLICATION_JSON).get().
+				readEntity(new GenericType<List<SubcriterioAvaliacao>> () {});
 		
 		return criterios;
 	}

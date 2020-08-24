@@ -23,14 +23,14 @@ public class DAOFactory<T> {
 			manager.persist(t);
 			manager.getTransaction().commit();
 		} finally {
-			manager.close();
+			//manager.close();//FIXME
 		}
 	}
 
 	public T consultar(Long id) {
 		manager = JPAEntityManager.getEntityManager();
 		T instancia = manager.find(classe, id);
-		manager.close();
+		//manager.close();//FIXME
 		return instancia;
 	}
 
@@ -41,7 +41,7 @@ public class DAOFactory<T> {
 			manager.merge(t);
 			manager.getTransaction().commit();
 		} finally {
-			manager.close();
+			//manager.close();//FIXME
 		}
 	}
 
@@ -67,7 +67,7 @@ public class DAOFactory<T> {
 			q.setParameter(i + 1, params[i]);
 		}
 		List<T> lista = q.getResultList();
-		manager.close();
+		//manager.close();//FIXME
 		return lista;
 	}
 
@@ -83,7 +83,7 @@ public class DAOFactory<T> {
 		} catch (NoResultException e) {
 			return null;
 		} finally {
-			manager.close();
+			//manager.close();//FIXME
 		}
 	}
 }

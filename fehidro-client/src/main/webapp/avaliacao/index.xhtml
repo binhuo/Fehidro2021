@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:body>
+	<ui:composition template="/shared/template.xhtml">
+		<ui:define name="content">
+			<h:inputHidden value="Avaliacao" id="menuAtual"/>
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+					<span class="input-group-text" id="basic-addon1"><i
+						class="fas fa-search"></i></span>
+				</div>
+				<h:inputText id="txtPesquisa" value="#{avaliacaoBean.consulta}"
+					class="form-control">
+					<f:passThroughAttribute name="placeholder" value="Pesquisa..." />
+				</h:inputText>
+			</div>
+
+			<div class="text-right">
+				<h:form>
+					<h:commandButton id="btnNovaAvaliacao" class="btn btn-outline-primary"
+						value="Nova avaliação" action="#{avaliacaoBean.cadastro}" />
+				</h:form>
+			</div>
+			<br />
+			
+			<h:dataTable value="#{avaliacaoBean.avaliacoes}" var="i" id="tabela" styleClass="table">
+				<h:column>
+					<f:facet name="header">Número</f:facet>
+					<h:outputText value="#{i.id}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Proposta</f:facet>
+					<h:outputText value="#{i.proposta.nomeProjeto}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Critério</f:facet>
+					<h:outputText value="#{i.criterio.titulo}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Subcritério</f:facet>
+					<h:outputText value="#{i.subcriterio.titulo}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Nota</f:facet>
+					<h:outputText value="#{i.nota.titulo}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header"></f:facet>
+					<h:form>				
+						<h:commandButton class="btn btn-outline-primary" value="Editar" action="#{avaliacaoBean.editar}">
+							<f:setPropertyActionListener target="#{avaliacaoBean.avaliacao.id}" value="#{i.id}" />
+					</h:commandButton>
+					</h:form>
+				</h:column>
+			</h:dataTable>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

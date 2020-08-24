@@ -90,7 +90,7 @@ public class UsuarioResource {
 
 	@PUT
 	@Produces("application/json")
-	@Consumes("application/json")
+	@Consumes(MediaType.APPLICATION_JSON)
 	public Response update(Usuario usuario) {		
 		UsuarioDAO dao = new UsuarioDAO();
 		dao.atualizar(usuario);
