@@ -11,55 +11,49 @@
 			<h:inputHidden value="Proposta" id="menuAtual" />
 			<h:form id="formProposta" enctype="multipart/form-data">
 				<h:inputHidden value="#{propostaBean.proposta.id}" id="propostaId" />
-				
-				<h:panelGroup layout="block" class="form-group row">			
+
+				<h:panelGroup layout="block" class="form-group row">
 					<h:panelGroup layout="block" class="col">
 						<h:outputLabel for="txtInstituicao">Instituição</h:outputLabel>
-						<h:selectOneMenu id="txtInstituicao" redisplay="false"
-							value="#{propostaBean.proposta.instituicao.id}"
-							class="form-control" required="true"
-							requiredMessage="Informe a instituição!">
+						<h:selectOneMenu id="txtInstituicao" redisplay="false" value="#{propostaBean.proposta.instituicao.id}"
+							class="form-control" required="true" requiredMessage="Informe a instituição!" disabled="#{baseBean.isAvaliadorCtpg}" >
 							<f:selectItems value="#{propostaBean.instituicoes}" />
 						</h:selectOneMenu>
 						<h:message for="txtInstituicao" styleClass="erro" />
-					</h:panelGroup>				
+					</h:panelGroup>
 				</h:panelGroup>
-				
+
 				<h:panelGroup layout="block" class="form-group row">
 					<h:panelGroup layout="block" class="col">
 						<h:outputLabel for="txtNomeProjeto">Nome do projeto</h:outputLabel>
-						<h:inputText id="txtNomeProjeto" value="#{propostaBean.proposta.nomeProjeto}" class="form-control" 
-							required="true" requiredMessage="Informe o nome do projeto!" maxlength="100">
+						<h:inputText id="txtNomeProjeto" value="#{propostaBean.proposta.nomeProjeto}" class="form-control"
+							required="true" requiredMessage="Informe o nome do projeto!" maxlength="100" disabled="#{baseBean.isAvaliadorCtpg}">
 							<f:passThroughAttribute name="placeholder" value="Nome da projeto" />
 						</h:inputText>
 						<h:message for="txtNomeProjeto" styleClass="erro" />
 					</h:panelGroup>
 				</h:panelGroup>
-				
-				<h:panelGroup layout="block" class="form-group row">			
+
+				<h:panelGroup layout="block" class="form-group row">
 					<h:panelGroup layout="block" class="col">
 						<h:outputLabel for="txtSubPDC">SubPDC</h:outputLabel>
-						<h:selectOneMenu id="txtSubPDC" redisplay="false"
-							value="#{propostaBean.proposta.subPDC.id}"
-							class="form-control" required="true"
-							requiredMessage="Informe o subPDC!">
+						<h:selectOneMenu id="txtSubPDC" redisplay="false" value="#{propostaBean.proposta.subPDC.id}" 
+						class="form-control" required="true" requiredMessage="Informe o subPDC!" disabled="#{baseBean.isAvaliadorCtpg}">
 							<f:selectItems value="#{propostaBean.subpdcs}" />
 						</h:selectOneMenu>
 						<h:message for="txtSubPDC" styleClass="erro" />
-					</h:panelGroup>				
+					</h:panelGroup>
 				</h:panelGroup>
 
 				<h:panelGroup layout="block" class="form-group row">
 					<h:panelGroup layout="block" class="col-sm-4">
 						<h:outputLabel value="Tipos da proposta" />
 					</h:panelGroup>
-					<h:panelGroup layout="block"
-						class="col custom-control custom-checkbox">
-						<h:selectManyCheckbox value="#{propostaBean.proposta.tiposProposta}"
-							converter="tipoPropostaConverter" multiple="true">
-							<f:selectItems
-								value="#{propostaBean.tiposPropostasSelecionadosValue}"
-								var="tp" itemLabel="#{tp.nome}" itemValue="#{tp}" />
+					<h:panelGroup layout="block" class="col custom-control custom-checkbox">
+						<h:selectManyCheckbox value="#{propostaBean.proposta.tiposProposta}" converter="tipoPropostaConverter" 
+						multiple="true" disabled="#{baseBean.isAvaliadorCtpg}">
+							<f:selectItems value="#{propostaBean.tiposPropostasSelecionadosValue}" var="tp"
+								itemLabel="#{tp.nome}" itemValue="#{tp}" />
 						</h:selectManyCheckbox>
 					</h:panelGroup>
 				</h:panelGroup>
@@ -67,80 +61,128 @@
 				<h:panelGroup layout="block" class="form-group row">
 					<h:panelGroup layout="block" class="col-6">
 						<h:outputLabel for="fileTermoReferencia">Termo de referência</h:outputLabel>
-						<h:inputFile  id="fileTermoReferencia" value="#{propostaBean.proposta.termoReferencia}" class="form-control-file" 
-							required="#{propostaBean.proposta.nomeArquivoTermoReferencia == null}" requiredMessage="Anexe o termo de referência!">
+						<h:inputFile id="fileTermoReferencia"
+							value="#{propostaBean.proposta.termoReferencia}"
+							class="form-control-file" rendered="#{baseBean.isSecExecutiva}"
+							required="#{propostaBean.proposta.nomeArquivoTermoReferencia == null}"
+							requiredMessage="Anexe o termo de referência!">
 						</h:inputFile>
 						<h:message for="fileTermoReferencia" styleClass="erro" />
 					</h:panelGroup>
+					
 					<h:panelGroup layout="block" class="col-4 text-left align-self-center" rendered="#{propostaBean.proposta.id > 0}">
-						<h:commandLink  immediate="true"  type="button" class="btn btn-outline-primary" title="Baixar termo referência" action="#{propostaBean.download}">
-    						    <f:setPropertyActionListener target="#{propostaBean.targetDownload}" value="#{propostaBean.proposta.nomeArquivoTermoReferencia}" />
-    						<i class="fas fa-download"></i>
+						<h:commandLink immediate="true" type="button"
+							class="btn btn-outline-primary" title="Baixar termo referência"
+							action="#{propostaBean.download}">
+							<f:setPropertyActionListener
+								target="#{propostaBean.targetDownload}"
+								value="#{propostaBean.proposta.nomeArquivoTermoReferencia}" />
+							<i class="fas fa-download"></i>
 						</h:commandLink>
 					</h:panelGroup>
 				</h:panelGroup>
-				
+
 				<h:panelGroup layout="block" class="form-group row">
 					<h:panelGroup layout="block" class="col-6">
 						<h:outputLabel for="fileCronogramaFinanceiro">Cronograma Físico Financeiro</h:outputLabel>
-						<h:inputFile  id="fileCronogramaFinanceiro" value="#{propostaBean.proposta.cronogramaFisicoFinanceiro}" class="form-control-file" 
-							required="#{propostaBean.proposta.nomeArquivoCronogramaFisicoFinanceiro == null}" requiredMessage="Anexe o cronograma físico financeiro!">
+						<h:inputFile id="fileCronogramaFinanceiro"
+							value="#{propostaBean.proposta.cronogramaFisicoFinanceiro}"
+							class="form-control-file" rendered="#{baseBean.isSecExecutiva}"
+							required="#{propostaBean.proposta.nomeArquivoCronogramaFisicoFinanceiro == null}"
+							requiredMessage="Anexe o cronograma físico financeiro!">
 						</h:inputFile>
 						<h:message for="fileCronogramaFinanceiro" styleClass="erro" />
 					</h:panelGroup>
-					<h:panelGroup layout="block" class="col-4 text-left align-self-center" rendered="#{propostaBean.proposta.id > 0}">
-						<h:commandLink immediate="true"  type="button" class="btn btn-outline-primary" title="Baixar cronograma físico financeiro" action="#{propostaBean.download}">
-    						    <f:setPropertyActionListener target="#{propostaBean.targetDownload}" value="#{propostaBean.proposta.nomeArquivoCronogramaFisicoFinanceiro}" />
-    						<i class="fas fa-download"></i>
+					
+					<h:panelGroup layout="block" class="col-4 text-left align-self-center"
+						rendered="#{propostaBean.proposta.id > 0}">
+						<h:commandLink immediate="true" type="button"
+							class="btn btn-outline-primary"
+							title="Baixar cronograma físico financeiro"
+							action="#{propostaBean.download}">
+							<f:setPropertyActionListener
+								target="#{propostaBean.targetDownload}"
+								value="#{propostaBean.proposta.nomeArquivoCronogramaFisicoFinanceiro}" />
+							<i class="fas fa-download"></i>
 						</h:commandLink>
 					</h:panelGroup>
 				</h:panelGroup>
-				
+
 				<h:panelGroup layout="block" class="form-group row">
 					<h:panelGroup layout="block" class="col-6">
 						<h:outputLabel for="filePlanilhaOrcamento">Planilha de Orçamento</h:outputLabel>
-						<h:inputFile  id="filePlanilhaOrcamento" value="#{propostaBean.proposta.planilhaOrcamento}" class="form-control-file" 
-							required="#{propostaBean.proposta.nomeArquivoPlanilhaOrcamento == null}" requiredMessage="Anexe a planilha de orçamento!">
+						<h:inputFile id="filePlanilhaOrcamento"
+							value="#{propostaBean.proposta.planilhaOrcamento}"
+							class="form-control-file" rendered="#{baseBean.isSecExecutiva}"
+							required="#{propostaBean.proposta.nomeArquivoPlanilhaOrcamento == null}"
+							requiredMessage="Anexe a planilha de orçamento!">
 						</h:inputFile>
 						<h:message for="filePlanilhaOrcamento" styleClass="erro" />
 					</h:panelGroup>
-					<h:panelGroup layout="block" class="col-4 text-left align-self-center" rendered="#{propostaBean.proposta.id > 0}">
-						<h:commandLink immediate="true"  type="button" class="btn btn-outline-primary" title="Baixar planilha de orçamento" action="#{propostaBean.download}">
-    						    <f:setPropertyActionListener target="#{propostaBean.targetDownload}" value="#{propostaBean.proposta.nomeArquivoPlanilhaOrcamento}" />
-    						<i class="fas fa-download"></i>
+					
+					<h:panelGroup layout="block"
+						class="col-4 text-left align-self-center"
+						rendered="#{propostaBean.proposta.id > 0}">
+						<h:commandLink immediate="true" type="button"
+							class="btn btn-outline-primary"
+							title="Baixar planilha de orçamento"
+							action="#{propostaBean.download}">
+							<f:setPropertyActionListener
+								target="#{propostaBean.targetDownload}"
+								value="#{propostaBean.proposta.nomeArquivoPlanilhaOrcamento}" />
+							<i class="fas fa-download"></i>
 						</h:commandLink>
 					</h:panelGroup>
 				</h:panelGroup>
-				
+
 				<h:panelGroup layout="block" class="form-group row">
 					<h:panelGroup layout="block" class="col-6">
 						<h:outputLabel for="fileFichaResumo">Ficha resumo</h:outputLabel>
-						<h:inputFile  id="fileFichaResumo" value="#{propostaBean.proposta.fichaResumo}" class="form-control-file" 
-							required="#{propostaBean.proposta.nomeArquivoFichaResumo == null}" requiredMessage="Anexe a ficha de resumo!">
+						<h:inputFile id="fileFichaResumo"
+							value="#{propostaBean.proposta.fichaResumo}"
+							class="form-control-file" rendered="#{baseBean.isSecExecutiva}"
+							required="#{propostaBean.proposta.nomeArquivoFichaResumo == null}"
+							requiredMessage="Anexe a ficha de resumo!">
 						</h:inputFile>
 						<h:message for="fileFichaResumo" styleClass="erro" />
 					</h:panelGroup>
-					<h:panelGroup layout="block" class="col-4 text-left align-self-center" rendered="#{propostaBean.proposta.id > 0}">
-						<h:commandLink immediate="true"  type="button" class="btn btn-outline-primary" title="Baixar ficha de resumo" action="#{propostaBean.download}">
-    						    <f:setPropertyActionListener target="#{propostaBean.targetDownload}" value="#{propostaBean.proposta.nomeArquivoFichaResumo}" />
-    						<i class="fas fa-download"></i>
+					
+					<h:panelGroup layout="block"
+						class="col-4 text-left align-self-center"
+						rendered="#{propostaBean.proposta.id > 0}">
+						<h:commandLink immediate="true" type="button"
+							class="btn btn-outline-primary" title="Baixar ficha de resumo"
+							action="#{propostaBean.download}">
+							<f:setPropertyActionListener
+								target="#{propostaBean.targetDownload}"
+								value="#{propostaBean.proposta.nomeArquivoFichaResumo}" />
+							<i class="fas fa-download"></i>
 						</h:commandLink>
 					</h:panelGroup>
 				</h:panelGroup>
 
 				<h:panelGroup layout="block" class="form-row mt-5">
-					<h:panelGroup layout="block" class="col text-right">
-						<h:commandButton id="btnCancel"
-							class="btn btn-outline-danger" value="Cancelar" action="#{propostaBean.index}" immediate="true">
+					<h:panelGroup layout="block" class="col text-right" rendered="#{baseBean.isSecExecutiva}">
+						<h:commandButton id="btnCancel" class="btn btn-outline-danger"
+							value="Cancelar" action="#{propostaBean.index}" immediate="true">
 							<h:message for="btnCancel" styleClass="erro" />
 						</h:commandButton>
 					</h:panelGroup>
-					<h:panelGroup layout="block" class="col text-left">
+					
+					<h:panelGroup layout="block" class="col text-center" rendered="#{baseBean.isAvaliadorCtpg}">
+						<h:commandButton id="btnVoltar"	class="btn btn-outline-primary" value="Voltar"
+							action="#{propostaBean.index}" immediate="true">
+							<h:message for="btnVoltar" styleClass="erro" />
+						</h:commandButton>
+					</h:panelGroup>
+
+					<h:panelGroup layout="block" class="col text-left" rendered="#{baseBean.isSecExecutiva}">
 						<h:commandButton id="btnCadastrar" class="btn btn-outline-success"
 							value="Salvar" action="#{propostaBean.salvar}">
 							<h:message for="btnCadastrar" styleClass="erro" />
 						</h:commandButton>
 					</h:panelGroup>
+					
 				</h:panelGroup>
 			</h:form>
 			<h:outputScript library="js" name="proposta.js" target="head" />

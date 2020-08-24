@@ -64,6 +64,18 @@ a:focus {
     transition: all 0.3s;
 }
 
+.help-nav{
+	margin-bottom: 2%;
+}
+
+.help-nav h1 { 
+	font-size: 1.5rem !important;
+}
+
+.help-nav small {
+	color: gray;
+}
+
 /* .custom-control input { */
 /* 	position: absolute; */
 /*     left: 0; */

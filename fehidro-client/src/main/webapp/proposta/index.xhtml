@@ -23,7 +23,7 @@
 			<div class="text-right">
 				<h:form>
 					<h:commandButton id="btnNovaProposta" class="btn btn-outline-primary"
-						value="Nova proposta" action="#{propostaBean.cadastro}" />
+						value="Nova proposta" action="#{propostaBean.cadastro}" rendered="#{baseBean.isSecExecutiva}"/>
 				</h:form>
 			</div>
 			<br />
@@ -44,7 +44,7 @@
 				<h:column>
 					<f:facet name="header"></f:facet>
 					<h:form>				
-						<h:commandButton class="btn btn-outline-primary" value="Editar" action="#{propostaBean.editar}">
+						<h:commandButton class="btn btn-outline-primary" value="#{baseBean.isSecExecutiva ? 'Editar' : 'Ver'}" action="#{propostaBean.editar}">
 							<f:setPropertyActionListener target="#{propostaBean.idProposta}" value="#{i.id}" />
 					</h:commandButton>
 					</h:form>
