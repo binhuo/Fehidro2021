@@ -41,9 +41,9 @@ public class EmailUtil {
                     InternetAddress.parse(email)
             );
             message.setSubject("Fehidro - Cadastro feito com sucesso");
-            message.setText("Olï¿½, " + nome + "!\n"
-                    + 	"\n\n Vocï¿½ foi cadastrado com sucesso no sistema da Fehidro!"
-                    + 	"\n\n Seus dados para entrar no sistema sï¿½o:"
+            message.setText("Olá, " + nome + "!\n"
+                    + 	"\n\n Você foi cadastrado com sucesso no sistema da Fehidro!"
+                    + 	"\n\n Seus dados para entrar no sistema são:"
                     +	"\n\t Login: " + login
                     +	"\n\t Senha: " + senha
                     +	"\n\n Seja bem vinda(o)!!!");
