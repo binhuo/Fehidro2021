@@ -1,5 +1,3 @@
-//TODO: implementar
-
 package fehidro.rest.client;
 
 import java.util.List;

@@ -1,6 +1,7 @@
 package fehidro.model;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,12 +11,15 @@ import fehidro.control.ItemRelatorio;
 public class Relatorio  {
 	
 	protected HashMap<Long, ItemRelatorio> itensRelatorio;
-	protected List<Long> idsPropostas; //Lista usada para auxiliar na manipulação dos itemRelatorio dentro do mapa. Deve ser igual aos Keys do mapa itensRelatorio.
-	
+	//TODO: Substituir por Sets para evitar repeticao de calculo de classificacao - vide setItensRelatorio()
+	protected List<Long> idsPropostas; //Lista usada para auxiliar na manipulacao dos itemRelatorio dentro do mapa. Deve ser igual aos Keys do mapa itensRelatorio.
+	protected List<Long> idsSubpdcs;
 	//Construtores
 	public Relatorio()
 	{
 		itensRelatorio = new HashMap<Long, ItemRelatorio>();
+		idsPropostas = new ArrayList<Long>();
+		idsSubpdcs = new ArrayList<Long>();
 	}
 	
 	public Relatorio(List<Avaliacao> avaliacoes)
@@ -25,14 +29,31 @@ public class Relatorio  {
 	
 	//Metodos
 	
-	public void calcularClassificacao() {
-		ItemRelatorio[] arr = new ItemRelatorio[itensRelatorio.size()]; //Cria um array
-		new LinkedList<ItemRelatorio>(itensRelatorio.values()).toArray(arr); //Transforma a lista em array para uso na classe quicksort
-		QuickSort q = new QuickSort();
-		q.sort(arr, 0, arr.length-1); //ordena por soma das notas
-		for(int i=0;i<arr.length;i++)//atribui a classificacao
+	public ItemRelatorio[] itensPorSubpdc(Long id, ArrayList<ItemRelatorio> listaFiltrar)	{
+		ArrayList<ItemRelatorio> auxOut = new ArrayList<>();
+		for(int i=0;i<listaFiltrar.size();i++)
 		{
-			itensRelatorio.get(arr[i].getProposta().getId()).setClassificacao(i+1);
+			if(listaFiltrar.get(i).getProposta().getSubPDC().getId() == id) {
+				auxOut.add(listaFiltrar.get(i));
+			}
+		}
+		ItemRelatorio[] out = new ItemRelatorio[auxOut.size()];
+		out = auxOut.toArray(out);
+		
+		return out;
+	}
+	
+	public void calcularClassificacao() {
+		ItemRelatorio[] arr = new ItemRelatorio[itensRelatorio.size()]; 
+		for(int j=0;j<idsSubpdcs.size();j++)
+		{
+			arr = itensPorSubpdc(idsSubpdcs.get(j), new ArrayList<ItemRelatorio>(this.itensRelatorio.values())); 
+			QuickSort q = new QuickSort();
+			q.sort(arr, 0, arr.length-1); //ordena por soma das notas
+			for(int i=0;i<arr.length;i++)//atribui a classificacao
+			{
+				itensRelatorio.get(arr[(arr.length-1) - i].getProposta().getId()).setClassificacao(i+1);
+			}
 		}
 	}
 	
@@ -40,23 +61,26 @@ public class Relatorio  {
 	{
 		Avaliacao avaliacaoAtual;
 		Long idPropostaAtual;
+		Long idSubpdcAtual;
 		idsPropostas = new LinkedList<>(); //Reset dos ids
-		for(int i =0;i<avaliacoes.size();i++)
-		{
-			avaliacaoAtual = avaliacoes.get(i);
-			idPropostaAtual = avaliacaoAtual.getProposta().getId();
-			
-			if(this.itensRelatorio.get(idPropostaAtual) == null)//Se não existir um itemRelatorio para a proposta nao existir, crie um itemRelatorio
+		if(avaliacoes != null) {
+			for(int i =0;i<avaliacoes.size();i++)
 			{
-				this.itensRelatorio.put(idPropostaAtual, new ItemRelatorio() );
-				this.idsPropostas.add(idPropostaAtual);
+				avaliacaoAtual = avaliacoes.get(i);
+				idPropostaAtual = avaliacaoAtual.getProposta().getId();
+				idSubpdcAtual = avaliacaoAtual.getProposta().getSubPDC().getId();
+				if(this.itensRelatorio.get(idPropostaAtual) == null)//Se nao existir um itemRelatorio para a proposta nao existir, crie um itemRelatorio
+				{
+					this.itensRelatorio.put(idPropostaAtual, new ItemRelatorio() );
+					this.idsPropostas.add(idPropostaAtual);
+					this.idsSubpdcs.add(idSubpdcAtual);
+				}
+				
+				this.itensRelatorio.get(idPropostaAtual).addAvaliacao(avaliacaoAtual);//Adicione a avaliacao a uma proposta
 			}
 			
-			this.itensRelatorio.get(idPropostaAtual).addAvaliacao(avaliacaoAtual);//Adicione a avaliacao à proposta
+			calcularClassificacao();//calcula a classificacao
 		}
-		
-		calcularClassificacao();//calcula a classificacao
-		
 	}
 	
 	public LinkedList<ItemRelatorio> getItensRelatorio()
@@ -71,7 +95,7 @@ public class Relatorio  {
 		for(int i=0;i<this.itensRelatorio.size();i++)//Navegue todos os itens desse relatorio
 		{
 			itemAtual = itensRelatorio.get(idsPropostas.get(i));
-			if(!itemAtual.isDesclassificado())//Se NÃO for desclassificado, adicione
+			if(!itemAtual.isDesclassificado())//Se NaO for desclassificado, adicione
 			{
 				classificados.add(itemAtual);
 			}
@@ -98,7 +122,7 @@ public class Relatorio  {
 	
 }
 
-//Para uso na classificação
+//Para uso na classificacao
 class QuickSort 
 { 
     int partition(ItemRelatorio arr[], int low, int high) 
@@ -107,7 +131,7 @@ class QuickSort
         int i = (low-1);
         for (int j=low; j<high; j++) 
         { 
-            if (arr[j].getSoma() <= pivot.getSoma()) 
+            if (arr[j].getSoma() < pivot.getSoma()) 
             { 
                 i++; 
   

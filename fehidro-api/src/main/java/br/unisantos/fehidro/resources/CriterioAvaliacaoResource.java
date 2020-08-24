@@ -27,6 +27,28 @@ public class CriterioAvaliacaoResource {
 		return Response.ok(criterios).build();
 	}
 	
+	@Path("subcriterios/{id}")
+	@GET
+	@Produces("application/json")
+	public Response obterSubcriterios(@PathParam("id") Long id) {
+		CriterioAvaliacaoDAO dao = new CriterioAvaliacaoDAO();
+		List<SubcriterioAvaliacao> subcriterios = dao.obterSubcriterios(id);
+		for(SubcriterioAvaliacao c : subcriterios) {
+			c.setPontuacoes(new ArrayList<Pontuacao>());
+		}
+		return Response.ok(subcriterios).build();
+	}
+	
+//	@Path("/completo")
+//	@GET
+//	@Produces("application/json")
+//	public Response getCompleto() {
+//		System.out.println("Resource - getCompleto()");
+//		CriterioAvaliacaoDAO dao = new CriterioAvaliacaoDAO();
+//		List<CriterioAvaliacao> criterios = dao.listarCriterioCompleto();
+//		return Response.ok(criterios).build();
+//	}
+	
 	@Path("/{id}")
 	@GET
 	@Produces("application/json")

@@ -12,15 +12,11 @@
 			<h:dataTable value="#{relatorioParcial.relatorio.itensRelatorio}" var="itemRelatorio" id="tabela" styleClass="table">
 				<h:column>
 					<f:facet name="header">Título</f:facet>
-					<h:outputText value="#{itemRelatorio.proposta.titulo}" />
+					<h:outputText value="#{itemRelatorio.proposta.nomeProjeto}" />
 				</h:column>
 				<h:column>
 					<f:facet name="header">SubPDC</f:facet>
-					<h:outputText value="#{itemRelatorio.subPDC.titulo}" />
-				</h:column>
-				<h:column>
-					<f:facet name="header">Valor</f:facet>
-					<h:outputText value="#{itemRelatorio.proposta.valor}" />
+					<h:outputText value="#{itemRelatorio.proposta.subPDC.titulo}" />
 				</h:column>
 				<h:column>
 					<f:facet name="header">Nota Parcial</f:facet>

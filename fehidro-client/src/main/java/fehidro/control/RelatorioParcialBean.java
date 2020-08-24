@@ -6,13 +6,14 @@ import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 
 import fehidro.model.Avaliacao;
 import fehidro.model.Relatorio;
 import fehidro.rest.client.AvaliacaoRESTClient;
 
 @ManagedBean(name="relatorioParcial")
-@SessionScoped
+@ViewScoped
 public class RelatorioParcialBean implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -31,14 +32,8 @@ public class RelatorioParcialBean implements Serializable {
 	public RelatorioParcialBean() {
 		relatorio = new Relatorio();
 		rest  = new AvaliacaoRESTClient();
-		System.out.println("===========Metodo gerar - R Parcial===============");
-		List<Avaliacao> avaliacoes = rest.findAll();//FIXME: Substituir por metodo mais apropriado + considerar data
+		List<Avaliacao> avaliacoes = rest.findAll();
 		
-//		if(avaliacoes == null)
-//		{
-//			System.out.println("TESTE");
-//		}
-//		System.out.println("> "+avaliacoes.toString());
 		this.relatorio.setItensRelatorio(avaliacoes);
 	}
 

@@ -2,54 +2,76 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
 	<ui:composition template="/shared/template.xhtml">
 		<ui:define name="content">
 			<h:inputHidden value="Avaliacao" id="menuAtual" />
-			<h:form id="formAvaliacao">
-				<h:panelGroup layout="block" class="form-row">
+			<h:form id="formAvaliacao" enctype="multipart/form-data">
+				<h:inputHidden value="#{avaliacaoBean.avaliacao.id}" id="avaliacaoId" />
+				
+				<h:panelGroup layout="block" class="form-group row">			
 					<h:panelGroup layout="block" class="col">
-						<h:outputLabel value="Proposta" id="txtProposta" />
-						<h:selectOneMenu id="cmbProposta" value="#{avaliacaoBean.proposta.id}">
-							<f:selectItems value="#{avaliacaoBean.propostas}" var="p" itemLabel="#{p.nomeProjeto}" itemValue="#{p.id}"/>
+						<h:outputLabel for="txtProposta">Proposta</h:outputLabel>
+						<h:selectOneMenu id="txtProposta" redisplay="false"
+							value="#{avaliacaoBean.avaliacao.proposta.id}"
+							class="form-control" required="true"
+							requiredMessage="Informe a instituição!">
+							<f:selectItems value="#{avaliacaoBean.propostas}" />
 						</h:selectOneMenu>
-					</h:panelGroup>
-					
-					<h:panelGroup layout="block" class="col">
-						<h:outputLabel value="Criterio" id="txtCriterio" />
-						<h:selectOneMenu id="cmbCriterio" value="#{avaliacaoBean.criterio.id}" >
-							<f:selectItems value="#{avaliacaoBean.criterios}" var="s" itemLabel="#{s.titulo}" itemValue="#{s.id}"/>
-						</h:selectOneMenu>
-					</h:panelGroup>
-					
-					<h:panelGroup layout="block" class="col">
-						<h:outputLabel value="Subcriterio" id="txtSubcriterio" />
-						<h:selectOneMenu id="cmbSubcriterio" value="#{avaliacaoBean.subcriterio.id}">
-						<f:selectItems value="#{avaliacaoBean.subcriterios}" var="s" itemLabel="#{s.titulo}" itemValue="#{s.id}"/>
-						</h:selectOneMenu>
-					</h:panelGroup>
-					
-					<h:panelGroup layout="block" class="col">
-						<h:outputLabel value="Pontuação" id="txtPontuacao" />
-						<h:selectOneMenu id="cmbAvaliacao" value="#{avaliacaoBean.pontuacao.id}">
-						<f:selectItems value="#{avaliacaoBean.pontuacoesSubcriterio}" var="o" itemLabel="#{o.titulo}" itemValue="#{o.id}"/>
-						</h:selectOneMenu>
-					</h:panelGroup>
-					
+						<h:message for="txtProposta" styleClass="erro" />
+					</h:panelGroup>				
 				</h:panelGroup>
 				
-
-				<hr />
+				<h:panelGroup layout="block" class="form-group row">			
+					<h:panelGroup layout="block" class="col">
+						<h:outputLabel for="txtCriterio">Criterio</h:outputLabel>
+						<h:selectOneMenu id="txtCriterio" redisplay="false"
+							value="#{avaliacaoBean.avaliacao.criterio.id}"
+							class="form-control" required="true"
+							requiredMessage="Informe o criterio!">
+							<f:selectItems value="#{avaliacaoBean.criterios}" />
+						</h:selectOneMenu>
+						<h:message for="txtCriterio" styleClass="erro" />
+					</h:panelGroup>				
+				</h:panelGroup>
 				
-				<h:panelGroup layout="block" class="form-row">
+				<h:panelGroup layout="block" class="form-group row">			
+					<h:panelGroup layout="block" class="col">
+						<h:outputLabel for="txtSubcriterio">Subcriterio</h:outputLabel>
+						<h:selectOneMenu id="txtSubcriterio" redisplay="false"
+							value="#{avaliacaoBean.avaliacao.subcriterio.id}"
+							class="form-control" required="true"
+							requiredMessage="Informe o subcriterio!">
+							<f:selectItems value="#{avaliacaoBean.subcriterios}" />
+							
+						</h:selectOneMenu>
+						<h:message for="txtSubcriterio" styleClass="erro" />
+					</h:panelGroup>				
+				</h:panelGroup>
+
+				<h:panelGroup layout="block" class="form-group row">			
+					<h:panelGroup layout="block" class="col">
+						<h:outputLabel for="txtNota">Nota</h:outputLabel>
+						<h:selectOneMenu id="txtNota" redisplay="false"
+							value="#{avaliacaoBean.avaliacao.nota.id}"
+							class="form-control" required="true"
+							requiredMessage="Informe a nota!">
+							<f:selectItems value="#{avaliacaoBean.pontuacoes}" />
+						</h:selectOneMenu>
+						<h:message for="txtNota" styleClass="erro" />
+					</h:panelGroup>				
+				</h:panelGroup>
+
+
+				<h:panelGroup layout="block" class="form-row mt-5">
 					<h:panelGroup layout="block" class="col text-right">
-						<h:button id="btnCancel" type="button"
-							class="btn btn-outline-danger" value="Cancelar" outcome="index">
+						<h:commandButton id="btnCancel"
+							class="btn btn-outline-danger" value="Cancelar" action="#{avaliacaoBean.index}" immediate="true">
 							<h:message for="btnCancel" styleClass="erro" />
-						</h:button>
+						</h:commandButton>
 					</h:panelGroup>
 					<h:panelGroup layout="block" class="col text-left">
 						<h:commandButton id="btnCadastrar" class="btn btn-outline-success"
@@ -59,7 +81,7 @@
 					</h:panelGroup>
 				</h:panelGroup>
 			</h:form>
-			
+			<h:outputScript library="js" name="avaliacao.js" target="head" />
 		</ui:define>
 	</ui:composition>
 </h:body>
