@@ -14,12 +14,11 @@ public class UsuarioRESTClient implements RESTClientInterface<Usuario>{
 
 	@Override
 	public List<Usuario> findAll() {
-		Client c = ClientBuilder.newClient();
-		WebTarget target = c.target(REST_WEBSERVICE_URL + REST_USUARIO_URL);
-		javax.ws.rs.client.Invocation.Builder builder = target.request(MediaType.APPLICATION_JSON);
-		Response response = builder.get();
-		System.out.println(response.toString());
-		List<Usuario> usuarios = response.readEntity(new GenericType<List<Usuario>> () {});
+		List<Usuario> usuarios = 	
+				ClientBuilder.newClient().
+				target(REST_WEBSERVICE_URL + REST_USUARIO_URL).
+				request(MediaType.APPLICATION_JSON).get().
+				readEntity(new GenericType<List<Usuario>> () {});
 		
 		return usuarios;
 	}
