@@ -146,7 +146,7 @@ public class PropostaBean implements Serializable {
 		this.proposta.setNomeArquivoCronogramaFisicoFinanceiro(p.getNomeArquivoCronogramaFisicoFinanceiro());
 		
 		p.setNomeArquivoPlanilhaOrcamento(p.getId().toString() 
-				+ ".planilha-or�amento"
+				+ ".planilha-orçamento"
 				+ obterExtensaoArquivo(this.proposta.getPlanilhaOrcamento().getSubmittedFileName()));
 		
 		this.proposta.setNomeArquivoPlanilhaOrcamento(p.getNomeArquivoPlanilhaOrcamento());
