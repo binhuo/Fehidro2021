@@ -33,16 +33,6 @@ public class CriterioAvaliacaoDAO extends DAOFactory<CriterioAvaliacao> {
 	
 	public void atualizar(CriterioAvaliacao criterioAvaliacao) {
 		alterar(criterioAvaliacao);
-		
-//		PontuacaoDAO pontuacaoDAO = new PontuacaoDAO();
-//		for(Pontuacao p : criterioAvaliacao.getPontuacoes()) {
-//			pontuacaoDAO.atualizar(p);
-//		}
-		
-//		SubcriterioAvaliacaoDAO subcriterioDAO = new SubcriterioAvaliacaoDAO();
-//		for(SubcriterioAvaliacao s : criterioAvaliacao.getSubcriterios()) {
-//			subcriterioDAO.atualizar(s);
-//		}
 	}
 	
 	public void remover(long id) {
