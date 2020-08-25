@@ -18,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import fehidro.api.model.CTPG;
 import fehidro.api.repository.CTPGRepository;
 import fehidro.api.util.password.Password;
+import fehidro.model.dto.ctpg.CadastroCtpgDTO;
 
 @RestController
 @RequestMapping("/usuario/ctpg")
@@ -27,36 +28,37 @@ public class CTPGController {
 	private CTPGRepository _ctpgRepository;
 
 	@GetMapping("/{id}")
-	public ResponseEntity<CTPG> get(@PathVariable(value = "id") Long id) {
+	public ResponseEntity<CadastroCtpgDTO> get(@PathVariable(value = "id") Long id) {
 		Optional<CTPG> user = _ctpgRepository.findById(id);
 		if(user.isPresent()) {
-			return ResponseEntity.ok(user.get());
+			return ResponseEntity.ok(new CadastroCtpgDTO(user.get()));
 		}
 
 		return ResponseEntity.notFound().build();
 	}
 
 	@PostMapping
-	public ResponseEntity<CTPG> add(@RequestBody CTPG user, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<CadastroCtpgDTO> add(@RequestBody CadastroCtpgDTO user, UriComponentsBuilder uriBuilder) {
 		try {
-			user.setLogin();
-			//usuario.setAtivo();
+			CTPG novo = new CTPG(user);
 			String senha = Password.generateRandomPassword(10);
-			user.setSenha(Password.hashPassword(senha));
-			
+
+			novo.setLogin();
+			//usuario.setAtivo();
+			novo.setSenha(Password.hashPassword(senha));			
+			CTPG cadastrado = _ctpgRepository.save(novo);
 			//TODO: migrar para spring-boot-starter-mail
 			//EmailUtil.sendMail(usuario.getEmail(), usuario.getNome(), usuario.getLogin(), senha);
-
-			CTPG cadastrado = _ctpgRepository.save(user);
 			URI uri = uriBuilder.path("/{id}").buildAndExpand(cadastrado.getId()).toUri();
-			return ResponseEntity.created(uri).body(cadastrado);
+			return ResponseEntity.created(uri).body(new CadastroCtpgDTO(cadastrado));
 		} catch(Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
 
 	@PutMapping
-	public ResponseEntity<CTPG> update(@RequestBody CTPG user) {
+	public ResponseEntity<CadastroCtpgDTO> update(@RequestBody CadastroCtpgDTO user) {
 		try {
 			Optional<CTPG> usuarioBase = _ctpgRepository.findById(user.getId()); 
 
@@ -67,8 +69,8 @@ public class CTPGController {
 					user.setSenha(Password.hashPassword(user.getSenha()));
 				}
 			} 
-			CTPG cadastrado =  _ctpgRepository.save(user);
-			return ResponseEntity.ok(cadastrado);
+			CTPG cadastrado =  _ctpgRepository.save(new CTPG(user));
+			return ResponseEntity.ok(new CadastroCtpgDTO(cadastrado));
 			
 		} catch(Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

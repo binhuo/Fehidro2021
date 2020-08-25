@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
@@ -40,14 +41,18 @@ public class CriterioAvaliacao extends AbstractEntity {
 	private Integer numero;
 		
 	@OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
-	@JoinColumn(name = "fk_criterioavaliacao_id")
+	@JoinColumn(name = "criterioavaliacao_id")
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private List<Pontuacao> pontuacoes;
 	
 	@OneToMany(cascade={CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})  //salva em cascata, altera pai e filho em cascata, exclui em cascata
-	@JoinColumn(name = "fk_criterioavaliacao_id")
+	@JoinColumn(name = "criterioavaliacao_id")
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private List<SubcriterioAvaliacao> subcriterios;
+	
+	@OneToOne
+	@JoinColumn(name = "perfilacesso_id")
+	private PerfilAcesso perfilAcesso;
 
 	public CriterioAvaliacao() {
 		super();

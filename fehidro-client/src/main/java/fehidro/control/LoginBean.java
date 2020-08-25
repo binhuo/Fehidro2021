@@ -55,7 +55,7 @@ public class LoginBean implements Serializable {
 					}
 					else if (user.getPerfilAcesso() == CodigoPerfilAcessoEnum.AvaliadorCtpg.getCodigo())
 					{
-						return "/avaliacao/cadastro?faces-redirect=true";
+						return "/avaliacao/index?faces-redirect=true";
 					}
 					
 				} 

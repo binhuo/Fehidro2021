@@ -4,22 +4,18 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import fehidro.api.model.AbstractEntity;
+import fehidro.model.dto.usuario.CadastroUsuarioDTO;
 
 @Table(name = "tb_usuario")
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-//@NamedQueries({ @NamedQuery(name = "Usuario.listarTodos", query = "select u from Usuario u order by u.nome"),
-//		@NamedQuery(name = "Usuario.consultarPorId", query = "select u from Usuario u where u.id=?1"),
-//		@NamedQuery(name = "Usuario.consultarPorLogin", query = "select u from Usuario u where u.login=?1"),
-//		@NamedQuery(name = "Usuario.consultarPorCPF", query = "select u from Usuario u where u.CPF=?1"),
-//		@NamedQuery(name = "Usuario.consultarPorPerfilAcesso", query = "select u from Usuario u where u.perfilAcesso=?1") })
 public class Usuario extends AbstractEntity {
-
+	
 	@Column(name = "nm_usuario", length = 256)
 	private String nome;
 
@@ -44,12 +40,30 @@ public class Usuario extends AbstractEntity {
 	@Column(name = "nr_celular")
 	private String celular;
 
-	@Column(name = "id_perfilacesso")
-	private long perfilAcesso;
-
-	
+	@OneToOne
+	@JoinColumn(name = "perfilacesso_id")
+	private PerfilAcesso perfilAcesso;
 	
 	public Usuario() {
+	}
+	
+	public Usuario(CadastroUsuarioDTO dto) {
+		if(dto != null) {
+			this.setId(dto.getId());
+			this.nome = dto.getNome();
+			this.sobrenome = dto.getSobrenome();
+			this.CPF = dto.getCPF();
+			this.email = dto.getEmail();
+			this.login = dto.getLogin();
+			this.senha = dto.getSenha();
+			this.ativo = dto.getAtivo();
+			this.celular = dto.getCelular();
+			
+			if (dto.getPerfilAcesso() > 0) {
+				this.perfilAcesso = new PerfilAcesso();
+				this.perfilAcesso.setId(dto.getPerfilAcesso());
+			}
+		}
 	}
 
 	public String getNome() {
@@ -134,14 +148,16 @@ public class Usuario extends AbstractEntity {
 	public void setCelular(String celular) {
 		this.celular = celular;
 	}
-
-	public long getPerfilAcesso() {
+	
+	public PerfilAcesso getPerfilAcesso() {
 		return perfilAcesso;
 	}
-	
-	public void setPerfilAcesso(long perfilAcesso) {
+
+	public void setPerfilAcesso(PerfilAcesso perfilAcesso) {
 		this.perfilAcesso = perfilAcesso;
 	}
+
+	
 
 	@Override
 	public String toString() {
