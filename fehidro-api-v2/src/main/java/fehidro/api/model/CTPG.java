@@ -7,6 +7,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import fehidro.api.model.Usuario;
+import fehidro.model.dto.ctpg.CadastroCtpgDTO;
 
 @Entity
 @Table(name = "tb_ctpg")
@@ -14,7 +15,7 @@ import fehidro.api.model.Usuario;
 public class CTPG extends Usuario {
 		
 	@OneToOne(cascade = CascadeType.MERGE)
-	@JoinColumn(name = "fk_instituicao_id")
+	@JoinColumn(name = "instituicao_id")
 	private Instituicao instituicao;
 	
 	@Temporal(TemporalType.TIMESTAMP)
@@ -30,11 +31,21 @@ public class CTPG extends Usuario {
 	@Column(name = "id_tipoavaliador")
 	private int tipoavaliador;
 
+	public CTPG() {
+		
+	}
+	
+	public CTPG(CadastroCtpgDTO dto) {
+		super(dto);
+		this.instituicao = dto.getInstituicao();
+		this.dataInicioMandato = dto.getDataInicioMandato();
+		this.dataNascimento = dto.getDataNascimento();
+		this.tipoavaliador = dto.getTipoavaliador();
+	}
 		
 	public Date getDataInicioMandato() {
 		return dataInicioMandato;
 	}
-
 	
 	public void setDataInicioMandato(Date dataInicioMandato) {
 		this.dataInicioMandato = dataInicioMandato;

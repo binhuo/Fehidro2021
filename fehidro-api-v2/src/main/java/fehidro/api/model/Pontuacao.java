@@ -18,7 +18,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 //				query = "select p from Pontuacao p"),
 //})
 public class Pontuacao extends AbstractEntity {
-	private static final long serialVersionUID = 1L;
 	@Column(name = "nm_titulo")
 	private String titulo;
 	

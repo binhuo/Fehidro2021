@@ -3,6 +3,7 @@ package fehidro.control;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -15,11 +16,13 @@ import javax.faces.validator.ValidatorException;
 
 import fehidro.model.CTPG;
 import fehidro.model.Instituicao;
+import fehidro.model.PerfilAcesso;
 import fehidro.model.SecretariaExecutiva;
 import fehidro.model.Usuario;
 import fehidro.model.enums.PerfilAcessoEnum;
 import fehidro.rest.client.CTPGRESTClient;
 import fehidro.rest.client.InstituicaoRESTClient;
+import fehidro.rest.client.PerfilAcessoRESTClient;
 import fehidro.rest.client.SecretariaExecutivaRESTClient;
 import fehidro.rest.client.UsuarioRESTClient;
 import fehidro.util.SessionContext;
@@ -36,6 +39,7 @@ public class UsuarioBean implements Serializable {
 	private SecretariaExecutivaRESTClient restSecretaria;
 	private CTPGRESTClient restCTPG;
 	private InstituicaoRESTClient restInstituicao;
+	private PerfilAcessoRESTClient restPerfilAcesso;
 	
 	private Usuario usuario;
 	private CTPG ctpg;
@@ -156,6 +160,7 @@ public class UsuarioBean implements Serializable {
 		this.secretaria = new SecretariaExecutiva();
 		this.restUsuario = new UsuarioRESTClient();
 		this.restInstituicao = new InstituicaoRESTClient();
+		this.restPerfilAcesso = new PerfilAcessoRESTClient();
 		
 		if (setInfo)
 			setInfo();
@@ -356,9 +361,15 @@ public class UsuarioBean implements Serializable {
 	}
 
 	public void setPerfisAcesso() {
+		List<PerfilAcesso> perfisBase = this.restPerfilAcesso.findAll();
 		List<SelectItem> perfis = new ArrayList<>();
-		perfis.add(new SelectItem("1", "Secretaria Executiva"));
-		perfis.add(new SelectItem("2", "Avaliador CT-PG"));
+		
+		perfis = perfisBase.stream().map(p -> {
+			return new SelectItem(p.getId(), p.getNome());
+		}).collect(Collectors.toList());
+		
+//		perfis.add(new SelectItem("1", "Secretaria Executiva"));
+//		perfis.add(new SelectItem("2", "Avaliador CT-PG"));
 
 		this.perfisAcesso = perfis;
 	}

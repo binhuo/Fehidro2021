@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import fehidro.api.model.SecretariaExecutiva;
+import fehidro.api.model.Usuario;
 import fehidro.api.repository.SecretariaExecutivaRepository;
 import fehidro.api.util.password.Password;
+import fehidro.model.dto.secretariaExecutiva.CadastroSecretariaExecutivaDTO;
 
 @RestController
 @RequestMapping("/usuario/secretaria")
@@ -28,36 +30,38 @@ public class SecretariaExecutivaController {
 	private SecretariaExecutivaRepository _secretariaExecRepository;
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<SecretariaExecutiva> get(@PathVariable(value = "id") Long id) {
+	public ResponseEntity<CadastroSecretariaExecutivaDTO> get(@PathVariable(value = "id") Long id) {
 		Optional<SecretariaExecutiva> user = _secretariaExecRepository.findById(id);
 		if(user.isPresent()) {
-			return ResponseEntity.ok(user.get());
+			return ResponseEntity.ok(new CadastroSecretariaExecutivaDTO(user.get()));
 		}
 
 		return ResponseEntity.notFound().build();
 	}
 
 	@PostMapping
-	public ResponseEntity<SecretariaExecutiva> add(@RequestBody SecretariaExecutiva user, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<CadastroSecretariaExecutivaDTO> add(@RequestBody CadastroSecretariaExecutivaDTO user, UriComponentsBuilder uriBuilder) {
 		try {
-			user.setLogin();
-			//usuario.setAtivo();
+			SecretariaExecutiva novo = new SecretariaExecutiva(user);
 			String senha = Password.generateRandomPassword(10);
-			user.setSenha(Password.hashPassword(senha));
-			
+
+			novo.setLogin();
+			//novo.setAtivo();
+			novo.setSenha(Password.hashPassword(senha));
+			SecretariaExecutiva usuario = _secretariaExecRepository.save(novo);
+			CadastroSecretariaExecutivaDTO cadastrado = new CadastroSecretariaExecutivaDTO(usuario);
 			//TODO: migrar para spring-boot-starter-mail
 			//EmailUtil.sendMail(usuario.getEmail(), usuario.getNome(), usuario.getLogin(), senha);
-
-			SecretariaExecutiva cadastrado = _secretariaExecRepository.save(user);
 			URI uri = uriBuilder.path("/{id}").buildAndExpand(cadastrado.getId()).toUri();
 			return ResponseEntity.created(uri).body(cadastrado);
 		} catch(Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
 
 	@PutMapping
-	public ResponseEntity<SecretariaExecutiva> update(@RequestBody SecretariaExecutiva user) {
+	public ResponseEntity<CadastroSecretariaExecutivaDTO> update(@RequestBody CadastroSecretariaExecutivaDTO user) {
 		try {
 			Optional<SecretariaExecutiva> usuarioBase = _secretariaExecRepository.findById(user.getId()); 
 
@@ -68,10 +72,12 @@ public class SecretariaExecutivaController {
 					user.setSenha(Password.hashPassword(user.getSenha()));
 				}
 			} 
-			SecretariaExecutiva cadastrado =  _secretariaExecRepository.save(user);
-			return ResponseEntity.ok(cadastrado);
+			SecretariaExecutiva cadastrado =  _secretariaExecRepository.save(new SecretariaExecutiva(user));
+			CadastroSecretariaExecutivaDTO alterado = new CadastroSecretariaExecutivaDTO(cadastrado);
+			return ResponseEntity.ok(alterado);
 			
 		} catch(Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}

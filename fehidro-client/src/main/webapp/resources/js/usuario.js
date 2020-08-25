@@ -2,8 +2,10 @@ $(document).ready(function () {
 
 	if ($("#formUsuario\\:txtPerfilAcesso").val() == "1") {
 		$("#formUsuario\\:infoSecretaria").show();
+		$("#formUsuario\\:infoCTPG").hide();
 	} else if ($("#formUsuario\\:txtPerfilAcesso").val() == "2") {
 		$("#formUsuario\\:infoCTPG").show();
+		$("#formUsuario\\:infoSecretaria").hide();
 	}
 	
 	$("#formUsuario\\:txtPerfilAcesso").on('change', function () {
