@@ -1,4 +1,6 @@
-package fehidro.model.dto;
+package fehidro.model.dto.subcriterio;
+
+import fehidro.api.model.SubcriterioAvaliacao;
 
 public class SubcriterioExibicaoDTO {
 
@@ -7,6 +9,13 @@ public class SubcriterioExibicaoDTO {
 	private int numero;
 	private char letra;
 
+	public SubcriterioExibicaoDTO(SubcriterioAvaliacao subcriterio) {
+		this.id = subcriterio.getId();
+		this.titulo = subcriterio.getTitulo();
+		this.numero = subcriterio.getNumero();
+		this.letra = subcriterio.getLetra();
+	}
+	
 	public SubcriterioExibicaoDTO(Long id,String titulo, int numero, char letra) {
 		this.id = id;
 		this.titulo = titulo;

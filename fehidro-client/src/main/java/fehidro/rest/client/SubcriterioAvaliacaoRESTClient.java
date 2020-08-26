@@ -27,7 +27,7 @@ public class SubcriterioAvaliacaoRESTClient implements RESTClientInterface<Subcr
 	public List<SubcriterioExibicaoDTO> obterSubcriteriosDTO() {
 		List<SubcriterioExibicaoDTO> subcriterios = 
 				ClientBuilder.newClient().
-				target(REST_WEBSERVICE_URL + REST_SUBCRITERIO_URL + "dto").
+				target(REST_WEBSERVICE_URL + REST_SUBCRITERIO_URL + "dtoExibicao/").
 				request(MediaType.APPLICATION_JSON).get().
 				readEntity(new GenericType<List<SubcriterioExibicaoDTO>> () {});
 		
@@ -37,7 +37,7 @@ public class SubcriterioAvaliacaoRESTClient implements RESTClientInterface<Subcr
 	public List<SubcriterioExibicaoDTO> obterSubcriteriosDTOPorSubcriterio(Long id) {
 		List<SubcriterioExibicaoDTO> subcriterios = 
 				ClientBuilder.newClient().
-				target(REST_WEBSERVICE_URL + REST_SUBCRITERIO_URL + "dto/" + id).
+				target(REST_WEBSERVICE_URL + REST_SUBCRITERIO_URL + "dtoExibicao/" + id).
 				request(MediaType.APPLICATION_JSON).get().
 				readEntity(new GenericType<List<SubcriterioExibicaoDTO>> () {});
 		

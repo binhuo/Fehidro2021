@@ -68,6 +68,7 @@ public class AutorizacaoFilter implements Filter {
 			acessoSecretariaExec.add("/criterioAvaliacao/");
 			acessoSecretariaExec.add("/tipoProposta/");
 			acessoSecretariaExec.add("/proposta/");
+			acessoSecretariaExec.add("/avaliacao/");
 			acessoSecretariaExec.add("/relatorio/");
 			acessoSecretariaExec.add("/usuario/");
 
