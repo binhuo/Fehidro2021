@@ -3,6 +3,7 @@ package fehidro.api.controller;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import fehidro.api.model.SubcriterioAvaliacao;
+import fehidro.api.model.Usuario;
 import fehidro.api.repository.SubcriterioAvaliacaoRepository;
+import fehidro.model.dto.subcriterio.SubcriterioExibicaoDTO;
+import fehidro.model.dto.usuario.CadastroUsuarioDTO;
 
 @RestController
 @RequestMapping("/subcriterioAvaliacao")
@@ -28,6 +32,23 @@ public class SubcriterioAvaliacaoController {
 	@GetMapping
 	public ResponseEntity<List<SubcriterioAvaliacao>> getAll() {		
 		return ResponseEntity.ok(_subcriterioAvaliacaoRepository.findAll());
+	}
+	
+	@GetMapping("/dtoExibicao/")
+	public ResponseEntity<List<SubcriterioExibicaoDTO>> obterDtosExibicao() {
+		List<SubcriterioAvaliacao> list = _subcriterioAvaliacaoRepository.findAll();
+		List<SubcriterioExibicaoDTO> resul = list.stream().map(u -> {return new SubcriterioExibicaoDTO(u);}).collect(Collectors.toList());
+		return ResponseEntity.ok().body(resul);
+	}
+	
+	@GetMapping("/dtoExibicao/{id}")
+	public ResponseEntity<SubcriterioExibicaoDTO> obterPorDtoExibicao(@PathVariable(value = "id") long id) {
+		Optional<SubcriterioAvaliacao> subcriteiro = _subcriterioAvaliacaoRepository.findById(id);
+		if (subcriteiro.isPresent()) {
+			return ResponseEntity.ok(new SubcriterioExibicaoDTO(subcriteiro.get()));
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 	
 	@PostMapping
