@@ -7,8 +7,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -16,10 +14,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Table(name = "tb_pdc")
 @Entity
-//@NamedQueries({
-//	@NamedQuery(name = "PDC.listarTodos", query = "select p from PDC p order by p.titulo"),
-//	@NamedQuery(name = "PDC.consultarPorId", query = "select p from PDC p where p.id=?1")
-//})
 public class PDC extends AbstractEntity {
 	
 	@Column(name="nm_titulo")

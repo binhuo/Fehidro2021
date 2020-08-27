@@ -8,8 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -18,10 +16,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Table(name = "tb_subpdc")
 @Entity
-//@NamedQueries({
-//	@NamedQuery(name = "SubPDC.listarTodos", query = "select s from SubPDC s order by s.numero"),
-//	@NamedQuery(name = "SubPDC.consultarPorId", query = "select s from SubPDC s where s.id=?1")
-//})
 public class SubPDC extends AbstractEntity {
 	
 	@Column(name="nr_subpdc")

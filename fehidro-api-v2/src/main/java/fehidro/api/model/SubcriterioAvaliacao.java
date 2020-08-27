@@ -9,9 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -19,16 +18,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Table(name = "tb_subcriterioavaliacao")
 @Entity
-//@NamedQueries({
-//	@NamedQuery(name = "SubcriterioAvaliacao.listarTodos",
-//			    query = "select c from SubcriterioAvaliacao c"),
-//	
-//	@NamedQuery(name = "SubcriterioAvaliacao.consultarPorId",
-//    			query = "select c from SubcriterioAvaliacao c join fetch c.pontuacoes p where c.id=?1"),
-//	
-//	@NamedQuery(name = "SubcriterioAvaliacao.obterPontuacoesPorSubcriterio", 
-//	query = "select p from SubcriterioAvaliacao s join s.pontuacoes p where s.id =?1"),
-//})
 public class SubcriterioAvaliacao extends AbstractEntity {
 	
 	@Column(name="nm_titulo")
@@ -55,6 +44,10 @@ public class SubcriterioAvaliacao extends AbstractEntity {
 	@ManyToOne
 	@JsonIgnore
 	private CriterioAvaliacao criterio;
+
+	@OneToOne
+	@JoinColumn(name = "perfilacesso_id")
+	private PerfilAcesso perfilAcesso;
 	
 	public SubcriterioAvaliacao() {
 		super();
@@ -150,5 +143,13 @@ public class SubcriterioAvaliacao extends AbstractEntity {
 		
 		if (criterio != null)
 			criterio.addSubcriterios(this);
+	}
+
+	public PerfilAcesso getPerfilAcesso() {
+		return perfilAcesso;
+	}
+
+	public void setPerfilAcesso(PerfilAcesso perfilAcesso) {
+		this.perfilAcesso = perfilAcesso;
 	}
 }

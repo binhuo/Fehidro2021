@@ -8,17 +8,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Table(name = "tb_deliberacao")
 @Entity
-//@NamedQueries({
-//	@NamedQuery(name = "Deliberacao.listarTodas", query = "select d from Deliberacao d order by d.ano, d.numero"),
-//	@NamedQuery(name = "Deliberacao.consultarPorId", query = "select d from Deliberacao d where d.id=?1")
-//})
 public class Deliberacao extends AbstractEntity {
 	
 	@Column(name="aa_deliberacao")

@@ -2,7 +2,6 @@ package fehidro.api.model;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,18 +9,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Table(name = "tb_proposta")
 @Entity
-//@NamedQueries({ @NamedQuery(name = "Proposta.listarTodos", query = "select p from Proposta p join fetch p.instituicao order by p.nomeProjeto"),
-//		@NamedQuery(name = "Proposta.consultarPorId", query = "select p from Proposta p where p.id=?1"),
-//		@NamedQuery(name = "Proposta.listarPorInstituicao", query = "select p from Proposta p join fetch p.instituicao i where i.id=?1") })
-
 public class Proposta extends AbstractEntity {
 
 	@Column(name = "nm_projeto")

@@ -18,10 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import fehidro.api.model.SubcriterioAvaliacao;
-import fehidro.api.model.Usuario;
 import fehidro.api.repository.SubcriterioAvaliacaoRepository;
 import fehidro.model.dto.subcriterio.SubcriterioExibicaoDTO;
-import fehidro.model.dto.usuario.CadastroUsuarioDTO;
 
 @RestController
 @RequestMapping("/subcriterioAvaliacao")
