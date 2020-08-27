@@ -3,20 +3,12 @@ package fehidro.api.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Table(name = "tb_pontuacao")
 @Entity
-//@NamedQueries({
-//	@NamedQuery(name = "Pontuacao.consultarPorId",
-//				query = "select p from Pontuacao p where p.id=?1"),
-//	@NamedQuery(name = "Pontuacao.listarTodos",
-//				query = "select p from Pontuacao p"),
-//})
 public class Pontuacao extends AbstractEntity {
 	@Column(name = "nm_titulo")
 	private String titulo;

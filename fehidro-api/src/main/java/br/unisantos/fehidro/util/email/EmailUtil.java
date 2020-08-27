@@ -9,8 +9,6 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import br.unisantos.fehidro.model.Usuario;
-
 import java.util.Properties;
 
 

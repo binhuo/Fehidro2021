@@ -4,18 +4,19 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.FacesConverter;
+import javax.faces.model.SelectItem;
 
 import fehidro.model.CriterioAvaliacao;
+import fehidro.model.PerfilAcesso;
 import fehidro.model.Pontuacao;
 import fehidro.model.SubcriterioAvaliacao;
 import fehidro.model.TipoProposta;
 import fehidro.rest.client.CriterioAvaliacaoRESTClient;
+import fehidro.rest.client.PerfilAcessoRESTClient;
 import fehidro.rest.client.TipoPropostaRESTClient;
 
 @ManagedBean
@@ -25,6 +26,7 @@ public class CriterioAvaliacaoBean implements Serializable {
 
 	private CriterioAvaliacaoRESTClient restCriterio;
 	private TipoPropostaRESTClient restTipoProposta;
+	private PerfilAcessoRESTClient restPerfilAcesso;
 	private List<CriterioAvaliacao> criterios;
 	private CriterioAvaliacao criterio;
 
@@ -33,6 +35,7 @@ public class CriterioAvaliacaoBean implements Serializable {
 	private int numeroSubcriterioNovaPontuacao;
 	private List<TipoProposta> tiposProposta;
 	private TipoProposta[] tiposPropostasSelecionados;
+	private List<SelectItem> perfisAcesso;
 
 	public CriterioAvaliacaoBean() {
 		startView(true);
@@ -45,6 +48,12 @@ public class CriterioAvaliacaoBean implements Serializable {
 
 	public String cadastro() {
 		startView(true);
+		definirNumeroCriterio();
+
+		return "/criterioAvaliacao/cadastro?faces-redirect=true";
+	}
+
+	private void definirNumeroCriterio() {
 		List<CriterioAvaliacao> criteriosExistentes = this.getCriterios();
 
 		if (criteriosExistentes == null) {
@@ -53,8 +62,6 @@ public class CriterioAvaliacaoBean implements Serializable {
 		else {
 			this.criterio.setNumero(criteriosExistentes.size() + 1);
 		}
-
-		return "/criterioAvaliacao/cadastro?faces-redirect=true";
 	}
 
 	public String editar() 
@@ -62,6 +69,10 @@ public class CriterioAvaliacaoBean implements Serializable {
 		if (getIdCriterioAvaliacao() != null) {
 
 			CriterioAvaliacao c = this.restCriterio.find(getIdCriterioAvaliacao());
+			c.getSubcriterios().forEach(s -> {
+				if (s.getPerfilAcesso() == null)
+					s.setPerfilAcesso(new PerfilAcesso());
+			});
 			setCriterio(c);
 		}
 		setInfo();
@@ -77,6 +88,7 @@ public class CriterioAvaliacaoBean implements Serializable {
 			this.restCriterio.edit(this.criterio);
 		}
 		startView(true);
+		definirNumeroCriterio();
 
 		return null;
 	}
@@ -96,6 +108,8 @@ public class CriterioAvaliacaoBean implements Serializable {
 
 	public String addSubcriterio() {
 		CriterioAvaliacao c = this.getCriterio();
+		c.setPerfilAcesso(null);
+		c.setPontuacoes(new ArrayList<Pontuacao>());
 		List<SubcriterioAvaliacao> subs = c.getSubcriterios();
 
 		if (subs == null) {
@@ -115,6 +129,7 @@ public class CriterioAvaliacaoBean implements Serializable {
 		novoSubcriterio.setNumero(qtSubcriterios + 1);
 		novoSubcriterio.setPontuacoes(new ArrayList<Pontuacao>());
 		novoSubcriterio.setTiposProposta(new ArrayList<TipoProposta>());
+		novoSubcriterio.setPerfilAcesso(new PerfilAcesso());
 
 		c.getSubcriterios().add(novoSubcriterio);
 		novoSubcriterio.setPontuacoes(new ArrayList<Pontuacao>());
@@ -128,9 +143,11 @@ public class CriterioAvaliacaoBean implements Serializable {
 
 	private void startView(boolean setInfo) {
 		this.restCriterio = new CriterioAvaliacaoRESTClient();
+		this.setRestPerfilAcesso(new PerfilAcessoRESTClient());
 		this.criterio = new CriterioAvaliacao();
 		this.criterio.setSubcriterios(new ArrayList<SubcriterioAvaliacao>());
 		this.criterio.setPontuacoes(new ArrayList<Pontuacao>());
+		this.criterio.setPerfilAcesso(new PerfilAcesso());
 
 		if (setInfo)
 			setInfo();
@@ -139,6 +156,7 @@ public class CriterioAvaliacaoBean implements Serializable {
 	private void setInfo() {
 		this.setCriterios(this.restCriterio.findAll());
 		this.setTiposProposta();
+		this.setPerfisAcesso();
 	}
 	
 	public Long getIdCriterioAvaliacao() {
@@ -217,6 +235,29 @@ public class CriterioAvaliacaoBean implements Serializable {
 
 	public String getTiposPropostasSelecionadosInString() {
 		return Arrays.toString(this.tiposPropostasSelecionados);
+	}
+
+	public PerfilAcessoRESTClient getRestPerfilAcesso() {
+		return restPerfilAcesso;
+	}
+
+	public void setRestPerfilAcesso(PerfilAcessoRESTClient restPerfilAcesso) {
+		this.restPerfilAcesso = restPerfilAcesso;
+	}
+
+	public List<SelectItem> getPerfisAcesso() {
+		return perfisAcesso;
+	}
+
+	public void setPerfisAcesso() {
+		List<PerfilAcesso> perfisBase = this.restPerfilAcesso.findAll();
+		List<SelectItem> perfis = new ArrayList<>();
+			
+		perfis = perfisBase.stream().map(p -> {
+			return new SelectItem(p.getId(), p.getNome());
+		}).collect(Collectors.toList());
+		
+		this.perfisAcesso = perfis;
 	}
 }
 

@@ -9,6 +9,7 @@ public class SubcriterioAvaliacao {
 	private char letra;
 	private List<Pontuacao> pontuacoes;
 	private List<TipoProposta> tiposProposta;
+	private PerfilAcesso perfilAcesso;
 	
 	
 	public Long getId() {
@@ -46,5 +47,11 @@ public class SubcriterioAvaliacao {
 	}
 	public void setNumero(int numero) {
 		this.numero = numero;
+	}
+	public PerfilAcesso getPerfilAcesso() {
+		return perfilAcesso;
+	}
+	public void setPerfilAcesso(PerfilAcesso perfilAcesso) {
+		this.perfilAcesso = perfilAcesso;
 	}
 }

@@ -1,13 +1,7 @@
 package br.unisantos.fehidro.model;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Random;
-
 import javax.persistence.*;
 
-import br.unisantos.fehidro.util.password.Password;
 
 @Table(name = "tb_usuario")
 @Entity

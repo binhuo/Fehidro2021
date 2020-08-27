@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import fehidro.api.model.SecretariaExecutiva;
-import fehidro.api.model.Usuario;
 import fehidro.api.repository.SecretariaExecutivaRepository;
 import fehidro.api.util.password.Password;
 import fehidro.model.dto.secretariaExecutiva.CadastroSecretariaExecutivaDTO;

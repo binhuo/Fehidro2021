@@ -8,6 +8,7 @@ public class CriterioAvaliacao {
 	private String titulo;
 	private List<Pontuacao> pontuacoes;
 	private List<SubcriterioAvaliacao> subcriterios;
+	private PerfilAcesso perfilAcesso;
 	
 	public Long getId() {
 		return id;
@@ -38,5 +39,11 @@ public class CriterioAvaliacao {
 	}
 	public void setNumero(Integer numero) {
 		this.numero = numero;
+	}
+	public PerfilAcesso getPerfilAcesso() {
+		return perfilAcesso;
+	}
+	public void setPerfilAcesso(PerfilAcesso perfilAcesso) {
+		this.perfilAcesso = perfilAcesso;
 	}
 }

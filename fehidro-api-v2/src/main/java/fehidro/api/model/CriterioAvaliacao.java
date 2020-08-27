@@ -6,33 +6,15 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Cascade;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Table(name = "tb_criterioavaliacao")
 @Entity
-//@NamedQueries({
-//	@NamedQuery(name = "CriterioAvaliacao.listarTodos",
-//			    query = "select c from CriterioAvaliacao c"),
-//	
-//	@NamedQuery(name = "CriterioAvaliacao.consultarPorId",
-//    			query = "select c from CriterioAvaliacao c where c.id=?1"),
-//	
-//	@NamedQuery(name = "CriterioAvaliacao.obterSubcriterios", 
-//	query = "select s from CriterioAvaliacao c join c.subcriterios s where c.id=?1"),
-//	
-//	@NamedQuery(name = "CriterioAvaliacao.obterPontuacoesPorCriterio", 
-//				query = "select p from CriterioAvaliacao c join c.pontuacoes p where c.id =?1"),
-//})
 public class CriterioAvaliacao extends AbstractEntity {
 	@Column(name = "nm_titulo")
 	private String titulo;
@@ -123,5 +105,13 @@ public class CriterioAvaliacao extends AbstractEntity {
 	}
 	public void setNumero(Integer numero) {
 		this.numero = numero;
+	}
+
+	public PerfilAcesso getPerfilAcesso() {
+		return perfilAcesso;
+	}
+
+	public void setPerfilAcesso(PerfilAcesso perfilAcesso) {
+		this.perfilAcesso = perfilAcesso;
 	}
 }

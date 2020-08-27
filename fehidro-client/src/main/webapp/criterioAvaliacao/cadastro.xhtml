@@ -12,11 +12,11 @@
 			<h:form id="formCriterioAvaliacao">
 				<h:inputHidden value="#{criterioAvaliacaoBean.criterio.id}"
 					id="criterioAvaliacaoId" />
-				<h:panelGroup layout="block" class="form-row">
+				<h:panelGroup layout="block" class="form-group row">
 					<h:panelGroup layout="block" class="col-1">
 						<h:outputLabel value="Nº" for="txtNumeroCriterio" />
 						<h:inputText id="txtNumeroCriterio"
-							value="#{criterioAvaliacaoBean.criterio.numero}."
+							value="#{criterioAvaliacaoBean.criterio.numero}"
 							class="form-control numeric" readonly="true" />
 					</h:panelGroup>
 					<h:panelGroup layout="block" class="col-11">
@@ -29,6 +29,21 @@
 								value="Nome do critério" />
 						</h:inputText>
 						<h:message for="txtNomeCriterio" styleClass="erro" />
+					</h:panelGroup>
+				</h:panelGroup>
+
+				<h:panelGroup layout="block" class="form-group row"  id="tipoAvaliadorCriterio" 
+					rendered="#{empty criterioAvaliacaoBean.criterio.subcriterios}">
+					<h:panelGroup layout="block" class="col-6">
+						<h:outputLabel value="Tipo de avaliador" for="txtPerfilAcesso" />
+						<h:selectOneMenu id="txtPerfilAcesso" redisplay="false"
+							value="#{criterioAvaliacaoBean.criterio.perfilAcesso.id}" class="form-control"
+							required="true" requiredMessage="Informe o tipo de avaliador!">
+							<f:selectItem itemValue="#{null}" itemLabel="Selecione" />
+							<f:selectItems value="#{criterioAvaliacaoBean.perfisAcesso}" />
+						</h:selectOneMenu>
+						<small class="text-muted"> Apenas para critérios que NÃO possuam subcritérios. </small>
+						<h:message for="txtPerfilAcesso" styleClass="erro" />
 					</h:panelGroup>
 				</h:panelGroup>
 
@@ -56,31 +71,39 @@
 							<h:inputHidden value="#{p.id}" id="pontuacaoCriterioId" />
 							<h:panelGroup layout="block" class="form-group row">
 								<h:panelGroup layout="block" class="col">
-									<h:outputLabel for="txtPontuacaoCriterioTitulo" value="Título da pontuação" />
-									<h:inputText id="txtPontuacaoCriterioTitulo" value="#{p.titulo}" required="true"
-										requiredMessage="Informe o título da pontuação!" class="form-control">
-										<f:passThroughAttribute name="placeholder" value="Título da pontuação" />
+									<h:outputLabel for="txtPontuacaoCriterioTitulo"
+										value="Título da pontuação" />
+									<h:inputText id="txtPontuacaoCriterioTitulo"
+										value="#{p.titulo}" required="true"
+										requiredMessage="Informe o título da pontuação!"
+										class="form-control">
+										<f:passThroughAttribute name="placeholder"
+											value="Título da pontuação" />
 									</h:inputText>
 									<h:message class="erro" for="txtPontuacaoCriterioTitulo" />
 								</h:panelGroup>
 								<h:panelGroup layout="block" class="col-4">
-									<h:outputLabel for="txtPontuacaoCriterioPontos" value="Ponto(s)" />
-									<h:inputText id="txtPontuacaoCriterioPontos" value="#{p.pontos}" class="form-control" 
-									required="true" requiredMessage="Informe o número de pontos dessa pontuação!">
-										<f:passThroughAttribute name="placeholder" value="Número de pontos" />
+									<h:outputLabel for="txtPontuacaoCriterioPontos"
+										value="Ponto(s)" />
+									<h:inputText id="txtPontuacaoCriterioPontos"
+										value="#{p.pontos}" class="form-control" required="true"
+										requiredMessage="Informe o número de pontos dessa pontuação!">
+										<f:passThroughAttribute name="placeholder"
+											value="Número de pontos" />
 									</h:inputText>
 								</h:panelGroup>
 							</h:panelGroup>
-							
+
 							<h:panelGroup layout="block" class="form-group row">
 								<h:panelGroup layout="block" class="col align-self-center">
-								<h:panelGroup layout="block" class="custom-control custom-checkbox">
-									<h:selectBooleanCheckbox
-										id="btPontuacaoCriterioDesclassificavel"
-										value="#{p.desclassificavel}" class="custom-control-input" />
-									<h:outputLabel class="custom-control-label"
-										for="btPontuacaoCriterioDesclassificavel">Desclassificação automática</h:outputLabel>
-								</h:panelGroup>
+									<h:panelGroup layout="block"
+										class="custom-control custom-checkbox">
+										<h:selectBooleanCheckbox
+											id="btPontuacaoCriterioDesclassificavel"
+											value="#{p.desclassificavel}" class="custom-control-input" />
+										<h:outputLabel class="custom-control-label"
+											for="btPontuacaoCriterioDesclassificavel">Desclassificação automática</h:outputLabel>
+									</h:panelGroup>
 								</h:panelGroup>
 							</h:panelGroup>
 						</h:panelGroup>
@@ -117,13 +140,28 @@
 
 							</h:panelGroup>
 
+							<h:panelGroup layout="block" class="form-group row"  name="tipoAvaliadorSubcriterio">
+								<h:panelGroup layout="block" class="col-6">
+									<h:outputLabel value="Tipo de avaliador" for="txtPerfilAcesso" />
+									<h:selectOneMenu id="txtPerfilAcesso" redisplay="false"
+										value="#{s.perfilAcesso.id}"
+										class="form-control" required="true"
+										requiredMessage="Informe o tipo de avaliador!">
+										<f:selectItem itemValue="#{null}" itemLabel="Selecione" />
+										<f:selectItems value="#{criterioAvaliacaoBean.perfisAcesso}" />
+									</h:selectOneMenu>
+									<h:message for="txtPerfilAcesso" styleClass="erro" />
+								</h:panelGroup>
+							</h:panelGroup>
+
 							<h:panelGroup layout="block" class="form-group row">
 								<h:panelGroup layout="block" class="col-sm-4">
 									<h:outputLabel value="Tipos de propostas" />
 								</h:panelGroup>
 								<h:panelGroup layout="block"
 									class="col custom-control custom-checkbox">
-									<h:selectManyCheckbox value="#{s.tiposProposta}" converter="tipoPropostaConverter" multiple="true">
+									<h:selectManyCheckbox value="#{s.tiposProposta}"
+										converter="tipoPropostaConverter" multiple="true">
 										<f:selectItems
 											value="#{criterioAvaliacaoBean.tiposPropostasSelecionadosValue}"
 											var="tp" itemLabel="#{tp.nome}" itemValue="#{tp}" />
@@ -163,7 +201,7 @@
 									<h:panelGroup layout="block" class="col-md-4">
 										<h:outputLabel for="txtPontuacaoSubcriterioPontos"
 											value="Ponto(s)" />
-											
+
 										<h:inputText id="txtPontuacaoSubcriterioPontos"
 											value="#{ps.pontos}" class="form-control" required="true"
 											requiredMessage="Informe o número de pontos dessa pontuação!">
@@ -172,17 +210,18 @@
 										</h:inputText>
 									</h:panelGroup>
 								</h:panelGroup>
-									<h:panelGroup layout="block" class="form-group row">
-										<h:panelGroup layout="block" class="col align-self-center">
-										<h:panelGroup layout="block" class="custom-control custom-checkbox">
+								<h:panelGroup layout="block" class="form-group row">
+									<h:panelGroup layout="block" class="col align-self-center">
+										<h:panelGroup layout="block"
+											class="custom-control custom-checkbox">
 											<h:selectBooleanCheckbox
 												id="btPontuacaoSubcriterioDesclassificavel"
 												value="#{ps.desclassificavel}" class="custom-control-input" />
 											<h:outputLabel class="custom-control-label"
 												for="btPontuacaoSubcriterioDesclassificavel">Desclassificação automática</h:outputLabel>
 										</h:panelGroup>
-										</h:panelGroup>
 									</h:panelGroup>
+								</h:panelGroup>
 							</ui:repeat>
 						</h:panelGroup>
 					</ui:repeat>
