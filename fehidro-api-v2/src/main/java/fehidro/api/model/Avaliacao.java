@@ -50,7 +50,7 @@ public class Avaliacao extends AbstractEntity {
 		if(dto != null) {
 			this.setId(dto.getId());
 			this.nota = dto.getNota();
-			this.avaliador = dto.getAvaliador();
+			this.avaliador = new Usuario(dto.getAvaliador());
 			this.proposta = dto.getProposta();
 			this.subcriterio = dto.getSubcriterio();
 			this.criterio = dto.getCriterio();

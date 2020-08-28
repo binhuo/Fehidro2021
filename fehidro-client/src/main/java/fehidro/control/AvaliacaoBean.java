@@ -117,7 +117,8 @@ public class AvaliacaoBean implements Serializable {
 	
 	public String salvar() {
 		
-		//this.avaliacao.setAvaliador( (Usuario)SessionContext.getInstance().getAttribute("usuarioLogado") ); //Cadastro do avaliador
+		//Setando avaliador na avaliacao
+		this.avaliacao.setAvaliador( (Usuario)SessionContext.getInstance().usuarioLogado() );
 		
 		if ( this.avaliacao.getId() == null) {
 			this.restAvaliacao.create(this.avaliacao);
@@ -201,7 +202,7 @@ public class AvaliacaoBean implements Serializable {
 				subcriteriosBase.add(aux);
 			}
 		
-			System.out.println("Size = "+subcriteriosBase.size());
+			//System.out.println("Size = "+subcriteriosBase.size());
 			List<SelectItem> subcriterios = new ArrayList<>();
 	
 			for (SubcriterioAvaliacao i:subcriteriosBase ) 
