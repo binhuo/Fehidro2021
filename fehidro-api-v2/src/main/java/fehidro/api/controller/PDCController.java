@@ -17,6 +17,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import fehidro.api.model.PDC;
 import fehidro.api.repository.PDCRepository;
+import fehidro.api.model.Meta;
+import fehidro.api.model.SubPDC;
 
 @RestController
 @RequestMapping("/pdc")
@@ -49,6 +51,14 @@ public class PDCController {
 
 	@PutMapping
 	public ResponseEntity<PDC> update(@RequestBody PDC pdc) {
+		
+		for(SubPDC s : pdc.getSubPDCs()){
+			s.setPdc(pdc);
+			for (Meta m : s.getMetas()) {
+				m.setSubpdc(s);
+			}
+		}
+		
 		PDC cadastrado =  _pdcRepository.save(pdc);
 		return ResponseEntity.ok(cadastrado);
 	}
