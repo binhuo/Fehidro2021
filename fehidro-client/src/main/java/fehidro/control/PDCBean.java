@@ -3,11 +3,13 @@ package fehidro.control;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 import fehidro.rest.client.PDCRESTClient;
+import fehidro.model.Meta;
 import fehidro.model.PDC;
 import fehidro.model.SubPDC;
 
@@ -21,6 +23,8 @@ public class PDCBean  implements Serializable {
 	private PDCRESTClient restPDC;
 	private PDC pdc;
 	private List<PDC> pdcs;
+	private int ordemListagemSubpdcNovaMeta;
+	private int idSubpdcNovaMeta;
 	
 	public PDCBean() {
 		startView(true);
@@ -49,11 +53,10 @@ public class PDCBean  implements Serializable {
 		return "/pdc/cadastro?faces-redirect=true";
 	}
 	
-	public String salvar() {
+	public String salvar() { 
 		if (getIdPDC() == null) {
 			this.restPDC.create(this.pdc);
-		}
-		else {
+		} else {
 			this.restPDC.edit(this.pdc);
 		}
 		startView(true);
@@ -63,11 +66,37 @@ public class PDCBean  implements Serializable {
 	
 	public String addSubPDC() {
 		
+		int qtSubPDCs = 0;
+		
 		if (this.pdc.getSubPDCs() == null) {
 			this.pdc.setSubPDCs(new ArrayList<SubPDC>());
+		} else {
+			qtSubPDCs = this.pdc.getSubPDCs().size();
 		}
 		
-		this.pdc.getSubPDCs().add(new SubPDC());
+		SubPDC novo = new SubPDC();
+		novo.setOrdemListagem(qtSubPDCs + 1);
+		novo.setMetas(new ArrayList<Meta>());
+		
+		this.pdc.getSubPDCs().add(novo);
+		 
+		return null;
+	}
+	
+	public String addMetaSubpdc() {
+		if (this.pdc.getId() == null || this.pdc.getId() == 0) {
+			this.pdc.getSubPDCs().get(getOrdemListagemSubpdcNovaMeta() - 1).getMetas().add(new Meta());
+		} else {
+			
+			Optional<SubPDC> optSubpdcNovaMeta = this.pdc.getSubPDCs().stream()
+					.filter(s -> s.getId() == this.idSubpdcNovaMeta)
+				    .findFirst();
+			
+			if (optSubpdcNovaMeta.isPresent()) {
+				SubPDC subpdcNovaMeta = optSubpdcNovaMeta.get();
+				subpdcNovaMeta.getMetas().add(new Meta());
+			}			
+		}
 		
 		return null;
 	}
@@ -124,5 +153,21 @@ public class PDCBean  implements Serializable {
 
 	public void setPdcs(List<PDC> pDCs) {
 		pdcs = pDCs;
+	}
+
+	public int getOrdemListagemSubpdcNovaMeta() {
+		return ordemListagemSubpdcNovaMeta;
+	}
+
+	public void setOrdemListagemSubpdcNovaMeta(int ordemListagemSubpdcNovaMeta) {
+		this.ordemListagemSubpdcNovaMeta = ordemListagemSubpdcNovaMeta;
+	}
+
+	public int getIdSubpdcNovaMeta() {
+		return idSubpdcNovaMeta;
+	}
+
+	public void setIdSubpdcNovaMeta(int idSubpdcNovaMeta) {
+		this.idSubpdcNovaMeta = idSubpdcNovaMeta;
 	}
 }

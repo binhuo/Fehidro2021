@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -21,6 +22,7 @@ public class PDC extends AbstractEntity {
 	
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch=FetchType.EAGER)
 	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	@JoinColumn(name="pdc_id")
 	private List<SubPDC> subPDCs = new ArrayList<SubPDC>();
 
 	public String getTitulo() {

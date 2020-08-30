@@ -25,6 +25,7 @@ public class SubPDC extends AbstractEntity {
 	private String titulo;
 	
 	@ManyToOne
+	@JsonIgnore
 	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	private PDC pdc;
 
@@ -32,6 +33,11 @@ public class SubPDC extends AbstractEntity {
 	@JsonIgnore
 	@JoinColumn(name = "subpdc_id")
 	private List<Proposta> propostas;
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "subpdc_id")
+	private List<Meta> metas;
+
 
 	public int getNumero() {
 		return numero;
@@ -55,5 +61,13 @@ public class SubPDC extends AbstractEntity {
 
 	public void setPdc(PDC pdc) {
 		this.pdc = pdc;
+	}
+	
+	public List<Meta> getMetas() {
+		return metas;
+	}
+
+	public void setMetas(List<Meta> metas) {
+		this.metas = metas;
 	}
 }
