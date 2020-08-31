@@ -8,10 +8,11 @@
 <h:body>
 	<ui:composition template="/shared/template.xhtml">
 		<ui:define name="content">
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
+		
 			<h:inputHidden value="PDC" id="menuAtual" />
 			<h:form id="formPDC">
-				<h:inputHidden value="#{pDCBean.PDC.id}"
-					id="pdcId" />
+				<h:inputHidden value="#{pDCBean.PDC.id}" id="pdcId" />
 
 				<h:panelGroup layout="block" class="form-group row">
 					<h:panelGroup layout="block" class="col">
@@ -33,12 +34,11 @@
 				</h:panelGroup>
 				
 				<h:panelGroup layout="block" id="subPDCs">
-					<ui:repeat value="#{pDCBean.PDC.subPDCs}"
-						var="s" id="subpdc">
-						<h:panelGroup layout="block"
-							class="justify-content-md-left card p-3 mb-3">
+					<ui:repeat value="#{pDCBean.PDC.subPDCs}" var="s" id="subpdc">
+						<h:panelGroup layout="block" class="justify-content-md-left card p-3 mb-3">
 							<h:inputHidden value="#{s.id}" id="subpdcId" />
-							<h:panelGroup layout="block" class="form-group row">
+							<h:panelGroup layout="block" class="form-group row" id="infoSubpdc">
+								
 								<h:panelGroup layout="block" class="col-2">
 									<h:outputLabel for="txtNumeroSubPDC" value="Nº subPDC" />
 									<h:inputText id="txtNumeroSubPDC" value="#{s.numero}" class="form-control" 
@@ -47,6 +47,7 @@
 									</h:inputText>
 									<h:message class="erro" for="txtNumeroSubPDC" />
 								</h:panelGroup>
+								
 								<h:panelGroup layout="block" class="col">
 									<h:outputLabel for="txtTituloSubPDC" value="Título do SubPDC" />
 									<h:inputText id="txtTituloSubPDC" value="#{s.titulo}" required="true"
@@ -56,7 +57,61 @@
 									<h:message class="erro" for="txtTituloSubPDC" />
 								</h:panelGroup>
 							</h:panelGroup>
+							
+							<h:panelGroup layout="block" class="form-group row">
+								<h:panelGroup layout="block" class="col align-self-end text-right" id="btNovaMetaSubPDC">
+									<h:commandButton class="btn btn-primary" immediate="true" 
+										action="#{pDCBean.addMetaSubpdc}" value="Nova meta">
+									<f:setPropertyActionListener
+										target="#{pDCBean.ordemListagemSubpdcNovaMeta}" value="#{s.ordemListagem}" />
+									<f:setPropertyActionListener 
+										target="#{pDCBean.idSubpdcNovaMeta}" value="#{s.id}" />
+									</h:commandButton>
+								</h:panelGroup>	
+							</h:panelGroup>
+
+							<ui:repeat value="#{s.metas}" var="m" id="metas">
+								<h:panelGroup layout="block" class="justify-content-md-left card p-3 mb-3">
+								
+									<h:panelGroup layout="block" class="form-group row">
+										<h:panelGroup layout="block" class="col">
+											<h:outputLabel for="txtDescricaoMeta" value="Descrição da meta" />
+											<h:inputTextarea id="txtDescricaoMeta" value="#{m.descricao}" class="form-control" 
+												required="true" requiredMessage="Informe a descrição da meta!" rows="1">
+												<f:passThroughAttribute name="placeholder" value="Descrição da meta" />
+											</h:inputTextarea>
+										</h:panelGroup>
+									</h:panelGroup>
+									
+									<h:panelGroup layout="block" class="form-group row">
+										<h:panelGroup layout="block" class="col">
+											<h:outputLabel for="txtAcaoMeta" value="Ação da meta" />
+											<h:inputTextarea id="txtAcaoMeta" value="#{m.acao}" class="form-control" 
+												required="true" requiredMessage="Informe a ação da meta!" rows="1">
+												<f:passThroughAttribute name="placeholder" value="Ação da meta" />
+											</h:inputTextarea>
+										</h:panelGroup>
+									</h:panelGroup>
+									
+									<h:panelGroup layout="block" class="form-group row">
+										<h:panelGroup layout="block" class="col">
+											<h:outputLabel for="txtValorMeta" value="Valor da meta" />
+											<h:inputHidden value="#{m.valor}" id="hdnValorMeta" converter="bigDecimalConverter">
+												<f:converter converterId="bigDecimalConverter"/>
+											</h:inputHidden>
+											<h:inputText id="txtValorMeta" value="" class="form-control" 
+												required="true" requiredMessage="Informe a valor da meta!">
+												<f:passThroughAttribute name="name" value="valorMeta" />
+												<f:passThroughAttribute name="placeholder" value="Valor da meta" />
+											</h:inputText>
+										</h:panelGroup>
+									</h:panelGroup>
+									
+								</h:panelGroup>										
+							
+							</ui:repeat>
 						</h:panelGroup>
+						
 					</ui:repeat>
 				</h:panelGroup>
 
@@ -75,6 +130,7 @@
 					</h:panelGroup>
 				</h:panelGroup>
 			</h:form>
+			<h:outputScript library="js" name="pdc.js" target="head" />
 		</ui:define>
 	</ui:composition>
 </h:body>
