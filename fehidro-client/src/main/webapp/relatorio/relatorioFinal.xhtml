@@ -15,12 +15,16 @@
 					<h:outputText value="#{itemRelatorio.proposta.nomeProjeto}" />
 				</h:column>
 				<h:column>
-					<f:facet name="header">Classificacação</f:facet>
+					<f:facet name="header">Classificacação Geral</f:facet>
 					<h:outputText value="#{itemRelatorio.classificacao}" />
 				</h:column>
 				<h:column>
 					<f:facet name="header">SubPDC</f:facet>
 					<h:outputText value="#{itemRelatorio.proposta.subPDC.titulo}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Classificacação subpdc</f:facet>
+					<h:outputText value="#{itemRelatorio.classificacaoSubpdc}" />
 				</h:column>
 				<h:column>
 					<f:facet name="header">Nota</f:facet>

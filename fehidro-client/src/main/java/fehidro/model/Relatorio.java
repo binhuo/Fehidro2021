@@ -14,22 +14,29 @@ public class Relatorio  {
 	//TODO: Substituir por Sets para evitar repeticao de calculo de classificacao - vide setItensRelatorio()
 	protected List<Long> idsPropostas; //Lista usada para auxiliar na manipulacao dos itemRelatorio dentro do mapa. Deve ser igual aos Keys do mapa itensRelatorio.
 	protected List<Long> idsSubpdcs;
-	//Construtores
+	
+	//////Construtores
 	public Relatorio()
 	{
 		itensRelatorio = new HashMap<Long, ItemRelatorio>();
 		idsPropostas = new ArrayList<Long>();
 		idsSubpdcs = new ArrayList<Long>();
 	}
-	
 	public Relatorio(List<Avaliacao> avaliacoes)
 	{
 		setItensRelatorio(avaliacoes);
 	}
 	
-	//Metodos
+	//////Metodos
 	
-	public ItemRelatorio[] itensPorSubpdc(Long id, ArrayList<ItemRelatorio> listaFiltrar)	{
+	/**
+	 * Retorna todos os itens pertencentes ao subpdc especificado dentro de listaFiltrar
+	 * @param id - id do SubPdc
+	 * @param listaFiltrar - A lista a ser filtrada
+	 * @return ItemRelatorio[] - Array de todos os items de relatorio pertencentes ao subPDC especificado
+	 */
+	//TODO: considerar substituir tipo do id de Long para Subpdc
+	public static ItemRelatorio[] itensPorSubpdc(Long id, ArrayList<ItemRelatorio> listaFiltrar)	{
 		ArrayList<ItemRelatorio> auxOut = new ArrayList<>();
 		for(int i=0;i<listaFiltrar.size();i++)
 		{
@@ -43,20 +50,54 @@ public class Relatorio  {
 		return out;
 	}
 	
+	/**
+	 * Calcula a classificacao de todos os itens desse relatorio
+	 */
 	public void calcularClassificacao() {
 		ItemRelatorio[] arr = new ItemRelatorio[itensRelatorio.size()]; 
 		for(int j=0;j<idsSubpdcs.size();j++)
 		{
-			arr = itensPorSubpdc(idsSubpdcs.get(j), new ArrayList<ItemRelatorio>(this.itensRelatorio.values())); 
+			//Pega todos os itens do relatorio
+			arr = this.itensRelatorio.values().toArray(new ItemRelatorio[this.itensRelatorio.values().size()]);
+			
 			QuickSort q = new QuickSort();
 			q.sort(arr, 0, arr.length-1); //ordena por soma das notas
-			for(int i=0;i<arr.length;i++)//atribui a classificacao
+			
+			//atribui o numero da classificacao
+			for(int i=0;i<arr.length;i++) 
 			{
 				itensRelatorio.get(arr[(arr.length-1) - i].getProposta().getId()).setClassificacao(i+1);
 			}
 		}
 	}
 	
+	/**
+	 * Calcula a classificacao de todos os itens desse relatorio por subpdc
+	 */
+	public void calcularClassificacaoPorSubpdc() {
+		ItemRelatorio[] arr = new ItemRelatorio[itensRelatorio.size()]; 
+		for(int j=0;j<idsSubpdcs.size();j++)
+		{
+			//Pega todos itens do subpdc atual
+			arr = itensPorSubpdc(idsSubpdcs.get(j), new ArrayList<ItemRelatorio>(this.itensRelatorio.values()));
+			System.out.println("Lenght>>>"+Integer.toString(arr.length));
+			
+			QuickSort q = new QuickSort();
+			q.sort(arr, 0, arr.length-1); //ordena por soma das notas
+			
+			//atribui o numero da classificacao
+			for(int i=0;i<arr.length;i++) 
+			{
+				System.out.println("<><>>>"+Integer.toString(i+1));
+				itensRelatorio.get(arr[(arr.length-1) - i].getProposta().getId()).setClassificacaoSubpdc(i+1);
+			}
+		}
+	}
+	
+	/**
+	 * Adiciona os itens de relatorio a este relatorio com as avaliacoes especificadas
+	 * @param avaliacoes
+	 */
 	public void setItensRelatorio(List<Avaliacao> avaliacoes)
 	{
 		Avaliacao avaliacaoAtual;
@@ -66,20 +107,24 @@ public class Relatorio  {
 		if(avaliacoes != null) {
 			for(int i =0;i<avaliacoes.size();i++)
 			{
+				//Pega as propriedades da avaliacao atual
 				avaliacaoAtual = avaliacoes.get(i);
 				idPropostaAtual = avaliacaoAtual.getProposta().getId();
 				idSubpdcAtual = avaliacaoAtual.getProposta().getSubPDC().getId();
-				if(this.itensRelatorio.get(idPropostaAtual) == null)//Se nao existir um itemRelatorio para a proposta nao existir, crie um itemRelatorio
+				//Se nao existir um itemRelatorio para a proposta nao existir, crie um itemRelatorio
+				if(this.itensRelatorio.get(idPropostaAtual) == null) //TODO: adicionar || this.itensRelatorio.size() <= 0 ????
 				{
 					this.itensRelatorio.put(idPropostaAtual, new ItemRelatorio() );
 					this.idsPropostas.add(idPropostaAtual);
 					this.idsSubpdcs.add(idSubpdcAtual);
 				}
-				
-				this.itensRelatorio.get(idPropostaAtual).addAvaliacao(avaliacaoAtual);//Adicione a avaliacao a uma proposta
+				//Adicione a avaliacao a proposta
+				this.itensRelatorio.get(idPropostaAtual).addAvaliacao(avaliacaoAtual);
 			}
 			
-			calcularClassificacao();//calcula a classificacao
+			//Recalcula a classificacao
+			calcularClassificacaoPorSubpdc(); //TODO: VERIFICAR. Ha maneira melhor de fazer classificacao por ambos os fatores (subpdc e geral)?
+			calcularClassificacao();
 		}
 	}
 	
@@ -88,6 +133,10 @@ public class Relatorio  {
 		return new LinkedList<ItemRelatorio>(this.itensRelatorio.values());
 	}
 	
+	/**
+	 * Retorna lista de ItemRelatorio com os itens de relatorio das propostas que foram classificadas
+	 * @return
+	 */
 	public LinkedList<ItemRelatorio> getItensRelatorioClassificado()
 	{
 		LinkedList<ItemRelatorio> classificados = new LinkedList<ItemRelatorio>();
@@ -104,6 +153,10 @@ public class Relatorio  {
 		return classificados;
 	}
 	
+	/**
+	 * Retorna lista de ItemRelatorio com os itens de relatorio das propostas que foram desclassificadas
+	 * @return LinkedList<ItemRelatorio>
+	 */
 	public LinkedList<ItemRelatorio> getItensRelatorioDesclassificado()
 	{
 		LinkedList<ItemRelatorio> desclassificados = new LinkedList<ItemRelatorio>();
@@ -122,10 +175,12 @@ public class Relatorio  {
 	
 }
 
-//Para uso na classificacao
+/**
+ * Classe de ordenacao - para uso na classificacao
+ */
 class QuickSort 
 { 
-    int partition(ItemRelatorio arr[], int low, int high) 
+    private int partition(ItemRelatorio arr[], int low, int high) 
     { 
         ItemRelatorio pivot = arr[high];  
         int i = (low-1);
@@ -148,7 +203,7 @@ class QuickSort
         return i+1; 
     } 
   
-    void sort(ItemRelatorio arr[], int low, int high) 
+    public void sort(ItemRelatorio arr[], int low, int high) 
     { 
         if (low < high) 
         { 

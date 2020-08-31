@@ -170,7 +170,7 @@ public class AvaliacaoBean implements Serializable {
 	
 	public void setPontuacoes() {
 		this.restPontuacao = new PontuacaoRESTClient();
-		List<Pontuacao> pontuacaoBase = this.restPontuacao.findAll();
+		List<Pontuacao> pontuacaoBase = this.restPontuacao.findAll(); //TODO: Substituir por pontuacao apropriada
 		List<SelectItem> pontuacoes = new ArrayList<>();
 
 		for (Pontuacao i : pontuacaoBase) 
