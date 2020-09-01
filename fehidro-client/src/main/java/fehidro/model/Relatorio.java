@@ -8,12 +8,14 @@ import java.util.List;
 
 import fehidro.control.ItemRelatorio;
 
+//TODO: REFATORAR
 public class Relatorio  {
 	
 	protected HashMap<Long, ItemRelatorio> itensRelatorio;
 	//TODO: Substituir por Sets para evitar repeticao de calculo de classificacao - vide setItensRelatorio()
 	protected List<Long> idsPropostas; //Lista usada para auxiliar na manipulacao dos itemRelatorio dentro do mapa. Deve ser igual aos Keys do mapa itensRelatorio.
 	protected List<Long> idsSubpdcs;
+	protected List<ItemRelatorio> classificacao;
 	
 	//////Construtores
 	public Relatorio()
@@ -21,6 +23,7 @@ public class Relatorio  {
 		itensRelatorio = new HashMap<Long, ItemRelatorio>();
 		idsPropostas = new ArrayList<Long>();
 		idsSubpdcs = new ArrayList<Long>();
+		classificacao = new ArrayList<ItemRelatorio>();
 	}
 	public Relatorio(List<Avaliacao> avaliacoes)
 	{
@@ -54,22 +57,32 @@ public class Relatorio  {
 	 * Calcula a classificacao de todos os itens desse relatorio
 	 */
 	public void calcularClassificacao() {
-		ItemRelatorio[] arr = new ItemRelatorio[itensRelatorio.size()]; 
-		for(int j=0;j<idsSubpdcs.size();j++)
-		{
+		ItemRelatorio[] arr = new ItemRelatorio[itensRelatorio.size()];
+		System.out.println(">>"+Integer.toString(arr.length));
+		//for(int j=0;j<idsSubpdcs.size();j++)
+		//{
 			//Pega todos os itens do relatorio
 			arr = this.itensRelatorio.values().toArray(new ItemRelatorio[this.itensRelatorio.values().size()]);
 			
 			QuickSort q = new QuickSort();
 			q.sort(arr, 0, arr.length-1); //ordena por soma das notas
 			
+			classificacao = new ArrayList<ItemRelatorio>();
 			//atribui o numero da classificacao
 			for(int i=0;i<arr.length;i++) 
 			{
 				itensRelatorio.get(arr[(arr.length-1) - i].getProposta().getId()).setClassificacao(i+1);
+				classificacao.add(i, itensRelatorio.get(arr[(arr.length-1) - i].getProposta().getId()) );
 			}
-		}
+		//}
+			
+			
 	}
+	
+	public List<ItemRelatorio> getClassificacao() {
+		return classificacao;
+	}
+	
 	
 	/**
 	 * Calcula a classificacao de todos os itens desse relatorio por subpdc
@@ -88,8 +101,9 @@ public class Relatorio  {
 			//atribui o numero da classificacao
 			for(int i=0;i<arr.length;i++) 
 			{
-				System.out.println("<><>>>"+Integer.toString(i+1));
+				//System.out.println("<><>>>"+Integer.toString(i+1));
 				itensRelatorio.get(arr[(arr.length-1) - i].getProposta().getId()).setClassificacaoSubpdc(i+1);
+				classificacao.add(i, itensRelatorio.get(arr[(arr.length-1) - i].getProposta().getId()) );
 			}
 		}
 	}
@@ -123,7 +137,7 @@ public class Relatorio  {
 			}
 			
 			//Recalcula a classificacao
-			calcularClassificacaoPorSubpdc(); //TODO: VERIFICAR. Ha maneira melhor de fazer classificacao por ambos os fatores (subpdc e geral)?
+			calcularClassificacaoPorSubpdc(); //TODO: REDUNDANTE?
 			calcularClassificacao();
 		}
 	}

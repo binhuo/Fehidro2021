@@ -18,6 +18,7 @@ public class ItemRelatorio {
 	private int classificacaoSubpdc; //A classificacao (rank) no subPDC
 	private int classificacao; //A classificacao geral (rank)
 	private boolean desclassificado;
+	private String stringDesclassificado;
 	
 	public ItemRelatorio() {
 		avaliacoes = new LinkedList<Avaliacao>();
@@ -46,6 +47,15 @@ public class ItemRelatorio {
 	//Desclassificacao
 	public boolean isDesclassificado() {
 		return desclassificado;
+	}
+	
+	public String getStringDesclassificado() {
+		if(desclassificado) {
+			return "Desclassificado";
+		}
+		else {
+			return "Classificado";
+		}
 	}
 
 	/**
