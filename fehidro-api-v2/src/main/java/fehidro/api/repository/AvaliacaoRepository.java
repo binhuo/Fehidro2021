@@ -3,6 +3,7 @@ package fehidro.api.repository;
 import fehidro.api.model.Avaliacao;
 import fehidro.api.model.CriterioAvaliacao;
 import fehidro.api.model.Proposta;
+import fehidro.api.model.SubPDC;
 import fehidro.api.model.SubcriterioAvaliacao;
 import fehidro.api.model.Usuario;
 
@@ -29,4 +30,8 @@ public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long>{
 	
 	@Query("select a from Avaliacao a where a.proposta = ?1 and a.subcriterio = ?2")
 	public List<Avaliacao> findAllBySubcriterioProposta(Proposta proposta,SubcriterioAvaliacao subcriterio);
+	
+	//@Query("select a from Avaliacao a where a.proposta = ( select p from Proposta p where p.subPDC = ?1 )  ")
+	@Query("select a from Avaliacao a inner join Proposta p on a.proposta = p.id where p.id = (select id from SubPDC s where s =?1)"  )
+	public List<Avaliacao> findAllBySubPdc(SubPDC subpdc);
 }

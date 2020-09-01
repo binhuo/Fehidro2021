@@ -20,6 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import fehidro.api.model.Avaliacao;
 import fehidro.api.model.CriterioAvaliacao;
 import fehidro.api.model.Proposta;
+import fehidro.api.model.SubPDC;
 import fehidro.api.model.SubcriterioAvaliacao;
 import fehidro.api.model.Usuario;
 import fehidro.api.repository.AvaliacaoRepository;
@@ -65,6 +66,12 @@ public class AvaliacaoController {
 	@GetMapping("/listarSubcriteiro/{subcriterio}")
 	public ResponseEntity<List<CadastroAvaliacaoDTO>> listarSubcriteiro(@PathVariable(value = "subcriterio") SubcriterioAvaliacao subcriterio) {
 		List<Avaliacao> list = _avaliacaoRepository.findAllBySubcriterio(subcriterio);
+		List<CadastroAvaliacaoDTO> resul = list.stream().map(u -> {return new CadastroAvaliacaoDTO(u);}).collect(Collectors.toList());
+		return ResponseEntity.ok().body(resul);
+	}
+	@GetMapping("/listarSubPDC/{subpdc}")
+	public ResponseEntity<List<CadastroAvaliacaoDTO>> listarSubPDC(@PathVariable(value = "subpdc") SubPDC subpdc) {
+		List<Avaliacao> list = _avaliacaoRepository.findAllBySubPdc(subpdc);
 		List<CadastroAvaliacaoDTO> resul = list.stream().map(u -> {return new CadastroAvaliacaoDTO(u);}).collect(Collectors.toList());
 		return ResponseEntity.ok().body(resul);
 	}
