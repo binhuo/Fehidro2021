@@ -57,21 +57,24 @@ public class Relatorio  {
 	 * Calcula a classificacao de todos os itens desse relatorio
 	 */
 	public void calcularClassificacao() {
+		System.out.println(">>classificacao lenght arr: " + Integer.toString(itensRelatorio.size()) );
 		ItemRelatorio[] arr = new ItemRelatorio[itensRelatorio.size()];
-		System.out.println(">>"+Integer.toString(arr.length));
+		System.out.println(">>classificacao lenght arr: " + Integer.toString(arr.length) );
 		//for(int j=0;j<idsSubpdcs.size();j++)
 		//{
 			//Pega todos os itens do relatorio
+		
+			classificacao = new ArrayList<ItemRelatorio>();//Reset
 			arr = this.itensRelatorio.values().toArray(new ItemRelatorio[this.itensRelatorio.values().size()]);
 			
 			QuickSort q = new QuickSort();
 			q.sort(arr, 0, arr.length-1); //ordena por soma das notas
 			
-			classificacao = new ArrayList<ItemRelatorio>();
 			//atribui o numero da classificacao
 			for(int i=0;i<arr.length;i++) 
 			{
 				itensRelatorio.get(arr[(arr.length-1) - i].getProposta().getId()).setClassificacao(i+1);
+				System.out.println("added to classificacao");
 				classificacao.add(i, itensRelatorio.get(arr[(arr.length-1) - i].getProposta().getId()) );
 			}
 		//}
@@ -80,6 +83,8 @@ public class Relatorio  {
 	}
 	
 	public List<ItemRelatorio> getClassificacao() {
+		System.out.println("getClassificacao!!!!");
+		System.out.println("--itens relatorio:"+this.getItensRelatorio().size());
 		return classificacao;
 	}
 	
@@ -93,7 +98,7 @@ public class Relatorio  {
 		{
 			//Pega todos itens do subpdc atual
 			arr = itensPorSubpdc(idsSubpdcs.get(j), new ArrayList<ItemRelatorio>(this.itensRelatorio.values()));
-			System.out.println("Lenght>>>"+Integer.toString(arr.length));
+			System.out.println("Lenght arr classif subpdc >>>"+Integer.toString(arr.length));
 			
 			QuickSort q = new QuickSort();
 			q.sort(arr, 0, arr.length-1); //ordena por soma das notas
@@ -114,6 +119,8 @@ public class Relatorio  {
 	 */
 	public void setItensRelatorio(List<Avaliacao> avaliacoes)
 	{
+		System.out.println("2434");
+		System.out.println("avaliacoes em setItensRelatorio = " + avaliacoes.size());
 		Avaliacao avaliacaoAtual;
 		Long idPropostaAtual;
 		Long idSubpdcAtual;
@@ -121,6 +128,7 @@ public class Relatorio  {
 		if(avaliacoes != null) {
 			for(int i =0;i<avaliacoes.size();i++)
 			{
+				System.out.println("teste");
 				//Pega as propriedades da avaliacao atual
 				avaliacaoAtual = avaliacoes.get(i);
 				idPropostaAtual = avaliacaoAtual.getProposta().getId();
@@ -134,11 +142,15 @@ public class Relatorio  {
 				}
 				//Adicione a avaliacao a proposta
 				this.itensRelatorio.get(idPropostaAtual).addAvaliacao(avaliacaoAtual);
+				System.out.println("add = " + this.itensRelatorio.size() );
 			}
 			
 			//Recalcula a classificacao
-			calcularClassificacaoPorSubpdc(); //TODO: REDUNDANTE?
+			System.out.println(">><>Classificacao lenght itensRelatorio: " + Integer.toString(itensRelatorio.size()) );
+			calcularClassificacaoPorSubpdc();
+			System.out.println(">><>Classificacao lenght itensRelatorio: " + Integer.toString(itensRelatorio.size()) );
 			calcularClassificacao();
+			System.out.println(">><>Classificacao lenght itensRelatorio: " + Integer.toString(itensRelatorio.size()) );
 		}
 	}
 	

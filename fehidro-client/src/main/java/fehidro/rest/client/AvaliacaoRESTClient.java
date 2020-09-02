@@ -74,7 +74,7 @@ public class AvaliacaoRESTClient implements RESTClientInterface<Avaliacao>{
 		Builder b = t.request(MediaType.APPLICATION_JSON);
 		Response r = b.get();
 		List<Avaliacao> out = r.readEntity(new GenericType<List<Avaliacao>> () {});
-		System.out.println("out size = "+out.size());
+		System.out.println("out REST listarSubPDC() size = "+out.size());
 		return out;
 		
 		

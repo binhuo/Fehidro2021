@@ -20,7 +20,7 @@ import fehidro.rest.client.SubPDCRESTClient;
 
 //TODO: Renomear de Parcial para SubPDC
 @ManagedBean(name="relatorioParcial")
-@ViewScoped
+@SessionScoped
 public class RelatorioParcialBean implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -49,9 +49,11 @@ public class RelatorioParcialBean implements Serializable {
 	}
 
 	public String getUrl() {
+		this.relatorio = new Relatorio();//RESET
 		if(this.subPdc != null) {
 			List<Avaliacao> avaliacoes = rest.listarSubPDC(subPdc);
-			System.out.println("SIZE AVALIACOES = " + avaliacoes.size());
+			System.out.println("SUBPDC = "+ subPdc.getId());
+			System.out.println("SIZE AVALIACOES REST listarSUBPDC = " + avaliacoes.size());
 			this.relatorio.setItensRelatorio(avaliacoes);
 		}
 		return "/relatorio/relatorioParcial";
