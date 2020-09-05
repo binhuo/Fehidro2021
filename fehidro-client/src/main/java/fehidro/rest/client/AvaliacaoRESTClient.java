@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.client.Invocation.Builder;
 
 import fehidro.model.Avaliacao;
-import fehidro.model.CriterioAvaliacao;
+//import fehidro.model.CriterioAvaliacao;
 import fehidro.model.PDC;
 import fehidro.model.Proposta;
 import fehidro.model.SubPDC;
@@ -91,15 +91,15 @@ public class AvaliacaoRESTClient implements RESTClientInterface<Avaliacao>{
 		return avaliacoes;
 	}
 	
-	public List<Avaliacao> listarCriterio(CriterioAvaliacao criterio) {
-		List<Avaliacao> avaliacoes = 
-				ClientBuilder.newClient().
-				target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL + "listarCriterio/" +criterio).
-				request(MediaType.APPLICATION_JSON).get().
-				readEntity(new GenericType<List<Avaliacao>> () {});
-		
-		return avaliacoes;
-	}
+//	public List<Avaliacao> listarCriterio(CriterioAvaliacao criterio) {
+//		List<Avaliacao> avaliacoes = 
+//				ClientBuilder.newClient().
+//				target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL + "listarCriterio/" +criterio).
+//				request(MediaType.APPLICATION_JSON).get().
+//				readEntity(new GenericType<List<Avaliacao>> () {});
+//		
+//		return avaliacoes;
+//	}
 	
 	public List<Avaliacao> listarCriterio(SubcriterioAvaliacao subcriterio) {
 		List<Avaliacao> avaliacoes = 
@@ -131,15 +131,15 @@ public class AvaliacaoRESTClient implements RESTClientInterface<Avaliacao>{
 		return avaliacoes;
 	}
 	
-	public List<Avaliacao> listarCriterioProposta(CriterioAvaliacao criterio, Proposta proposta) {
-		List<Avaliacao> avaliacoes = 
-				ClientBuilder.newClient().
-				target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL + "listarCriterioProposta/" +criterio+"/"+proposta).
-				request(MediaType.APPLICATION_JSON).get().
-				readEntity(new GenericType<List<Avaliacao>> () {});
-		
-		return avaliacoes;
-	}
+//	public List<Avaliacao> listarCriterioProposta(CriterioAvaliacao criterio, Proposta proposta) {
+//		List<Avaliacao> avaliacoes = 
+//				ClientBuilder.newClient().
+//				target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL + "listarCriterioProposta/" +criterio+"/"+proposta).
+//				request(MediaType.APPLICATION_JSON).get().
+//				readEntity(new GenericType<List<Avaliacao>> () {});
+//		
+//		return avaliacoes;
+//	}
 	
 	public List<Avaliacao> listarSubcriterioProposta(SubcriterioAvaliacao subcriterio, Proposta proposta) {
 		List<Avaliacao> avaliacoes = 

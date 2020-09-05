@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import fehidro.api.model.Avaliacao;
-import fehidro.api.model.CriterioAvaliacao;
+//import fehidro.api.model.CriterioAvaliacao;
 import fehidro.api.model.Proposta;
 import fehidro.api.model.SubPDC;
 import fehidro.api.model.SubcriterioAvaliacao;
@@ -57,12 +57,6 @@ public class AvaliacaoController {
 		List<CadastroAvaliacaoDTO> resul = list.stream().map(u -> {return new CadastroAvaliacaoDTO(u);}).collect(Collectors.toList());
 		return ResponseEntity.ok().body(resul);
 	}
-	@GetMapping("/listarCriteiro/{criterio}")
-	public ResponseEntity<List<CadastroAvaliacaoDTO>> listarCriterio(@PathVariable(value = "criterio") CriterioAvaliacao criterio) {
-		List<Avaliacao> list = _avaliacaoRepository.findAllByCriterio(criterio);
-		List<CadastroAvaliacaoDTO> resul = list.stream().map(u -> {return new CadastroAvaliacaoDTO(u);}).collect(Collectors.toList());
-		return ResponseEntity.ok().body(resul);
-	}
 	@GetMapping("/listarSubcriteiro/{subcriterio}")
 	public ResponseEntity<List<CadastroAvaliacaoDTO>> listarSubcriteiro(@PathVariable(value = "subcriterio") SubcriterioAvaliacao subcriterio) {
 		List<Avaliacao> list = _avaliacaoRepository.findAllBySubcriterio(subcriterio);
@@ -85,12 +79,6 @@ public class AvaliacaoController {
 	@GetMapping("/listarAvaliadorProposta/{proposta}/{avaliador}")
 	public ResponseEntity<List<CadastroAvaliacaoDTO>> listarAvaliadorProposta(@PathVariable(value = "proposta") Proposta proposta,@PathVariable(value = "avaliador") Usuario avaliador ) {
 		List<Avaliacao> list = _avaliacaoRepository.findAllByAvaliadorProposta(proposta,avaliador);
-		List<CadastroAvaliacaoDTO> resul = list.stream().map(u -> {return new CadastroAvaliacaoDTO(u);}).collect(Collectors.toList());
-		return ResponseEntity.ok().body(resul);
-	}
-	@GetMapping("/listarCriterioProposta/{proposta}/{criterio}")
-	public ResponseEntity<List<CadastroAvaliacaoDTO>> listarCriterioProposta(@PathVariable(value = "proposta") Proposta proposta,@PathVariable(value = "criterio") CriterioAvaliacao criterio ) {
-		List<Avaliacao> list = _avaliacaoRepository.findAllByCriterioProposta(proposta,criterio);
 		List<CadastroAvaliacaoDTO> resul = list.stream().map(u -> {return new CadastroAvaliacaoDTO(u);}).collect(Collectors.toList());
 		return ResponseEntity.ok().body(resul);
 	}
