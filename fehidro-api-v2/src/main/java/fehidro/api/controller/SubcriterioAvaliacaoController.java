@@ -20,6 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import fehidro.api.model.SubcriterioAvaliacao;
 import fehidro.api.repository.SubcriterioAvaliacaoRepository;
 import fehidro.model.dto.subcriterio.SubcriterioExibicaoDTO;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/subcriterioAvaliacao")
@@ -27,7 +28,8 @@ public class SubcriterioAvaliacaoController {
 	@Autowired
 	private SubcriterioAvaliacaoRepository _subcriterioAvaliacaoRepository; 
 
-	@GetMapping
+	@ApiOperation(value = "Retorna uma lista de subcritérios de avaliação")
+	@GetMapping(produces="application/json")
 	public ResponseEntity<List<SubcriterioAvaliacao>> getAll() {		
 		return ResponseEntity.ok(_subcriterioAvaliacaoRepository.findAll());
 	}
@@ -49,19 +51,22 @@ public class SubcriterioAvaliacaoController {
 		}
 	}
 	
-	@PostMapping
+	@ApiOperation(value = "Cadastra um novo subcritério de avaliação")
+	@PostMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<SubcriterioAvaliacao> add(@RequestBody SubcriterioAvaliacao subcriterio, UriComponentsBuilder uriBuilder) {
 		SubcriterioAvaliacao cadastrado = _subcriterioAvaliacaoRepository.save(subcriterio);
 		URI uri = uriBuilder.path("/{id}").buildAndExpand(cadastrado.getId()).toUri();
 		return ResponseEntity.created(uri).body(cadastrado);
 	}
 
-	@PutMapping
+	@ApiOperation(value = "Atualiza um subcritério de avaliação")
+	@PutMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<SubcriterioAvaliacao> update(@RequestBody SubcriterioAvaliacao subcriterio) {
 		SubcriterioAvaliacao cadastrado =  _subcriterioAvaliacaoRepository.save(subcriterio);
 		return ResponseEntity.ok(cadastrado);
 	}
 
+	@ApiOperation(value = "Deleta um subcritério de avaliação pelo seu id")
 	@DeleteMapping
 	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
 		Optional<SubcriterioAvaliacao> subcriterio = _subcriterioAvaliacaoRepository.findById(id);

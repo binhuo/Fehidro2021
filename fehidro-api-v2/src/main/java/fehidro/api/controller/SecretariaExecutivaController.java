@@ -20,6 +20,7 @@ import fehidro.api.model.SecretariaExecutiva;
 import fehidro.api.repository.SecretariaExecutivaRepository;
 import fehidro.api.util.password.Password;
 import fehidro.model.dto.secretariaExecutiva.CadastroSecretariaExecutivaDTO;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/usuario/secretaria")
@@ -28,7 +29,8 @@ public class SecretariaExecutivaController {
 	@Autowired
 	private SecretariaExecutivaRepository _secretariaExecRepository;
 	
-	@GetMapping("/{id}")
+	@ApiOperation(value = "Retorna um usuário da Secretaria Executiva encontrada por seu id")
+	@GetMapping(value = "/{id}", produces="application/json")
 	public ResponseEntity<CadastroSecretariaExecutivaDTO> get(@PathVariable(value = "id") Long id) {
 		Optional<SecretariaExecutiva> user = _secretariaExecRepository.findById(id);
 		if(user.isPresent()) {
@@ -38,7 +40,8 @@ public class SecretariaExecutivaController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@PostMapping
+	@ApiOperation(value = "Cadastra um usuário da Secretaria Executiva")
+	@PostMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<CadastroSecretariaExecutivaDTO> add(@RequestBody CadastroSecretariaExecutivaDTO user, UriComponentsBuilder uriBuilder) {
 		try {
 			SecretariaExecutiva novo = new SecretariaExecutiva(user);
@@ -58,8 +61,9 @@ public class SecretariaExecutivaController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
-
-	@PutMapping
+	
+	@ApiOperation(value = "Atualiza um usuário da Secretaria Executiva")
+	@PutMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<CadastroSecretariaExecutivaDTO> update(@RequestBody CadastroSecretariaExecutivaDTO user) {
 		try {
 			Optional<SecretariaExecutiva> usuarioBase = _secretariaExecRepository.findById(user.getId()); 

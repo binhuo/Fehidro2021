@@ -18,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import fehidro.api.model.CriterioAvaliacao;
 import fehidro.api.repository.CriterioAvaliacaoRepository;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/criterioAvaliacao")
@@ -26,12 +27,14 @@ public class CriterioAvaliacaoController {
 	@Autowired
 	private CriterioAvaliacaoRepository _criterioAvaliacaoRepository; 
 
-	@GetMapping
+	@ApiOperation(value = "Retorna uma lista de critérios de avaliação")
+	@GetMapping(produces="application/json")
 	public ResponseEntity<List<CriterioAvaliacao>> getAll() {		
 		return ResponseEntity.ok(_criterioAvaliacaoRepository.findAll());
 	}
-
-	@GetMapping("/{id}")
+	
+	@ApiOperation(value = "Retorna um critério de avaliação encontrado por seu id")
+	@GetMapping(value = "/{id}", produces="application/json")
 	public ResponseEntity<CriterioAvaliacao> get(@PathVariable(value = "id") Long id) {
 		Optional<CriterioAvaliacao> criterio = _criterioAvaliacaoRepository.findById(id);
 		if(criterio.isPresent()) {
@@ -41,19 +44,22 @@ public class CriterioAvaliacaoController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@PostMapping
+	@ApiOperation(value = "Cadastra um novo critério de avaliação")
+	@PostMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<CriterioAvaliacao> add(@RequestBody CriterioAvaliacao criterio, UriComponentsBuilder uriBuilder) {
 		CriterioAvaliacao cadastrado = _criterioAvaliacaoRepository.save(criterio);
 		URI uri = uriBuilder.path("/{id}").buildAndExpand(cadastrado.getId()).toUri();
 		return ResponseEntity.created(uri).body(cadastrado);
 	}
 
-	@PutMapping
+	@ApiOperation(value = "Atualiza um critério de avaliação")
+	@PutMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<CriterioAvaliacao> update(@RequestBody CriterioAvaliacao criterio) {
 		CriterioAvaliacao cadastrado =  _criterioAvaliacaoRepository.save(criterio);
 		return ResponseEntity.ok(cadastrado);
 	}
 
+	@ApiOperation(value = "Deleta um critério de avaliação pelo seu id")
 	@DeleteMapping
 	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
 		Optional<CriterioAvaliacao> criterio = _criterioAvaliacaoRepository.findById(id);

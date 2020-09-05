@@ -18,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import fehidro.api.model.Pontuacao;
 import fehidro.api.repository.PontuacaoRepository;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/pontuacao")
@@ -26,12 +27,14 @@ public class PontuacaoController {
 	@Autowired
 	private PontuacaoRepository _pontuacaoRepository;
 	
-	@GetMapping
+	@ApiOperation(value = "Retorna uma lista de pontuações dos critérios de avaliação")
+	@GetMapping(produces="application/json")
 	public ResponseEntity<List<Pontuacao>> getAll() {		
 		return ResponseEntity.ok(_pontuacaoRepository.findAll());
 	}
 
-	@GetMapping("/{id}")
+	@ApiOperation(value = "Retorna uma pontuação encontrada por seu id")
+	@GetMapping(value = "/{id}", produces="application/json")
 	public ResponseEntity<Pontuacao> get(@PathVariable(value = "id") Long id) {
 		Optional<Pontuacao> pontuacao = _pontuacaoRepository.findById(id);
 		if(pontuacao.isPresent()) {
@@ -41,19 +44,22 @@ public class PontuacaoController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@PostMapping
+	@ApiOperation(value = "Cadastra uma nova pontuação")
+	@PostMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<Pontuacao> add(@RequestBody Pontuacao pontuacao, UriComponentsBuilder uriBuilder) {
 		Pontuacao cadastrado = _pontuacaoRepository.save(pontuacao);
 		URI uri = uriBuilder.path("/{id}").buildAndExpand(cadastrado.getId()).toUri();
 		return ResponseEntity.created(uri).body(cadastrado);
 	}
 
-	@PutMapping
+	@ApiOperation(value = "Atualiza uma pontuação")
+	@PutMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<Pontuacao> update(@RequestBody Pontuacao pontuacao) {
 		Pontuacao cadastrado =  _pontuacaoRepository.save(pontuacao);
 		return ResponseEntity.ok(cadastrado);
 	}
 
+	@ApiOperation(value = "Deleta uma pontuação pelo seu id")
 	@DeleteMapping
 	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
 		Optional<Pontuacao> pontuacao = _pontuacaoRepository.findById(id);

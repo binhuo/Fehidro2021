@@ -21,6 +21,7 @@ import fehidro.api.model.Usuario;
 import fehidro.api.repository.UsuarioRepository;
 import fehidro.api.util.password.Password;
 import fehidro.model.dto.usuario.CadastroUsuarioDTO;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/usuario")
@@ -32,14 +33,16 @@ public class UsuarioController {
 //	@Autowired
 //	private EmailUtil emailService;
 		
-	@GetMapping
+	@ApiOperation(value = "Retorna uma lista de usuários independente do perfil de acesso")
+	@GetMapping(produces="application/json")
 	public ResponseEntity<List<CadastroUsuarioDTO>> getAll() {
 		List<Usuario> list = _usuarioRepository.findAll();
 		List<CadastroUsuarioDTO> resul = list.stream().map(u -> {return new CadastroUsuarioDTO(u);}).collect(Collectors.toList());
 		return ResponseEntity.ok().body(resul);
 	}
 	
-	@GetMapping("/{id}")
+	@ApiOperation(value = "Retorna um usuário encontrado por seu id")
+	@GetMapping(value = "/{id}", produces="application/json")
 	public ResponseEntity<CadastroUsuarioDTO> get(@PathVariable(value = "id") Long id) {
 		Optional<Usuario> user = _usuarioRepository.findById(id);
 		if (user.isPresent()) {
@@ -49,7 +52,8 @@ public class UsuarioController {
 		}
 	}
 	
-	@GetMapping("/obterPorLogin/{login}")
+	@ApiOperation(value = "Retorna um usuário encontrado por seu login")
+	@GetMapping(value="/obterPorLogin/{login}", produces="application/json")
 	public ResponseEntity<CadastroUsuarioDTO> obterPorLogin(@PathVariable(value = "login") String login) {
 		Optional<Usuario> user = _usuarioRepository.findByLogin(login);
 		if (user.isPresent()) {
@@ -59,7 +63,8 @@ public class UsuarioController {
 		}
 	}
 	
-	@GetMapping("/obterPorCPF/{cpf}")
+	@ApiOperation(value = "Retorna um usuário encontrado por seu CPF")
+	@GetMapping(value="/obterPorCPF/{cpf}", produces="application/json")
 	public ResponseEntity<CadastroUsuarioDTO> obterPorCPF(@PathVariable(value = "cpf") String cpf) {
 		Optional<Usuario> user = _usuarioRepository.findByCPF(cpf);
 		if (user.isPresent()) {
@@ -69,14 +74,16 @@ public class UsuarioController {
 		}
 	}
 	
-	@GetMapping("/obterPorPerfilAcesso/{perfilacesso}")
+	@ApiOperation(value = "Retorna uma lista de usuários de um perfil de acesso específico")
+	@GetMapping(value="/obterPorPerfilAcesso/{perfilacesso}", produces="application/json")
 	public ResponseEntity<List<CadastroUsuarioDTO>> obterPorPerfilAcesso(@PathVariable(value = "perfilacesso") Long perfilacesso) {
 		List<Usuario> list = _usuarioRepository.findAllByPerfilAcesso(perfilacesso);
 		List<CadastroUsuarioDTO> resul = list.stream().map(u -> {return new CadastroUsuarioDTO(u);}).collect(Collectors.toList());
 		return ResponseEntity.ok().body(resul);
 	}
 	
-	@PostMapping
+	@ApiOperation(value = "Cadastra um novo usuário")
+	@PostMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<CadastroUsuarioDTO> add(@RequestBody CadastroUsuarioDTO usuario, UriComponentsBuilder uriBuilder) {
 		
 		try {
@@ -97,7 +104,8 @@ public class UsuarioController {
 		}
 	}
 	
-	@PutMapping
+	@ApiOperation(value = "Atualiza um usuário")
+	@PutMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<Usuario> update(@RequestBody Usuario usuario) {
 		Usuario user = _usuarioRepository.save(usuario);	
 		return ResponseEntity.ok(user);
