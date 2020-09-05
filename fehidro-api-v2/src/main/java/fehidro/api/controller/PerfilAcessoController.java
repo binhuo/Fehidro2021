@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fehidro.api.model.PerfilAcesso;
 import fehidro.api.repository.PerfilAcessoRepository;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/perfilAcesso")
@@ -18,7 +19,8 @@ public class PerfilAcessoController {
 	@Autowired
 	private PerfilAcessoRepository _perfilAcessoRepository;
 	
-	@GetMapping
+	@ApiOperation(value = "Retorna uma lista de perfis de acesso")
+	@GetMapping(produces="application/json")
 	public ResponseEntity<List<PerfilAcesso>> getAll() {		
 		return ResponseEntity.ok(_perfilAcessoRepository.findAll());
 	}

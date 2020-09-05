@@ -17,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import fehidro.api.model.Deliberacao;
 import fehidro.api.repository.DeliberacaoRepository;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/deliberacao")
@@ -25,12 +26,14 @@ public class DeliberacaoController {
 	@Autowired
 	private DeliberacaoRepository _deliberacaoRepository;
 	
-	@GetMapping
+	@ApiOperation(value = "Retorna uma lista de deliberações")
+	@GetMapping(produces="application/json")
 	public ResponseEntity<List<Deliberacao>> getAll() {		
 		return ResponseEntity.ok(_deliberacaoRepository.findAll());
 	}
 	
-	@GetMapping("/{id}")
+	@ApiOperation(value = "Retorna uma deliberação encontrada por seu id")
+	@GetMapping(value = "/{id}", produces="application/json")
 	public ResponseEntity<Deliberacao> get(@PathVariable(value = "id") Long id) {
 		Optional<Deliberacao> deliberacao = _deliberacaoRepository.findById(id);
 		if(deliberacao.isPresent()) {
@@ -40,14 +43,16 @@ public class DeliberacaoController {
 		return ResponseEntity.notFound().build();
 	}
 	
-	@PostMapping
+	@ApiOperation(value = "Cadastra uma nova deliberação")
+	@PostMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<Deliberacao> add(@RequestBody Deliberacao deliberacao, UriComponentsBuilder uriBuilder) {
 		Deliberacao cadastrado = _deliberacaoRepository.save(deliberacao);
 		URI uri = uriBuilder.path("/{id}").buildAndExpand(cadastrado.getId()).toUri();
 		return ResponseEntity.created(uri).body(cadastrado);
 	}
 	
-	@PutMapping
+	@ApiOperation(value = "Atualiza uma deliberação")
+	@PutMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<Deliberacao> update(@RequestBody Deliberacao deliberacao) {
 		Deliberacao cadastrado =  _deliberacaoRepository.save(deliberacao);
 		return ResponseEntity.ok(cadastrado);

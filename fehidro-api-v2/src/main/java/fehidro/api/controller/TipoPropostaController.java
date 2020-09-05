@@ -17,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import fehidro.api.model.TipoProposta;
 import fehidro.api.repository.TipoPropostaRepository;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/tipoProposta")
@@ -25,12 +26,14 @@ public class TipoPropostaController {
 	@Autowired
 	private TipoPropostaRepository _tipoPropostaRepository;
 	
-	@GetMapping
+	@ApiOperation(value = "Retorna uma lista de tipos de proposta")
+	@GetMapping(produces="application/json")
 	public ResponseEntity<List<TipoProposta>> getAll() {		
 		return ResponseEntity.ok(_tipoPropostaRepository.findAll());
 	}
 
-	@GetMapping("/{id}")
+	@ApiOperation(value = "Retorna um tipo de proposta encontrado por seu id")
+	@GetMapping(value = "/{id}", produces="application/json")
 	public ResponseEntity<TipoProposta> get(@PathVariable(value = "id") Long id) {
 		Optional<TipoProposta> tipoProposta = _tipoPropostaRepository.findById(id);
 		if(tipoProposta.isPresent()) {
@@ -40,14 +43,16 @@ public class TipoPropostaController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@PostMapping
+	@ApiOperation(value = "Cadastra um novo tipo de proposta")
+	@PostMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<TipoProposta> add(@RequestBody TipoProposta tipoProposta, UriComponentsBuilder uriBuilder) {
 		TipoProposta cadastrado = _tipoPropostaRepository.save(tipoProposta);
 		URI uri = uriBuilder.path("/{id}").buildAndExpand(cadastrado.getId()).toUri();
 		return ResponseEntity.created(uri).body(cadastrado);
 	}
 
-	@PutMapping
+	@ApiOperation(value = "Atualiza um tipo de proposta")
+	@PutMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<TipoProposta> update(@RequestBody TipoProposta tipoProposta) {
 		TipoProposta cadastrado =  _tipoPropostaRepository.save(tipoProposta);
 		return ResponseEntity.ok(cadastrado);

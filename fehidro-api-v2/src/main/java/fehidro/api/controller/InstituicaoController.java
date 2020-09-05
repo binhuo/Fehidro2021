@@ -17,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import fehidro.api.model.Instituicao;
 import fehidro.api.repository.InstituicaoRepository;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/instituicao")
@@ -25,12 +26,14 @@ public class InstituicaoController {
 	@Autowired
 	private InstituicaoRepository _instituicaoRepository;
 	
-	@GetMapping
+	@ApiOperation(value = "Retorna uma lista de instituições")
+	@GetMapping(produces="application/json")
 	public ResponseEntity<List<Instituicao>> getAll() {		
 		return ResponseEntity.ok(_instituicaoRepository.findAll());
 	}
 
-	@GetMapping("/{id}")
+	@ApiOperation(value = "Retorna uma instituição encontrada por seu id")
+	@GetMapping(value = "/{id}", produces="application/json")
 	public ResponseEntity<Instituicao> get(@PathVariable(value = "id") Long id) {
 		Optional<Instituicao> instituicao = _instituicaoRepository.findById(id);
 		if(instituicao.isPresent()) {
@@ -40,14 +43,16 @@ public class InstituicaoController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@PostMapping
+	@ApiOperation(value = "Cadastra uma nova instituição")
+	@PostMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<Instituicao> add(@RequestBody Instituicao instituicao, UriComponentsBuilder uriBuilder) {
 		Instituicao cadastrado = _instituicaoRepository.save(instituicao);
 		URI uri = uriBuilder.path("/{id}").buildAndExpand(cadastrado.getId()).toUri();
 		return ResponseEntity.created(uri).body(cadastrado);
 	}
 
-	@PutMapping
+	@ApiOperation(value = "Atualiza uma instituição")
+	@PutMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<Instituicao> update(@RequestBody Instituicao instituicao) {
 		Instituicao cadastrado =  _instituicaoRepository.save(instituicao);
 		return ResponseEntity.ok(cadastrado);
