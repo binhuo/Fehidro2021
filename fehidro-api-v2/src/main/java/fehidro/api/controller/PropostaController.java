@@ -18,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import fehidro.api.model.Proposta;
 import fehidro.api.repository.PropostaRepository;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/proposta")
@@ -26,12 +27,14 @@ public class PropostaController {
 	@Autowired
 	private PropostaRepository _propostaRepository;
 	
-	@GetMapping
+	@ApiOperation(value = "Retorna uma lista de propostas")
+	@GetMapping(produces="application/json")
 	public ResponseEntity<List<Proposta>> getAll() {		
 		return ResponseEntity.ok(_propostaRepository.findAll());
 	}
 
-	@GetMapping("/{id}")
+	@ApiOperation(value = "Retorna uma proposta encontrada por seu id")
+	@GetMapping(value = "/{id}", produces="application/json")
 	public ResponseEntity<Proposta> get(@PathVariable(value = "id") Long id) {
 		Optional<Proposta> proposta = _propostaRepository.findById(id);
 		if(proposta.isPresent()) {
@@ -41,19 +44,22 @@ public class PropostaController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@PostMapping
+	@ApiOperation(value = "Cadastra uma nova proposta")
+	@PostMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<Proposta> add(@RequestBody Proposta proposta, UriComponentsBuilder uriBuilder) {
 		Proposta cadastrado = _propostaRepository.save(proposta);
 		URI uri = uriBuilder.path("/{id}").buildAndExpand(cadastrado.getId()).toUri();
 		return ResponseEntity.created(uri).body(cadastrado);
 	}
 
-	@PutMapping
+	@ApiOperation(value = "Atualiza uma proposta")
+	@PutMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<Proposta> update(@RequestBody Proposta proposta) {
 		Proposta cadastrado =  _propostaRepository.save(proposta);
 		return ResponseEntity.ok(cadastrado);
 	}
 
+	@ApiOperation(value = "Deleta uma proposta pelo seu id")
 	@DeleteMapping
 	public ResponseEntity<?> delete(@PathVariable(value = "id") Long id) {
 		Optional<Proposta> proposta = _propostaRepository.findById(id);

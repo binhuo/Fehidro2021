@@ -17,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import fehidro.api.model.PDC;
 import fehidro.api.repository.PDCRepository;
+import io.swagger.annotations.ApiOperation;
 import fehidro.api.model.Meta;
 import fehidro.api.model.SubPDC;
 
@@ -27,12 +28,14 @@ public class PDCController {
 	@Autowired
 	private PDCRepository _pdcRepository;
 	
-	@GetMapping
+	@ApiOperation(value = "Retorna uma lista de PDCs")
+	@GetMapping(produces="application/json")
 	public ResponseEntity<List<PDC>> getAll() {		
 		return ResponseEntity.ok(_pdcRepository.findAll()); 
 	}
 
-	@GetMapping("/{id}")
+	@ApiOperation(value = "Retorna um PDC encontrado por seu id")
+	@GetMapping(value = "/{id}", produces="application/json")
 	public ResponseEntity<PDC> get(@PathVariable(value = "id") Long id) {
 		Optional<PDC> pdc = _pdcRepository.findById(id);
 		if(pdc.isPresent()) {
@@ -42,14 +45,16 @@ public class PDCController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@PostMapping
+	@ApiOperation(value = "Cadastra um novo PDC")
+	@PostMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<PDC> add(@RequestBody PDC pdc, UriComponentsBuilder uriBuilder) {
 		PDC cadastrado = _pdcRepository.save(pdc);
 		URI uri = uriBuilder.path("/{id}").buildAndExpand(cadastrado.getId()).toUri();
 		return ResponseEntity.created(uri).body(cadastrado);
 	}
 
-	@PutMapping
+	@ApiOperation(value = "Atualiza um PDC")
+	@PutMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<PDC> update(@RequestBody PDC pdc) {
 		
 		for(SubPDC s : pdc.getSubPDCs()){
