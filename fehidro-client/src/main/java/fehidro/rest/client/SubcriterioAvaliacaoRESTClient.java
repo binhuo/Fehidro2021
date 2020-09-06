@@ -5,20 +5,22 @@ import java.util.List;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import fehidro.model.Pontuacao;
 import fehidro.model.SubcriterioAvaliacao;
 import fehidro.model.dto.SubcriterioExibicaoDTO;
 
-public class SubcriterioAvaliacaoRESTClient implements RESTClientInterface<SubcriterioAvaliacao>{
+public class SubcriterioAvaliacaoRESTClient extends BaseRESTClient implements RESTClientInterface<SubcriterioAvaliacao>{
 
 	@Override
 	public List<SubcriterioAvaliacao> findAll() {
 		List<SubcriterioAvaliacao> subcriterios = 
 				ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_SUBCRITERIO_URL).
-				request(MediaType.APPLICATION_JSON).get().
+				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).get().
 				readEntity(new GenericType<List<SubcriterioAvaliacao>> () {});
 		
 		return subcriterios;		
@@ -28,7 +30,8 @@ public class SubcriterioAvaliacaoRESTClient implements RESTClientInterface<Subcr
 		List<SubcriterioExibicaoDTO> subcriterios = 
 				ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_SUBCRITERIO_URL + "dtoExibicao/").
-				request(MediaType.APPLICATION_JSON).get().
+				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).get().
 				readEntity(new GenericType<List<SubcriterioExibicaoDTO>> () {});
 		
 		return subcriterios;		
@@ -38,7 +41,8 @@ public class SubcriterioAvaliacaoRESTClient implements RESTClientInterface<Subcr
 		List<SubcriterioExibicaoDTO> subcriterios = 
 				ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_SUBCRITERIO_URL + "dtoExibicao/" + id).
-				request(MediaType.APPLICATION_JSON).get().
+				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).get().
 				readEntity(new GenericType<List<SubcriterioExibicaoDTO>> () {});
 		
 		return subcriterios;		
@@ -48,7 +52,8 @@ public class SubcriterioAvaliacaoRESTClient implements RESTClientInterface<Subcr
 		List<Pontuacao> pontuacoes = 
 				ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_SUBCRITERIO_URL + "pontuacao/" + id).
-				request(MediaType.APPLICATION_JSON).get().
+				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).get().
 				readEntity(new GenericType<List<Pontuacao>> () {});
 		
 		return pontuacoes;		
@@ -59,7 +64,8 @@ public class SubcriterioAvaliacaoRESTClient implements RESTClientInterface<Subcr
 		SubcriterioAvaliacao subcriterio = 
 				ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_SUBCRITERIO_URL + id).
-				request(MediaType.APPLICATION_JSON).get()
+				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).get()
 				.readEntity(SubcriterioAvaliacao.class);
 		
 		return subcriterio;
@@ -71,6 +77,7 @@ public class SubcriterioAvaliacaoRESTClient implements RESTClientInterface<Subcr
 				target(REST_WEBSERVICE_URL + REST_SUBCRITERIO_URL).
 				queryParam("subcriterioAvaliacao", obj).
 				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).
 				post(Entity.entity(obj, MediaType.APPLICATION_JSON)).	
 				readEntity(SubcriterioAvaliacao.class);	
 		
@@ -84,6 +91,7 @@ public class SubcriterioAvaliacaoRESTClient implements RESTClientInterface<Subcr
 				target(REST_WEBSERVICE_URL + REST_SUBCRITERIO_URL).
 				queryParam("subcriterioAvaliacao", obj).
 				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).
 				put(Entity.entity(obj, MediaType.APPLICATION_JSON)).
 				readEntity(SubcriterioAvaliacao.class);	
 		

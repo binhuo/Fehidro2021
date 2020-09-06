@@ -7,6 +7,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.client.Invocation.Builder;
@@ -20,7 +21,7 @@ import fehidro.model.SubcriterioAvaliacao;
 import fehidro.model.Usuario;
 
 
-public class AvaliacaoRESTClient implements RESTClientInterface<Avaliacao>{
+public class AvaliacaoRESTClient extends BaseRESTClient implements RESTClientInterface<Avaliacao>{
 
 	@Override
 	public List<Avaliacao> findAll() {
@@ -31,7 +32,7 @@ public class AvaliacaoRESTClient implements RESTClientInterface<Avaliacao>{
 		System.out.println(c.toString());
 		WebTarget t = c.target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL);
 		System.out.println(t.toString());
-		Builder b = t.request(MediaType.APPLICATION_JSON);
+		Builder b = t.request(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, authToken);
 		System.out.println(b.toString());
 		Response r = b.get();
 		System.out.println(r.toString());
@@ -45,7 +46,8 @@ public class AvaliacaoRESTClient implements RESTClientInterface<Avaliacao>{
 	public Avaliacao find(Long id) {
 		Avaliacao avaliacao = ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL + id).
-				request(MediaType.APPLICATION_JSON).get()
+				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).get()
 				.readEntity(Avaliacao.class);
 		
 		return avaliacao;
@@ -55,7 +57,8 @@ public class AvaliacaoRESTClient implements RESTClientInterface<Avaliacao>{
 		List<Avaliacao> avaliacoes = 
 				ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL + "listarPDC/" +pdc).
-				request(MediaType.APPLICATION_JSON).get().
+				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).get().
 				readEntity(new GenericType<List<Avaliacao>> () {});
 		
 		return avaliacoes;
@@ -65,7 +68,8 @@ public class AvaliacaoRESTClient implements RESTClientInterface<Avaliacao>{
 		List<Avaliacao> avaliacoes = 
 				ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL + "listarSubPDC/" +subpdc).
-				request(MediaType.APPLICATION_JSON).get().
+				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).get().
 				readEntity(new GenericType<List<Avaliacao>> () {});
 		
 		return avaliacoes;
@@ -75,7 +79,8 @@ public class AvaliacaoRESTClient implements RESTClientInterface<Avaliacao>{
 		List<Avaliacao> avaliacoes = 
 				ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL + "listarAvaliador/" +avaliador).
-				request(MediaType.APPLICATION_JSON).get().
+				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).get().
 				readEntity(new GenericType<List<Avaliacao>> () {});
 		
 		return avaliacoes;
@@ -85,7 +90,8 @@ public class AvaliacaoRESTClient implements RESTClientInterface<Avaliacao>{
 		List<Avaliacao> avaliacoes = 
 				ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL + "listarCriterio/" +criterio).
-				request(MediaType.APPLICATION_JSON).get().
+				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).get().
 				readEntity(new GenericType<List<Avaliacao>> () {});
 		
 		return avaliacoes;
@@ -95,7 +101,8 @@ public class AvaliacaoRESTClient implements RESTClientInterface<Avaliacao>{
 		List<Avaliacao> avaliacoes = 
 				ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL + "listarSubcriterio/" +subcriterio).
-				request(MediaType.APPLICATION_JSON).get().
+				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).get().
 				readEntity(new GenericType<List<Avaliacao>> () {});
 		
 		return avaliacoes;
@@ -105,7 +112,8 @@ public class AvaliacaoRESTClient implements RESTClientInterface<Avaliacao>{
 		List<Avaliacao> avaliacoes = 
 				ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL + "listarProposta/" +proposta).
-				request(MediaType.APPLICATION_JSON).get().
+				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).get().
 				readEntity(new GenericType<List<Avaliacao>> () {});
 		
 		return avaliacoes;
@@ -115,7 +123,8 @@ public class AvaliacaoRESTClient implements RESTClientInterface<Avaliacao>{
 		List<Avaliacao> avaliacoes = 
 				ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL + "listarAvaliadorProposta/" +avaliador+"/"+proposta).
-				request(MediaType.APPLICATION_JSON).get().
+				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).get().
 				readEntity(new GenericType<List<Avaliacao>> () {});
 		
 		return avaliacoes;
@@ -125,7 +134,8 @@ public class AvaliacaoRESTClient implements RESTClientInterface<Avaliacao>{
 		List<Avaliacao> avaliacoes = 
 				ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL + "listarCriterioProposta/" +criterio+"/"+proposta).
-				request(MediaType.APPLICATION_JSON).get().
+				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).get().
 				readEntity(new GenericType<List<Avaliacao>> () {});
 		
 		return avaliacoes;
@@ -135,7 +145,8 @@ public class AvaliacaoRESTClient implements RESTClientInterface<Avaliacao>{
 		List<Avaliacao> avaliacoes = 
 				ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL + "listarSubcriterioProposta/" +subcriterio+"/"+proposta).
-				request(MediaType.APPLICATION_JSON).get().
+				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).get().
 				readEntity(new GenericType<List<Avaliacao>> () {});
 		
 		return avaliacoes;
@@ -148,6 +159,7 @@ public class AvaliacaoRESTClient implements RESTClientInterface<Avaliacao>{
 				target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL).
 				queryParam("avaliacao", obj).
 				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).
 				post(Entity.entity(obj, MediaType.APPLICATION_JSON)).
 				readEntity(Avaliacao.class);
 		
@@ -161,6 +173,7 @@ public class AvaliacaoRESTClient implements RESTClientInterface<Avaliacao>{
 				target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL).
 				queryParam("avaliacao", obj).
 				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).
 				put(Entity.entity(obj, MediaType.APPLICATION_JSON)).
 				readEntity(Avaliacao.class);
 		
@@ -172,6 +185,7 @@ public class AvaliacaoRESTClient implements RESTClientInterface<Avaliacao>{
 		return 	ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL + id).
 				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).
 				delete().getStatus() 
 				== Response.Status.OK.getStatusCode();
 	}

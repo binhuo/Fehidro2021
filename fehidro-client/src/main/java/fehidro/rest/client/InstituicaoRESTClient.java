@@ -5,19 +5,21 @@ import java.util.List;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import fehidro.model.Instituicao;
 
-public class InstituicaoRESTClient implements RESTClientInterface<Instituicao>{
+public class InstituicaoRESTClient extends BaseRESTClient implements RESTClientInterface<Instituicao>{
 
 	@Override
 	public List<Instituicao> findAll() {
 		List<Instituicao> instituicoes = 
 				ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_INSTITUICAO_URL).
-				request(MediaType.APPLICATION_JSON).get().
+				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).get().
 				readEntity(new GenericType<List<Instituicao>> () {});
 		
 		return instituicoes;
@@ -28,7 +30,8 @@ public class InstituicaoRESTClient implements RESTClientInterface<Instituicao>{
 		Instituicao instituicao = 
 				ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_INSTITUICAO_URL + id).
-				request(MediaType.APPLICATION_JSON).get()
+				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).get()
 				.readEntity(Instituicao.class);
 		
 		return instituicao;
@@ -41,6 +44,7 @@ public class InstituicaoRESTClient implements RESTClientInterface<Instituicao>{
 				target(REST_WEBSERVICE_URL + REST_INSTITUICAO_URL).
 				queryParam("usuario", obj).
 				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).
 				post(Entity.entity(obj, MediaType.APPLICATION_JSON)).
 				readEntity(Instituicao.class);	
 		
@@ -54,6 +58,7 @@ public class InstituicaoRESTClient implements RESTClientInterface<Instituicao>{
 				target(REST_WEBSERVICE_URL + REST_INSTITUICAO_URL).
 				queryParam("usuario", obj).
 				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).
 				put(Entity.entity(obj, MediaType.APPLICATION_JSON)).
 				readEntity(Instituicao.class);	
 		
@@ -65,6 +70,7 @@ public class InstituicaoRESTClient implements RESTClientInterface<Instituicao>{
 		return 	ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_INSTITUICAO_URL + id).
 				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).
 				delete().getStatus() 
 				== Response.Status.OK.getStatusCode();
 	}

@@ -5,12 +5,13 @@ import java.util.List;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import fehidro.model.Pontuacao;
 
-public class PontuacaoRESTClient implements RESTClientInterface<Pontuacao> {
+public class PontuacaoRESTClient extends BaseRESTClient implements RESTClientInterface<Pontuacao> {
 	
 	public List<Pontuacao> findAll(){
 		List<Pontuacao> pontuacaos = 	
@@ -39,6 +40,7 @@ public class PontuacaoRESTClient implements RESTClientInterface<Pontuacao> {
 				target(REST_WEBSERVICE_URL + REST_PONTUACAO_URL).
 				queryParam("pontuacao", obj).
 				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).
 				post(Entity.entity(obj, MediaType.APPLICATION_JSON)).
 				readEntity(Pontuacao.class);
 		
@@ -52,6 +54,7 @@ public class PontuacaoRESTClient implements RESTClientInterface<Pontuacao> {
 				target(REST_WEBSERVICE_URL + REST_PONTUACAO_URL).
 				queryParam("pontuacao", obj).
 				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).
 				put(Entity.entity(obj, MediaType.APPLICATION_JSON)).
 				readEntity(Pontuacao.class);
 		
@@ -63,6 +66,7 @@ public class PontuacaoRESTClient implements RESTClientInterface<Pontuacao> {
 		return 	ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_PONTUACAO_URL + id).
 				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).
 				delete().getStatus() 
 				== Response.Status.OK.getStatusCode();
 	}

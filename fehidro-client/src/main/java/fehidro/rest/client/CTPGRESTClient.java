@@ -5,19 +5,21 @@ import java.util.List;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import fehidro.model.CTPG;
 
-public class CTPGRESTClient implements RESTClientInterface<CTPG>{
+public class CTPGRESTClient extends BaseRESTClient implements RESTClientInterface<CTPG> {
 
 	@Override
 	public List<CTPG> findAll() {
 		List<CTPG> usuarios = 
 				ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_CTPG_URL).
-				request(MediaType.APPLICATION_JSON).get().
+				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).get().
 				readEntity(new GenericType<List<CTPG>> () {});
 		
 		return usuarios;
@@ -28,7 +30,8 @@ public class CTPGRESTClient implements RESTClientInterface<CTPG>{
 		CTPG usuario = 
 				ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_CTPG_URL + id).
-				request(MediaType.APPLICATION_JSON).get()
+				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).get()
 				.readEntity(CTPG.class);
 		
 		return usuario;
@@ -40,6 +43,7 @@ public class CTPGRESTClient implements RESTClientInterface<CTPG>{
 				target(REST_WEBSERVICE_URL + REST_CTPG_URL).
 				queryParam("usuario", obj).
 				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).
 				post(Entity.entity(obj, MediaType.APPLICATION_JSON)).
 				readEntity(CTPG.class);	
 		
@@ -53,6 +57,7 @@ public class CTPGRESTClient implements RESTClientInterface<CTPG>{
 				target(REST_WEBSERVICE_URL + REST_CTPG_URL).
 				queryParam("usuario", obj).
 				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).
 				put(Entity.entity(obj, MediaType.APPLICATION_JSON)).
 				readEntity(CTPG.class);	
 		
@@ -64,6 +69,7 @@ public class CTPGRESTClient implements RESTClientInterface<CTPG>{
 		return 	ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_CTPG_URL + id).
 				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).
 				delete().getStatus() 
 				== Response.Status.OK.getStatusCode();
 	}
