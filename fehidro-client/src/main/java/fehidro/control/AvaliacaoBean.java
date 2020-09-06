@@ -84,7 +84,7 @@ public class AvaliacaoBean implements Serializable {
 		this.setPropostas();
 //		this.setCriterios();
 		this.setSubcriterios();
-		this.setPontuacoes();
+		//this.setPontuacoes();
 	}
 	
 	public String cadastro() {
@@ -111,16 +111,6 @@ public class AvaliacaoBean implements Serializable {
 		
 		this.avaliacao.getSubcriterio().setId( (Long)subcriterios.get(contadorSubcriterio).getValue() );
 		
-		
-		System.out.println(this.avaliacao.getAvaliador());
-		System.out.println(this.avaliacao.getAvaliador().getId());
-		System.out.println(this.avaliacao.getNota());
-		System.out.println(this.avaliacao.getNota().getId());
-		System.out.println(this.avaliacao.getProposta());
-		System.out.println(this.avaliacao.getProposta().getId());
-		System.out.println(this.avaliacao.getSubcriterio());
-		System.out.println(this.avaliacao.getSubcriterio().getId());
-		
 		if ( this.avaliacao.getId() == null) {
 			this.restAvaliacao.create(this.avaliacao);
 		}
@@ -132,14 +122,16 @@ public class AvaliacaoBean implements Serializable {
 		contadorSubcriterio++;
 		if(contadorSubcriterio < subcriterios.size()) {
 			stringSubcriteiroAtual = subcriterios.get(contadorSubcriterio).getLabel();
+			this.avaliacao.getSubcriterio().setId( (Long) subcriterios.get(contadorSubcriterio).getValue() );
+			this.setPontuacoes();
 		}else {
 			contadorSubcriterio = 0;
 			stringSubcriteiroAtual = subcriterios.get(0).getLabel();
+			this.setPontuacoes();
 			return this.index();
 		}
 
-		//return "/avaliacao/cadastro?faces-redirect=true";
-		return null;
+		return this.pageSubcriterio();
 	}
 	
 	public String pageSubcriterio() {
@@ -175,7 +167,8 @@ public class AvaliacaoBean implements Serializable {
 	}
 	public void setPontuacoes() {
 		this.restPontuacao = new PontuacaoRESTClient();
-		List<Pontuacao> pontuacaoBase = this.restPontuacao.findAll(); //TODO: Substituir por pontuacao apropriada
+		
+		List<Pontuacao> pontuacaoBase = this.restPontuacao.findAllBySubcriterio(this.avaliacao.getSubcriterio());
 		List<SelectItem> pontuacoes = new ArrayList<>();
 
 		for (Pontuacao i : pontuacaoBase) 
@@ -214,6 +207,8 @@ public class AvaliacaoBean implements Serializable {
 			}
 			
 			contadorSubcriterio = 0;
+			this.avaliacao.getSubcriterio().setId((Long)subcriterios.get(0).getValue());
+			this.setPontuacoes();
 			this.stringSubcriteiroAtual = subcriterios.get(0).getLabel();
 			
 			this.subcriterios = subcriterios;
