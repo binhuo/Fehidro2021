@@ -52,8 +52,6 @@ public class RelatorioParcialBean implements Serializable {
 		this.relatorio = new Relatorio();//RESET
 		if(this.subPdc != null) {
 			List<Avaliacao> avaliacoes = rest.listarSubPDC(subPdc);
-			//System.out.println("SUBPDC = "+ subPdc.getId());
-			//System.out.println("SIZE AVALIACOES REST listarSUBPDC = " + avaliacoes.size());
 			this.relatorio.setItensRelatorio(avaliacoes);
 		}
 		return "/relatorio/relatorioParcial";

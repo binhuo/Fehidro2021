@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.client.Invocation.Builder;
 
 import fehidro.model.Avaliacao;
-import fehidro.model.CriterioAvaliacao;
+//import fehidro.model.CriterioAvaliacao;
 import fehidro.model.PDC;
 import fehidro.model.Proposta;
 import fehidro.model.SubPDC;
@@ -26,18 +26,13 @@ public class AvaliacaoRESTClient implements RESTClientInterface<Avaliacao>{
 	public List<Avaliacao> findAll() {
 		//List<Avaliacao> avaliacoes = ClientBuilder.newClient().target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL).request(MediaType.APPLICATION_JSON).get().readEntity(new GenericType<List<Avaliacao>> () {});
 
-		//System.out.println("==================================");
 		Client c = ClientBuilder.newClient();
-		//System.out.println(c.toString());
 		WebTarget t = c.target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL);
-		//System.out.println(t.toString());
 		Builder b = t.request(MediaType.APPLICATION_JSON);
-		//System.out.println(b.toString());
 		Response r = b.get();
-		//System.out.println(r.toString());
 		List<Avaliacao> out = r.readEntity(new GenericType<List<Avaliacao>> () {});
-		//System.out.println("<==================================>");
 		return out;
+		
 		//return avaliacoes;
 	}
 
@@ -74,7 +69,6 @@ public class AvaliacaoRESTClient implements RESTClientInterface<Avaliacao>{
 		Builder b = t.request(MediaType.APPLICATION_JSON);
 		Response r = b.get();
 		List<Avaliacao> out = r.readEntity(new GenericType<List<Avaliacao>> () {});
-		//System.out.println("out REST listarSubPDC() size = "+out.size());
 		return out;
 		
 		
@@ -91,15 +85,15 @@ public class AvaliacaoRESTClient implements RESTClientInterface<Avaliacao>{
 		return avaliacoes;
 	}
 	
-	public List<Avaliacao> listarCriterio(CriterioAvaliacao criterio) {
-		List<Avaliacao> avaliacoes = 
-				ClientBuilder.newClient().
-				target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL + "listarCriterio/" +criterio).
-				request(MediaType.APPLICATION_JSON).get().
-				readEntity(new GenericType<List<Avaliacao>> () {});
-		
-		return avaliacoes;
-	}
+//	public List<Avaliacao> listarCriterio(CriterioAvaliacao criterio) {
+//		List<Avaliacao> avaliacoes = 
+//				ClientBuilder.newClient().
+//				target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL + "listarCriterio/" +criterio).
+//				request(MediaType.APPLICATION_JSON).get().
+//				readEntity(new GenericType<List<Avaliacao>> () {});
+//		
+//		return avaliacoes;
+//	}
 	
 	public List<Avaliacao> listarCriterio(SubcriterioAvaliacao subcriterio) {
 		List<Avaliacao> avaliacoes = 
@@ -131,15 +125,15 @@ public class AvaliacaoRESTClient implements RESTClientInterface<Avaliacao>{
 		return avaliacoes;
 	}
 	
-	public List<Avaliacao> listarCriterioProposta(CriterioAvaliacao criterio, Proposta proposta) {
-		List<Avaliacao> avaliacoes = 
-				ClientBuilder.newClient().
-				target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL + "listarCriterioProposta/" +criterio+"/"+proposta).
-				request(MediaType.APPLICATION_JSON).get().
-				readEntity(new GenericType<List<Avaliacao>> () {});
-		
-		return avaliacoes;
-	}
+//	public List<Avaliacao> listarCriterioProposta(CriterioAvaliacao criterio, Proposta proposta) {
+//		List<Avaliacao> avaliacoes = 
+//				ClientBuilder.newClient().
+//				target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL + "listarCriterioProposta/" +criterio+"/"+proposta).
+//				request(MediaType.APPLICATION_JSON).get().
+//				readEntity(new GenericType<List<Avaliacao>> () {});
+//		
+//		return avaliacoes;
+//	}
 	
 	public List<Avaliacao> listarSubcriterioProposta(SubcriterioAvaliacao subcriterio, Proposta proposta) {
 		List<Avaliacao> avaliacoes = 

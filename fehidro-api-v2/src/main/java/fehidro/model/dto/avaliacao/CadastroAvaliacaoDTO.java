@@ -1,7 +1,7 @@
 package fehidro.model.dto.avaliacao;
 
 import fehidro.api.model.Avaliacao;
-import fehidro.api.model.CriterioAvaliacao;
+//import fehidro.api.model.CriterioAvaliacao;
 import fehidro.api.model.Pontuacao;
 import fehidro.api.model.Proposta;
 import fehidro.api.model.SubcriterioAvaliacao;
@@ -15,7 +15,7 @@ public class CadastroAvaliacaoDTO {
     private CadastroUsuarioDTO avaliador;
     private Proposta proposta;
     private SubcriterioAvaliacao subcriterio;
-    private CriterioAvaliacao criterio;
+//    private CriterioAvaliacao criterio;
 
 	public CadastroAvaliacaoDTO() {
 
@@ -28,7 +28,7 @@ public class CadastroAvaliacaoDTO {
 			this.avaliador = new CadastroUsuarioDTO(model.getAvaliador());
 			this.proposta = model.getProposta();
 			this.subcriterio = model.getSubcriterio();
-			this.criterio = model.getCriterio();
+//			this.criterio = model.getCriterio();
 		}
 	}
 
@@ -72,13 +72,13 @@ public class CadastroAvaliacaoDTO {
 		this.subcriterio = subcriterio;
 	}
 
-	public CriterioAvaliacao getCriterio() {
-		return criterio;
-	}
-
-	public void setCriterio(CriterioAvaliacao criterio) {
-		this.criterio = criterio;
-	}
+//	public CriterioAvaliacao getCriterio() {
+//		return criterio;
+//	}
+//
+//	public void setCriterio(CriterioAvaliacao criterio) {
+//		this.criterio = criterio;
+//	}
 
 	
 

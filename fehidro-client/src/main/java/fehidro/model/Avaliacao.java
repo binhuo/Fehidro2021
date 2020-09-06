@@ -11,7 +11,7 @@ public class Avaliacao {
 		
 	    private Proposta proposta;
 	    private SubcriterioAvaliacao subcriterio;
-	    private CriterioAvaliacao criterio;
+//	    private CriterioAvaliacao criterio;
 
 	    //Id
 	    public Long getId()
@@ -42,13 +42,13 @@ public class Avaliacao {
 		public void setProposta(Proposta proposta) {
 			this.proposta = proposta;
 		}
-		//Criterio
-		public CriterioAvaliacao getCriterio() {
-			return criterio;
-		}
-		public void setCriterio(CriterioAvaliacao criterio) {
-			this.criterio = criterio;
-		}
+//		//Criterio
+//		public CriterioAvaliacao getCriterio() {
+//			return criterio;
+//		}
+//		public void setCriterio(CriterioAvaliacao criterio) {
+//			this.criterio = criterio;
+//		}
 		//Subcriterio
 		public SubcriterioAvaliacao getSubcriterio() {
 			return subcriterio;

@@ -19,6 +19,7 @@ import fehidro.api.model.CTPG;
 import fehidro.api.repository.CTPGRepository;
 import fehidro.api.util.password.Password;
 import fehidro.model.dto.ctpg.CadastroCtpgDTO;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/usuario/ctpg")
@@ -27,7 +28,8 @@ public class CTPGController {
 	@Autowired
 	private CTPGRepository _ctpgRepository;
 
-	@GetMapping("/{id}")
+	@ApiOperation(value = "Retorna um usuário CT-PG encontrado por seu id")
+	@GetMapping(value = "/{id}", produces="application/json")
 	public ResponseEntity<CadastroCtpgDTO> get(@PathVariable(value = "id") Long id) {
 		Optional<CTPG> user = _ctpgRepository.findById(id);
 		if(user.isPresent()) {
@@ -37,7 +39,8 @@ public class CTPGController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@PostMapping
+	@ApiOperation(value = "Cadastra um novo usuário CT-PG")
+	@PostMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<CadastroCtpgDTO> add(@RequestBody CadastroCtpgDTO user, UriComponentsBuilder uriBuilder) {
 		try {
 			CTPG novo = new CTPG(user);
@@ -57,7 +60,8 @@ public class CTPGController {
 		}
 	}
 
-	@PutMapping
+	@ApiOperation(value = "Atualiza um usuário CT-PG")
+	@PutMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<CadastroCtpgDTO> update(@RequestBody CadastroCtpgDTO user) {
 		try {
 			Optional<CTPG> usuarioBase = _ctpgRepository.findById(user.getId()); 

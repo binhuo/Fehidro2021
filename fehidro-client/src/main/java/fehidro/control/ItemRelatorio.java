@@ -64,7 +64,6 @@ public class ItemRelatorio {
 	 */
 	public void addAvaliacao(Avaliacao a)
 	{
-		//System.out.println("item relatorio add avaliacao");
 		//Setando propriedades desse itemRelatorio caso nao esteja setado
 		if(this.proposta == null)
 		{
