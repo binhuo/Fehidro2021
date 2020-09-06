@@ -25,6 +25,7 @@ import fehidro.api.model.SubcriterioAvaliacao;
 import fehidro.api.model.Usuario;
 import fehidro.api.repository.AvaliacaoRepository;
 import fehidro.model.dto.avaliacao.CadastroAvaliacaoDTO;
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/avaliacao")
@@ -32,15 +33,17 @@ public class AvaliacaoController {
 	
 	@Autowired
 	private AvaliacaoRepository _avaliacaoRepository;
-		
-	@GetMapping
+	
+	@ApiOperation(value = "Retorna todas as avaliacoes")
+	@GetMapping(produces="application/json")
 	public ResponseEntity<List<CadastroAvaliacaoDTO>> getAll() {
 		List<Avaliacao> list = _avaliacaoRepository.findAll();
 		List<CadastroAvaliacaoDTO> resul = list.stream().map(u -> {return new CadastroAvaliacaoDTO(u);}).collect(Collectors.toList());
 		return ResponseEntity.ok().body(resul);
 	}
 	
-	@GetMapping("/{id}")
+	@ApiOperation(value = "Retorna uma avaliação encontrada por seu id")
+	@GetMapping(value="/{id}", produces="application/json")
 	public ResponseEntity<CadastroAvaliacaoDTO> get(@PathVariable(value = "id") Long id) {
 		Optional<Avaliacao> aval = _avaliacaoRepository.findById(id);
 		if (aval.isPresent()) {
@@ -50,47 +53,56 @@ public class AvaliacaoController {
 		}
 	}
 	
-	
-	@GetMapping("/listarAvaliador/{avaliador}")
+	@ApiOperation(value = "Retorna todas avaliação efetuada pelo avaliador especificado")
+	@GetMapping(value="/listarAvaliador/{avaliador}", produces="application/json")
 	public ResponseEntity<List<CadastroAvaliacaoDTO>> listarAvaliador(@PathVariable(value = "avaliador") Usuario avaliador) {
 		List<Avaliacao> list = _avaliacaoRepository.findAllByAvaliador(avaliador);
 		List<CadastroAvaliacaoDTO> resul = list.stream().map(u -> {return new CadastroAvaliacaoDTO(u);}).collect(Collectors.toList());
 		return ResponseEntity.ok().body(resul);
 	}
-	@GetMapping("/listarSubcriteiro/{subcriterio}")
+	
+	@ApiOperation(value = "Retorna todas as avaliação feitas em um subcriterio especificado")
+	@GetMapping(value = "/listarSubcriteiro/{subcriterio}", produces="application/json")
 	public ResponseEntity<List<CadastroAvaliacaoDTO>> listarSubcriteiro(@PathVariable(value = "subcriterio") SubcriterioAvaliacao subcriterio) {
 		List<Avaliacao> list = _avaliacaoRepository.findAllBySubcriterio(subcriterio);
 		List<CadastroAvaliacaoDTO> resul = list.stream().map(u -> {return new CadastroAvaliacaoDTO(u);}).collect(Collectors.toList());
 		return ResponseEntity.ok().body(resul);
 	}
-	@GetMapping("/listarSubPDC/{subpdc}")
+	
+	@ApiOperation(value = "Retorna todas as avaliação feitas em um SubPDC especificado")
+	@GetMapping(value="/listarSubPDC/{subpdc}", produces="application/json")
 	public ResponseEntity<List<CadastroAvaliacaoDTO>> listarSubPDC(@PathVariable(value = "subpdc") SubPDC subpdc) {
 		List<Avaliacao> list = _avaliacaoRepository.findAllBySubPdc(subpdc);
 		List<CadastroAvaliacaoDTO> resul = list.stream().map(u -> {return new CadastroAvaliacaoDTO(u);}).collect(Collectors.toList());
 		return ResponseEntity.ok().body(resul);
 	}
-	@GetMapping("/listarProposta/{proposta}")
+	
+	@ApiOperation(value = "Retorna todas as avaliação feitas em uma proposta especificada")
+	@GetMapping(value="/listarProposta/{proposta}", produces="application/json")
 	public ResponseEntity<List<CadastroAvaliacaoDTO>> listarProposta(@PathVariable(value = "proposta") Proposta proposta) {
 		List<Avaliacao> list = _avaliacaoRepository.findAllByProposta(proposta);
 		List<CadastroAvaliacaoDTO> resul = list.stream().map(u -> {return new CadastroAvaliacaoDTO(u);}).collect(Collectors.toList());
 		return ResponseEntity.ok().body(resul);
 	}
 	
-	@GetMapping("/listarAvaliadorProposta/{proposta}/{avaliador}")
+	@ApiOperation(value = "Retorna todas as avaliação feitas por um especifico usuario dentro de uma proposta especificada")
+	@GetMapping(value = "/listarAvaliadorProposta/{proposta}/{avaliador}", produces="application/json")
 	public ResponseEntity<List<CadastroAvaliacaoDTO>> listarAvaliadorProposta(@PathVariable(value = "proposta") Proposta proposta,@PathVariable(value = "avaliador") Usuario avaliador ) {
 		List<Avaliacao> list = _avaliacaoRepository.findAllByAvaliadorProposta(proposta,avaliador);
 		List<CadastroAvaliacaoDTO> resul = list.stream().map(u -> {return new CadastroAvaliacaoDTO(u);}).collect(Collectors.toList());
 		return ResponseEntity.ok().body(resul);
 	}
-	@GetMapping("/listarSubcriterioProposta/{proposta}/{subcriterio}")
+	
+	@ApiOperation(value = "Retorna todas as avaliação feitas em um subcriterio de uma proposta especificada")
+	@GetMapping(value = "/listarSubcriterioProposta/{proposta}/{subcriterio}", produces="application/json")
 	public ResponseEntity<List<CadastroAvaliacaoDTO>> listarSubcriterioProposta(@PathVariable(value = "proposta") Proposta proposta,@PathVariable(value = "subcriterio") SubcriterioAvaliacao subcriterio ) {
 		List<Avaliacao> list = _avaliacaoRepository.findAllBySubcriterioProposta(proposta,subcriterio);
 		List<CadastroAvaliacaoDTO> resul = list.stream().map(u -> {return new CadastroAvaliacaoDTO(u);}).collect(Collectors.toList());
 		return ResponseEntity.ok().body(resul);
 	}
 	
-	
-	@PostMapping
+	@ApiOperation(value = "Cadastra uma avaliacao")
+	@PostMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<CadastroAvaliacaoDTO> add(@RequestBody CadastroAvaliacaoDTO avaliacao, UriComponentsBuilder uriBuilder) {
 		
 		try {
@@ -104,7 +116,8 @@ public class AvaliacaoController {
 		}
 	}
 	
-	@PutMapping
+	@ApiOperation(value = "Atualiza uma avaliacao")
+	@PutMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<Avaliacao> update(@RequestBody Avaliacao avaliacao) {
 		Avaliacao aval = _avaliacaoRepository.save(avaliacao);	
 		return ResponseEntity.ok(aval);
