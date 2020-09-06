@@ -4,20 +4,23 @@ import java.util.List;
 
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import fehidro.model.Usuario;
 import fehidro.rest.client.RESTClientInterface;
 
-public class UsuarioRESTClient implements RESTClientInterface<Usuario>{
+public class UsuarioRESTClient extends BaseRESTClient implements RESTClientInterface<Usuario>{
 
 	@Override
 	public List<Usuario> findAll() {
 		List<Usuario> usuarios = 	
 				ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_USUARIO_URL).
-				request(MediaType.APPLICATION_JSON).get().
+				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).
+				get().
 				readEntity(new GenericType<List<Usuario>> () {});
 		
 		return usuarios;
@@ -27,8 +30,9 @@ public class UsuarioRESTClient implements RESTClientInterface<Usuario>{
 	public Usuario find(Long id) {
 		Usuario usuario = ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_USUARIO_URL + id).
-				request(MediaType.APPLICATION_JSON).get()
-				.readEntity(Usuario.class);
+				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).
+				get().readEntity(Usuario.class);
 		
 		return usuario;
 	}
@@ -37,8 +41,9 @@ public class UsuarioRESTClient implements RESTClientInterface<Usuario>{
 		Usuario usuario = 
 				ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_USUARIO_URL + "obterPorCPF/" + CPF).
-				request(MediaType.APPLICATION_JSON).get().
-				readEntity(Usuario.class);
+				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).
+				get().readEntity(Usuario.class);
 		
 		return usuario;
 	}
@@ -47,8 +52,9 @@ public class UsuarioRESTClient implements RESTClientInterface<Usuario>{
 		List<Usuario> usuarios = 
 				ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_USUARIO_URL + "obterPorPerfilAcesso/" +perfilacesso).
-				request(MediaType.APPLICATION_JSON).get().
-				readEntity(new GenericType<List<Usuario>> () {});
+				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).
+				get().readEntity(new GenericType<List<Usuario>> () {});
 		
 		return usuarios;
 	}
@@ -57,8 +63,9 @@ public class UsuarioRESTClient implements RESTClientInterface<Usuario>{
 		Usuario usuario = 	
 				ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_USUARIO_URL + "obterPorLogin/" + login).
-				request(MediaType.APPLICATION_JSON).get().
-				readEntity(Usuario.class);
+				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).
+				get().readEntity(Usuario.class);
 		
 		return usuario;
 	}
@@ -70,6 +77,7 @@ public class UsuarioRESTClient implements RESTClientInterface<Usuario>{
 				target(REST_WEBSERVICE_URL + REST_USUARIO_URL).
 				queryParam("usuario", obj).
 				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).
 				post(Entity.entity(obj, MediaType.APPLICATION_JSON)).
 				readEntity(Usuario.class);
 		
@@ -83,6 +91,7 @@ public class UsuarioRESTClient implements RESTClientInterface<Usuario>{
 				target(REST_WEBSERVICE_URL + REST_USUARIO_URL).
 				queryParam("usuario", obj).
 				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).
 				put(Entity.entity(obj, MediaType.APPLICATION_JSON)).
 				readEntity(Usuario.class);
 		
@@ -94,6 +103,7 @@ public class UsuarioRESTClient implements RESTClientInterface<Usuario>{
 		return 	ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_USUARIO_URL + id).
 				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).
 				delete().getStatus() 
 				== Response.Status.OK.getStatusCode();
 	}

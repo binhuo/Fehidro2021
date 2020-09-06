@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,9 @@ public class CTPGController {
 
 	@Autowired
 	private CTPGRepository _ctpgRepository;
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 
 	@ApiOperation(value = "Retorna um usuário CT-PG encontrado por seu id")
 	@GetMapping(value = "/{id}", produces="application/json")
@@ -47,10 +51,9 @@ public class CTPGController {
 			String senha = Password.generateRandomPassword(10);
 
 			novo.setLogin();
-			//usuario.setAtivo();
-			novo.setSenha(Password.hashPassword(senha));			
+			novo.setSenha(passwordEncoder.encode(senha));
 			CTPG cadastrado = _ctpgRepository.save(novo);
-			//TODO: migrar para spring-boot-starter-mail
+			//TODO Migrar para spring-boot-starter-mail
 			//EmailUtil.sendMail(usuario.getEmail(), usuario.getNome(), usuario.getLogin(), senha);
 			URI uri = uriBuilder.path("/{id}").buildAndExpand(cadastrado.getId()).toUri();
 			return ResponseEntity.created(uri).body(new CadastroCtpgDTO(cadastrado));
@@ -70,7 +73,7 @@ public class CTPGController {
 				CTPG userBase = usuarioBase.get();
 
 				if(user.getSenha() != null && !userBase.getSenha().equals(user.getSenha())) {
-					user.setSenha(Password.hashPassword(user.getSenha()));
+					user.setSenha(passwordEncoder.encode(user.getSenha()));
 				}
 			} 
 			CTPG cadastrado =  _ctpgRepository.save(new CTPG(user));
