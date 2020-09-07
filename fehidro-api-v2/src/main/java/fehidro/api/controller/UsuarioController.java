@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,9 @@ public class UsuarioController {
 	
 	@Autowired
 	private UsuarioRepository _usuarioRepository;
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 	
 //	@Autowired
 //	private EmailUtil emailService;
@@ -92,10 +96,10 @@ public class UsuarioController {
 			
 			novo.setLogin();
 			novo.setAtivo();	
-			novo.setSenha(Password.hashPassword(senha));
+			novo.setSenha(passwordEncoder.encode(senha));
 			Usuario user = _usuarioRepository.save(novo);
 			CadastroUsuarioDTO cadastrado = new CadastroUsuarioDTO(user);
-			//TODO: migrar para spring-boot-starter-mail
+			//TODO Migrar para spring-boot-starter-mail
 			//EmailUtil.sendMail(usuario.getEmail(), usuario.getNome(), usuario.getLogin(), senha);
 			URI uri = uriBuilder.path("/{id}").buildAndExpand(cadastrado.getId()).toUri();
 			return ResponseEntity.created(uri).body(cadastrado);

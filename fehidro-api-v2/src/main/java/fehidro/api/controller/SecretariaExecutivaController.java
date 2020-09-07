@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,9 @@ public class SecretariaExecutivaController {
 	@Autowired
 	private SecretariaExecutivaRepository _secretariaExecRepository;
 	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+	
 	@ApiOperation(value = "Retorna um usuário da Secretaria Executiva encontrada por seu id")
 	@GetMapping(value = "/{id}", produces="application/json")
 	public ResponseEntity<CadastroSecretariaExecutivaDTO> get(@PathVariable(value = "id") Long id) {
@@ -46,13 +50,11 @@ public class SecretariaExecutivaController {
 		try {
 			SecretariaExecutiva novo = new SecretariaExecutiva(user);
 			String senha = Password.generateRandomPassword(10);
-
 			novo.setLogin();
-			//novo.setAtivo();
-			novo.setSenha(Password.hashPassword(senha));
+			novo.setSenha(passwordEncoder.encode(senha));
 			SecretariaExecutiva usuario = _secretariaExecRepository.save(novo);
 			CadastroSecretariaExecutivaDTO cadastrado = new CadastroSecretariaExecutivaDTO(usuario);
-			//TODO: migrar para spring-boot-starter-mail
+			//TODO Migrar para spring-boot-starter-mail
 			//EmailUtil.sendMail(usuario.getEmail(), usuario.getNome(), usuario.getLogin(), senha);
 			URI uri = uriBuilder.path("/{id}").buildAndExpand(cadastrado.getId()).toUri();
 			return ResponseEntity.created(uri).body(cadastrado);
@@ -72,7 +74,7 @@ public class SecretariaExecutivaController {
 				SecretariaExecutiva userBase = usuarioBase.get();
 
 				if(user.getSenha() != null && !userBase.getSenha().equals(user.getSenha())) {
-					user.setSenha(Password.hashPassword(user.getSenha()));
+					user.setSenha(passwordEncoder.encode(user.getSenha()));
 				}
 			} 
 			SecretariaExecutiva cadastrado =  _secretariaExecRepository.save(new SecretariaExecutiva(user));

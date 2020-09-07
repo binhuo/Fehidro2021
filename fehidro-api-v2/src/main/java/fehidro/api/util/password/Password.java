@@ -1,8 +1,5 @@
 package fehidro.api.util.password;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Collections;
@@ -39,30 +36,4 @@ public class Password {
 	        Collections.shuffle(letters);
 	        return letters.stream().collect(Collectors.joining());
 	    }
-	    
-
-		public static String hashPassword(String password) throws Exception {
-			String senhaHash = "";
-				  
-			try 
-			{
-				MessageDigest algorithm;
-				algorithm = MessageDigest.getInstance("SHA-256");
-				byte messageDigest[] = algorithm.digest(password.getBytes("UTF-8"));
-				StringBuilder strSenha = new StringBuilder();
-			
-				for (byte b : messageDigest) {
-					strSenha.append(String.format("%02X", 0xFF & b));
-				}
-				
-				senhaHash = strSenha.toString();
-			
-			} catch (UnsupportedEncodingException | NoSuchAlgorithmException e) {
-				e.printStackTrace();
-				throw e;
-			}
-			
-			return senhaHash;
-			//this.senha = senha;
-		}
 }
