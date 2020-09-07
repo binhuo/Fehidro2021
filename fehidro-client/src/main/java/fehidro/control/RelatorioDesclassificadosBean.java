@@ -30,7 +30,7 @@ public class RelatorioDesclassificadosBean implements Serializable {
 	public RelatorioDesclassificadosBean() {
 		relatorio = new Relatorio();
 		rest  = new AvaliacaoRESTClient();
-		List<Avaliacao> avaliacoes = rest.findAll();//TODO: Considerar armazenar desclassificacao no BD e pegar somente os desclassificados via REST.
+		List<Avaliacao> avaliacoes = rest.findAll();
 		
 		this.relatorio.setItensRelatorio(avaliacoes);
 	}

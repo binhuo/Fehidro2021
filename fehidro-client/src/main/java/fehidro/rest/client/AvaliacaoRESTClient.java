@@ -48,35 +48,29 @@ public class AvaliacaoRESTClient extends BaseRESTClient implements RESTClientInt
 		return avaliacao;
 	}
 
-	// public List<Avaliacao> listarPDC(PDC pdc) {
-	// 	List<Avaliacao> avaliacoes = 
-	// 			ClientBuilder.newClient().
-	// 			target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL + "listarPDC/" +pdc).
-	// 			request(MediaType.APPLICATION_JSON).
-	// 			header(HttpHeaders.AUTHORIZATION, authToken).get().
-	// 			readEntity(new GenericType<List<Avaliacao>> () {});
-		
-	// 	return avaliacoes;
-	// }
+//	 public List<Avaliacao> listarPDC(PDC pdc) {
+//	 	List<Avaliacao> avaliacoes = 
+//	 			ClientBuilder.newClient().
+//	 			target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL + "listarPDC/" +pdc).
+//				request(MediaType.APPLICATION_JSON).
+//	 			header(HttpHeaders.AUTHORIZATION, authToken).get().
+//	 			readEntity(new GenericType<List<Avaliacao>> () {});
+//		
+//	 	return avaliacoes;
+//	}
 	
-	// public List<Avaliacao> listarSubPDC(SubPDC subpdc) {
-	// 	List<Avaliacao> avaliacoes = 
-	// 			ClientBuilder.newClient().
-	// 			target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL + "listarSubPDC/" +subpdc).
-	// 			request(MediaType.APPLICATION_JSON).
-	// 			header(HttpHeaders.AUTHORIZATION, authToken).get().
-	// 			readEntity(new GenericType<List<Avaliacao>> () {});
-		
-	// 	Client c = ClientBuilder.newClient();
-	// 	WebTarget t = c.target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL + "listarSubPDC/" + subpdc.getId());
-	// 	Builder b = t.request(MediaType.APPLICATION_JSON);
-	// 	Response r = b.get();
-	// 	List<Avaliacao> out = r.readEntity(new GenericType<List<Avaliacao>> () {});
-	// 	return out;
-		
-		
-	// 	//return avaliacoes;
-	// }
+		public List<Avaliacao> listarSubPDC(SubPDC subpdc) {
+			
+			Client c = ClientBuilder.newClient();
+			WebTarget t = c.target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL + "listarSubPDC/" + subpdc.getId());
+			Builder b = t.request(MediaType.APPLICATION_JSON);
+			Response r = b.header(HttpHeaders.AUTHORIZATION, authToken).get();
+			List<Avaliacao> out = r.readEntity(new GenericType<List<Avaliacao>> () {});
+			return out;
+			
+			
+			//return avaliacoes;
+		}
 	
 	public List<Avaliacao> listarAvaliador(Usuario avaliador) {
 		List<Avaliacao> avaliacoes = 

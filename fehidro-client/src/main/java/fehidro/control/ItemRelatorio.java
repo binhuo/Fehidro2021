@@ -89,7 +89,7 @@ public class ItemRelatorio {
 		if(a.getNota().isDesclassificavel()) {	//TODO: considerar substituir por um for() e remover o parametro - menos performance porem pode prevenir alguns erros
 			this.desclassificado = true;
 		}
-		//TODO: outros criterios de avaliacao
+		//TODO: outros criterios de desclassificacao
 		
 		return this.desclassificado;
 	}
