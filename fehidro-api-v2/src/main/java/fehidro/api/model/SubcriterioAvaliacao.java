@@ -31,7 +31,7 @@ public class SubcriterioAvaliacao extends AbstractEntity {
 	
 	@OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE}, orphanRemoval = true)
 	@JsonInclude(JsonInclude.Include.NON_EMPTY)
-	@JoinColumn(name = "subcriterioavaliacao_id")
+	@JoinColumn(name = "subcriterio_id")
 	private List<Pontuacao> pontuacoes;
 	
 	@ManyToMany

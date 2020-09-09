@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import fehidro.api.model.Proposta;
 import fehidro.api.model.SubcriterioAvaliacao;
+import fehidro.api.model.Usuario;
 import fehidro.api.repository.SubcriterioAvaliacaoRepository;
 import fehidro.model.dto.subcriterio.SubcriterioExibicaoDTO;
 import io.swagger.annotations.ApiOperation;
@@ -32,6 +34,11 @@ public class SubcriterioAvaliacaoController {
 	@GetMapping(produces="application/json")
 	public ResponseEntity<List<SubcriterioAvaliacao>> getAll() {		
 		return ResponseEntity.ok(_subcriterioAvaliacaoRepository.findAll());
+	}
+	
+	@GetMapping(value="/emAberto/{usuario}/{proposta}", produces="application/json")
+	public ResponseEntity<List<SubcriterioAvaliacao>> findEmAberto(@PathVariable(value = "usuario") Usuario usuario, @PathVariable(value = "proposta") Proposta proposta) {	
+		return ResponseEntity.ok(_subcriterioAvaliacaoRepository.findEmAberto(usuario, proposta));
 	}
 	
 	@GetMapping("/dtoExibicao/")

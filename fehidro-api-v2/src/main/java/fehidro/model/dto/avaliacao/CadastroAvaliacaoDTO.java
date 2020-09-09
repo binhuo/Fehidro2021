@@ -1,20 +1,21 @@
 package fehidro.model.dto.avaliacao;
 
 import fehidro.api.model.Avaliacao;
-import fehidro.api.model.CriterioAvaliacao;
+//import fehidro.api.model.CriterioAvaliacao;
 import fehidro.api.model.Pontuacao;
 import fehidro.api.model.Proposta;
 import fehidro.api.model.SubcriterioAvaliacao;
 import fehidro.api.model.Usuario;
+import fehidro.model.dto.usuario.CadastroUsuarioDTO;
 
 public class CadastroAvaliacaoDTO {
 
 	private long id;
     private Pontuacao nota;
-    private Usuario avaliador;
+    private CadastroUsuarioDTO avaliador;
     private Proposta proposta;
     private SubcriterioAvaliacao subcriterio;
-    private CriterioAvaliacao criterio;
+//    private CriterioAvaliacao criterio;
 
 	public CadastroAvaliacaoDTO() {
 
@@ -24,10 +25,10 @@ public class CadastroAvaliacaoDTO {
 		if (model != null) {
 			this.setId(model.getId());
 			this.nota = model.getNota();
-			this.avaliador = model.getAvaliador();
+			this.avaliador = new CadastroUsuarioDTO(model.getAvaliador());
 			this.proposta = model.getProposta();
 			this.subcriterio = model.getSubcriterio();
-			this.criterio = model.getCriterio();
+//			this.criterio = model.getCriterio();
 		}
 	}
 
@@ -47,11 +48,11 @@ public class CadastroAvaliacaoDTO {
 		this.nota = nota;
 	}
 
-	public Usuario getAvaliador() {
+	public CadastroUsuarioDTO getAvaliador() {
 		return avaliador;
 	}
 
-	public void setAvaliador(Usuario avaliador) {
+	public void setAvaliador(CadastroUsuarioDTO avaliador) {
 		this.avaliador = avaliador;
 	}
 
@@ -71,13 +72,13 @@ public class CadastroAvaliacaoDTO {
 		this.subcriterio = subcriterio;
 	}
 
-	public CriterioAvaliacao getCriterio() {
-		return criterio;
-	}
-
-	public void setCriterio(CriterioAvaliacao criterio) {
-		this.criterio = criterio;
-	}
+//	public CriterioAvaliacao getCriterio() {
+//		return criterio;
+//	}
+//
+//	public void setCriterio(CriterioAvaliacao criterio) {
+//		this.criterio = criterio;
+//	}
 
 	
 

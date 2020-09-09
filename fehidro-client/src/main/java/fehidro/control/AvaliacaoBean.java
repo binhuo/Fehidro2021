@@ -34,9 +34,9 @@ public class AvaliacaoBean implements Serializable {
 	//Subcriterio
 	private SubcriterioAvaliacaoRESTClient restSubcriterio;
 	private List<SelectItem> subcriterios;
-	//Criterio
-	private CriterioAvaliacaoRESTClient restCriterio;
-	private List<SelectItem> criterios;
+	private int contadorSubcriterio = 0;
+	private String stringSubcriteiroAtual;
+	
 	//Pontuacao
 	private PontuacaoRESTClient restPontuacao;
 	private List<SelectItem> pontuacoes;
@@ -46,22 +46,12 @@ public class AvaliacaoBean implements Serializable {
 	private Avaliacao avaliacao;
 	private List<Avaliacao> avaliacoes;
 	
-//	private long idSubcriteiro;
 	private String consulta;
 	
-//	public long getIdSubcriteiro() {
-//		return idSubcriteiro;
-//	}
-//
-//	public void setIdSubcriteiro(long idSubcriteiro) {
-//		this.idSubcriteiro = idSubcriteiro;
-//		this.avaliacao.getSubcriterio().setId(idSubcriteiro );
-//	}
 
 	public String getConsulta() {
 		return consulta;
 	}
-
 	public void setConsulta(String consulta) {
 		this.consulta = consulta;
 	}
@@ -79,12 +69,13 @@ public class AvaliacaoBean implements Serializable {
 		this.restAvaliacao = new AvaliacaoRESTClient();
 		this.avaliacao = new Avaliacao();
 		this.avaliacao.setProposta(new Proposta());
-		this.avaliacao.setCriterio(new CriterioAvaliacao());
 		this.avaliacao.setSubcriterio(new SubcriterioAvaliacao());
 		ArrayList<Pontuacao> p = new ArrayList<Pontuacao>();
 		p.add(new Pontuacao());
 		this.avaliacao.getSubcriterio().setPontuacoes(p);
 		this.avaliacao.setNota(new Pontuacao());
+		//Setando avaliador na avaliacao
+		this.avaliacao.setAvaliador( (Usuario)SessionContext.getInstance().usuarioLogado() );
 			
 		if (setInfo)
 			setInfo();
@@ -93,9 +84,9 @@ public class AvaliacaoBean implements Serializable {
 	private void setInfo() {
 		this.setAvaliacoes(this.restAvaliacao.findAll());
 		this.setPropostas();
-		this.setCriterios();
-		this.setSubcriterios();
-		this.setPontuacoes();
+//		this.setCriterios();
+		
+		//this.setPontuacoes();
 	}
 	
 	public String cadastro() {
@@ -117,7 +108,7 @@ public class AvaliacaoBean implements Serializable {
 	
 	public String salvar() {
 		
-		//this.avaliacao.setAvaliador( (Usuario)SessionContext.getInstance().getAttribute("usuarioLogado") ); //Cadastro do avaliador
+		this.avaliacao.getSubcriterio().setId( (Long)subcriterios.get(contadorSubcriterio).getValue() );
 		
 		if ( this.avaliacao.getId() == null) {
 			this.restAvaliacao.create(this.avaliacao);
@@ -125,18 +116,49 @@ public class AvaliacaoBean implements Serializable {
 		else {
 			this.restAvaliacao.edit(this.avaliacao);
 		}
-		startView(true);
+		//startView(true);
+		
+		contadorSubcriterio++;
+		if(contadorSubcriterio < subcriterios.size()) {
+			stringSubcriteiroAtual = subcriterios.get(contadorSubcriterio).getLabel();
+			this.avaliacao.getSubcriterio().setId( (Long) subcriterios.get(contadorSubcriterio).getValue() );
+			this.setPontuacoes();
+		}else {
+			contadorSubcriterio = 0;
+			stringSubcriteiroAtual = subcriterios.get(0).getLabel();
+			this.setPontuacoes();
+			return this.index();
+		}
 
-		return null;
+		return this.pageSubcriterio();
+	}
+	
+	public String pageSubcriterio() {
+		this.setSubcriterios();
+		if(subcriterios == null) {
+			return index();
+		}else {
+			if(subcriterios.size() <= 0){
+				return index();
+			}
+		}
+		return "/avaliacao/cadastroSubcriterio?faces-redirect=true";
 	}
 
+	protected void setStringSubcriterioAtual(String s) {
+		this.stringSubcriteiroAtual = s;
+	}
+	public String getStringSubcriteiroAtual() {
+		return stringSubcriteiroAtual;
+	}
+	
 	//Propostas
 	public List<SelectItem> getPropostas() {
 		return propostas;
 	}
 	public void setPropostas() {
 		this.restProposta = new PropostaRESTClient();
-		List<Proposta> propostasBase = this.restProposta.findAll();
+		List<Proposta> propostasBase = this.restProposta.findAll(); //TODO: substituir por proposta que faltam avaliar
 		List<SelectItem> propostas = new ArrayList<>();
 
 		for (Proposta i : propostasBase) 
@@ -146,30 +168,14 @@ public class AvaliacaoBean implements Serializable {
 		
 		this.propostas = propostas;
 	}
-	//Criterios
-	public List<SelectItem> getCriterios() {
-		return criterios;
-	}
-	public void setCriterios() {
-		this.restCriterio = new CriterioAvaliacaoRESTClient();
-		List<CriterioAvaliacao> criteriosBase = this.restCriterio.findAll();
-		List<SelectItem> criterios = new ArrayList<>();
-
-		for (CriterioAvaliacao i : criteriosBase) 
-		{
-			criterios.add(new SelectItem(i.getId(), i.getTitulo()));
-		}
-		
-		this.criterios = criterios;
-	}
 	//Pontuacoes
 	public List<SelectItem> getPontuacoes() {
 		return pontuacoes;
 	}
-	
 	public void setPontuacoes() {
 		this.restPontuacao = new PontuacaoRESTClient();
-		List<Pontuacao> pontuacaoBase = this.restPontuacao.findAll();
+		
+		List<Pontuacao> pontuacaoBase = this.restPontuacao.findAllBySubcriterio(this.avaliacao.getSubcriterio());
 		List<SelectItem> pontuacoes = new ArrayList<>();
 
 		for (Pontuacao i : pontuacaoBase) 
@@ -179,29 +185,32 @@ public class AvaliacaoBean implements Serializable {
 		
 		this.pontuacoes = pontuacoes;
 	}
-
 	//Subcriterios
 	public List<SelectItem> getSubcriterios() {
 		return subcriterios;
 	}
 	public void setSubcriterios() {
 		this.restSubcriterio = new SubcriterioAvaliacaoRESTClient();
-		List<SubcriterioExibicaoDTO> dtos = restSubcriterio.obterSubcriteriosDTO();
-		List<SubcriterioAvaliacao> subcriteriosBase = new ArrayList<SubcriterioAvaliacao>();
+		//List<SubcriterioExibicaoDTO> dtos = restSubcriterio.obterSubcriteriosDTO();
+		List<SubcriterioAvaliacao> subcriteriosBase = restSubcriterio.findEmAberto(this.avaliacao.getAvaliador(), this.avaliacao.getProposta());
+		
+		if(subcriteriosBase.size() <= 0)
+		{
+			return;
+		}
 		
 		SubcriterioAvaliacao aux;
-		if(dtos != null) {
-			for(int i =0;i<dtos.size();i++)
-			{
-				aux = new SubcriterioAvaliacao();
-				aux.setId(dtos.get(i).getId());
-				aux.setLetra(dtos.get(i).getLetra());
-				aux.setNumero(dtos.get(i).getNumero());
-				aux.setTitulo(dtos.get(i).getTitulo());
-				subcriteriosBase.add(aux);
-			}
+		//if(dtos != null) {
+//			for(int i =0;i<dtos.size();i++)
+//			{
+//				aux = new SubcriterioAvaliacao();
+//				aux.setId(dtos.get(i).getId());
+//				aux.setLetra(dtos.get(i).getLetra());
+//				aux.setNumero(dtos.get(i).getNumero());
+//				aux.setTitulo(dtos.get(i).getTitulo());
+//				subcriteriosBase.add(aux);
+//			}
 		
-			System.out.println("Size = "+subcriteriosBase.size());
 			List<SelectItem> subcriterios = new ArrayList<>();
 	
 			for (SubcriterioAvaliacao i:subcriteriosBase ) 
@@ -209,10 +218,14 @@ public class AvaliacaoBean implements Serializable {
 				subcriterios.add(new SelectItem( i.getId() , i.getTitulo() ) );
 			}
 			
+			contadorSubcriterio = 0;
+			this.avaliacao.getSubcriterio().setId((Long)subcriterios.get(0).getValue());
+			this.setPontuacoes();
+			this.stringSubcriteiroAtual = subcriterios.get(0).getLabel();
+			
 			this.subcriterios = subcriterios;
-		}
+		//}
 	}
-
 	//Avaliacao
 	public Avaliacao getAvaliacao() {
 		return avaliacao;

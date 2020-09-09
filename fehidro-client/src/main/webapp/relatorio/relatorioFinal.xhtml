@@ -9,13 +9,13 @@
 	<ui:composition template="/shared/template.xhtml">
 		<ui:define name="content">
 			<h:inputHidden value="Relatorio" id="menuAtual"/>
-			<h:dataTable value="#{relatorioFinal.relatorio.itensRelatorioClassificado}" var="itemRelatorio" id="tabela" styleClass="table">
+			<h:dataTable value="#{relatorioFinal.relatorio.classificacao}" var="itemRelatorio" id="tabela" styleClass="table">
 				<h:column>
 					<f:facet name="header">Título</f:facet>
 					<h:outputText value="#{itemRelatorio.proposta.nomeProjeto}" />
 				</h:column>
 				<h:column>
-					<f:facet name="header">Classificacação</f:facet>
+					<f:facet name="header">Classificacação Geral</f:facet>
 					<h:outputText value="#{itemRelatorio.classificacao}" />
 				</h:column>
 				<h:column>
@@ -23,8 +23,16 @@
 					<h:outputText value="#{itemRelatorio.proposta.subPDC.titulo}" />
 				</h:column>
 				<h:column>
+					<f:facet name="header">Classificacação subpdc</f:facet>
+					<h:outputText value="#{itemRelatorio.classificacaoSubpdc}" />
+				</h:column>
+				<h:column>
 					<f:facet name="header">Nota</f:facet>
 					<h:outputText value="#{itemRelatorio.soma}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header">Status</f:facet>
+					<h:outputText value="#{itemRelatorio.stringDesclassificado}" />
 				</h:column>
 				
 			</h:dataTable>
