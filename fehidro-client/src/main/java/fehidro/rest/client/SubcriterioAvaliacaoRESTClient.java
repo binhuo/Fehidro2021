@@ -9,7 +9,9 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import fehidro.model.Pontuacao;
+import fehidro.model.Proposta;
 import fehidro.model.SubcriterioAvaliacao;
+import fehidro.model.Usuario;
 import fehidro.model.dto.SubcriterioExibicaoDTO;
 
 public class SubcriterioAvaliacaoRESTClient extends BaseRESTClient implements RESTClientInterface<SubcriterioAvaliacao>{
@@ -19,6 +21,19 @@ public class SubcriterioAvaliacaoRESTClient extends BaseRESTClient implements RE
 		List<SubcriterioAvaliacao> subcriterios = 
 				ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_SUBCRITERIO_URL).
+				request(MediaType.APPLICATION_JSON).
+				header(HttpHeaders.AUTHORIZATION, authToken).get().
+				readEntity(new GenericType<List<SubcriterioAvaliacao>> () {});
+		
+		return subcriterios;		
+	}
+	
+	public List<SubcriterioAvaliacao> findEmAberto(Usuario usuario, Proposta proposta) {
+		System.out.println(usuario.getId());
+		System.out.println(proposta.getId());
+		List<SubcriterioAvaliacao> subcriterios = 
+				ClientBuilder.newClient().
+				target(REST_WEBSERVICE_URL + REST_SUBCRITERIO_URL + "emAberto/" + usuario.getId() + "/" + proposta.getId()).
 				request(MediaType.APPLICATION_JSON).
 				header(HttpHeaders.AUTHORIZATION, authToken).get().
 				readEntity(new GenericType<List<SubcriterioAvaliacao>> () {});

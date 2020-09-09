@@ -9,6 +9,8 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import fehidro.model.Proposta;
+import fehidro.model.SubcriterioAvaliacao;
+import fehidro.model.Usuario;
 
 public class PropostaRESTClient extends BaseRESTClient implements RESTClientInterface<Proposta>{
 
@@ -23,6 +25,17 @@ public class PropostaRESTClient extends BaseRESTClient implements RESTClientInte
 		
 		return propostas;		
 	} 
+	
+//	public List<SubcriterioAvaliacao> findEmAberto(Usuario usuario) {
+//		List<SubcriterioAvaliacao> subcriterios = 
+//				ClientBuilder.newClient().
+//				target(REST_WEBSERVICE_URL + REST_PROPOSTA_URL + "emAberto/" + usuario.getId()).
+//				request(MediaType.APPLICATION_JSON).
+//				header(HttpHeaders.AUTHORIZATION, authToken).get().
+//				readEntity(new GenericType<List<SubcriterioAvaliacao>> () {});
+//		
+//		return subcriterios;		
+//	}
  
 	@Override
 	public Proposta find(Long id) {
