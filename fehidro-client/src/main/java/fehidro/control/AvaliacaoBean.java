@@ -16,6 +16,7 @@ import fehidro.model.SubcriterioAvaliacao;
 import fehidro.model.Usuario;
 //import fehidro.model.SubcriterioAvaliacao;
 import fehidro.model.dto.SubcriterioExibicaoDTO;
+import fehidro.model.enums.CodigoPerfilAcessoEnum;
 import fehidro.rest.client.AvaliacaoRESTClient;
 import fehidro.rest.client.CriterioAvaliacaoRESTClient;
 import fehidro.rest.client.PontuacaoRESTClient;
@@ -33,6 +34,7 @@ public class AvaliacaoBean implements Serializable {
 	private List<SelectItem> propostas;
 	//Subcriterio
 	private SubcriterioAvaliacaoRESTClient restSubcriterio;
+	private List<SubcriterioAvaliacao> subcriteriosObject;
 	private List<SelectItem> subcriterios;
 	private int contadorSubcriterio = 0;
 	private String stringSubcriteiroAtual;
@@ -70,6 +72,7 @@ public class AvaliacaoBean implements Serializable {
 		this.avaliacao = new Avaliacao();
 		this.avaliacao.setProposta(new Proposta());
 		this.avaliacao.setSubcriterio(new SubcriterioAvaliacao());
+		subcriteriosObject = new ArrayList<SubcriterioAvaliacao>();
 		ArrayList<Pontuacao> p = new ArrayList<Pontuacao>();
 		p.add(new Pontuacao());
 		this.avaliacao.getSubcriterio().setPontuacoes(p);
@@ -108,7 +111,7 @@ public class AvaliacaoBean implements Serializable {
 	
 	public String salvar() {
 		
-		this.avaliacao.getSubcriterio().setId( (Long)subcriterios.get(contadorSubcriterio).getValue() );
+		this.avaliacao.setSubcriterio( subcriteriosObject.get(contadorSubcriterio) );
 		
 		if ( this.avaliacao.getId() == null) {
 			this.restAvaliacao.create(this.avaliacao);
@@ -192,7 +195,18 @@ public class AvaliacaoBean implements Serializable {
 	public void setSubcriterios() {
 		this.restSubcriterio = new SubcriterioAvaliacaoRESTClient();
 		//List<SubcriterioExibicaoDTO> dtos = restSubcriterio.obterSubcriteriosDTO();
-		List<SubcriterioAvaliacao> subcriteriosBase = restSubcriterio.findEmAberto(this.avaliacao.getAvaliador(), this.avaliacao.getProposta());
+		
+		if(SessionContext.getInstance().usuarioLogado().getPerfilAcesso() == CodigoPerfilAcessoEnum.SecretariaExecutiva.getCodigo()) {
+			//Secretaria Executiva
+			System.out.println("secretaria ->");
+			subcriteriosObject = restSubcriterio.findEmAbertoSecretariaExecutiva(this.avaliacao.getAvaliador(), this.avaliacao.getProposta());
+		}else {
+			System.out.println("ctpg ->");
+			subcriteriosObject = restSubcriterio.findEmAberto(this.avaliacao.getAvaliador(), this.avaliacao.getProposta());
+		}
+		
+		subcriteriosObject = restSubcriterio.findEmAberto(this.avaliacao.getAvaliador(), this.avaliacao.getProposta());
+		List<SubcriterioAvaliacao> subcriteriosBase = subcriteriosObject; //TODO: Substituir pelo subcriteriosObject?
 		
 		if(subcriteriosBase.size() <= 0)
 		{

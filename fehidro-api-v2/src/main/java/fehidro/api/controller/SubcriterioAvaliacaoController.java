@@ -37,8 +37,13 @@ public class SubcriterioAvaliacaoController {
 	}
 	
 	@GetMapping(value="/emAberto/{usuario}/{proposta}", produces="application/json")
-	public ResponseEntity<List<SubcriterioAvaliacao>> findEmAberto(@PathVariable(value = "usuario") Usuario usuario, @PathVariable(value = "proposta") Proposta proposta) {	
+	public ResponseEntity<List<SubcriterioAvaliacao>> findEmAberto(@PathVariable(value = "usuario") Usuario usuario, @PathVariable(value = "proposta") Proposta proposta) {
 		return ResponseEntity.ok(_subcriterioAvaliacaoRepository.findEmAberto(usuario, proposta));
+	}
+	
+	@GetMapping(value="/emAbertoSecretariaExecutiva/{usuario}/{proposta}", produces="application/json")
+	public ResponseEntity<List<SubcriterioAvaliacao>> findEmAbertoSecretariaExecutiva(@PathVariable(value = "usuario") Usuario usuario, @PathVariable(value = "proposta") Proposta proposta) {
+		return ResponseEntity.ok(_subcriterioAvaliacaoRepository.findEmAbertoSecretariaExecutiva(usuario, proposta));
 	}
 	
 	@GetMapping("/dtoExibicao/")

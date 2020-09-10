@@ -11,7 +11,10 @@ import fehidro.api.model.Usuario;
 
 public interface SubcriterioAvaliacaoRepository extends JpaRepository<SubcriterioAvaliacao, Long> {
 
-	@Query("select s from SubcriterioAvaliacao s where s.id not in ( select subcriterio from Avaliacao a where a.avaliador = ?1 and a.proposta =?2)")
+	@Query("select s from SubcriterioAvaliacao s where s.perfilAcesso = '2' AND (s.id not in ( select subcriterio from Avaliacao a where a.avaliador = ?1 and a.proposta =?2))")
 	public List<SubcriterioAvaliacao> findEmAberto(Usuario usuario, Proposta proposta);
+	
+	@Query("select s from SubcriterioAvaliacao s where s.perfilAcesso = '1' AND (s.id not in ( select subcriterio from Avaliacao a where a.avaliador = ?1 and a.proposta =?2))")
+	public List<SubcriterioAvaliacao> findEmAbertoSecretariaExecutiva(Usuario usuario, Proposta proposta);
 	
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import fehidro.api.model.Avaliacao;
+import fehidro.api.model.PerfilAcesso;
 //import fehidro.api.model.CriterioAvaliacao;
 import fehidro.api.model.Proposta;
 import fehidro.api.model.SubPDC;
@@ -107,10 +108,24 @@ public class AvaliacaoController {
 		
 		try {
 			Avaliacao novo = new Avaliacao(avaliacao);
+//			//Bloqueio secretaria //TODO: Considerar outra maneira.	
+//			boolean permitido = false;
+//			PerfilAcesso perfil =  ;  
+//			
+//			if(perfil.getNome() == "Secretaria Executiva") {
+//				permitido = ( novo.getSubcriterio().getNumero() == '5' && (novo.getSubcriterio().getLetra() == 'a' || novo.getSubcriterio().getLetra() == 'b'));
+//			}else {
+//				permitido = true;
+//			}
+//			
+//			if(permitido) {
 			Avaliacao aval = _avaliacaoRepository.save(novo);
 			CadastroAvaliacaoDTO cadastrado = new CadastroAvaliacaoDTO(aval);
 			URI uri = uriBuilder.path("/{id}").buildAndExpand(cadastrado.getId()).toUri();
 			return ResponseEntity.created(uri).body(cadastrado);
+//			}else {
+//				return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+//			}
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
