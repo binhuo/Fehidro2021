@@ -17,11 +17,13 @@ import fehidro.model.Usuario;
 //import fehidro.model.SubcriterioAvaliacao;
 import fehidro.model.dto.SubcriterioExibicaoDTO;
 import fehidro.model.enums.CodigoPerfilAcessoEnum;
+import fehidro.model.enums.PerfilAcessoEnum;
 import fehidro.rest.client.AvaliacaoRESTClient;
 import fehidro.rest.client.CriterioAvaliacaoRESTClient;
 import fehidro.rest.client.PontuacaoRESTClient;
 import fehidro.rest.client.PropostaRESTClient;
 import fehidro.rest.client.SubcriterioAvaliacaoRESTClient;
+import fehidro.rest.client.UsuarioRESTClient;
 import fehidro.util.SessionContext;
 
 @ManagedBean
@@ -49,6 +51,9 @@ public class AvaliacaoBean implements Serializable {
 	private List<Avaliacao> avaliacoes;
 	
 	private String consulta;
+	
+	//Usuario
+	private UsuarioRESTClient restUsuario;
 	
 
 	public String getConsulta() {
@@ -188,7 +193,22 @@ public class AvaliacaoBean implements Serializable {
 		
 		this.pontuacoes = pontuacoes;
 	}
+	
+	
 	//Subcriterios
+	protected boolean todosSecretariaAvaliaramEm5AB() {
+		System.out.println("todosSecretariaAvaliaramEm5AB()");
+		restUsuario = new UsuarioRESTClient();
+		
+		int qtd = restAvaliacao.findAllAvaliacaoSubcriterioSecretaria(this.avaliacao.getProposta()).size();
+		int qtdUsuario = restUsuario.obterPorPerfilAcesso(new Long(1)).size();
+		//TODO: fazer validacao apropriada
+		if(qtd >= (2*qtdUsuario) ) {
+			return true;
+		}
+		
+		return false;
+	}
 	public List<SelectItem> getSubcriterios() {
 		return subcriterios;
 	}
@@ -198,18 +218,26 @@ public class AvaliacaoBean implements Serializable {
 		
 		if(SessionContext.getInstance().usuarioLogado().getPerfilAcesso() == CodigoPerfilAcessoEnum.SecretariaExecutiva.getCodigo()) {
 			//Secretaria Executiva
-			System.out.println("secretaria ->");
+			System.out.println("Secretaria Executiva");
 			subcriteriosObject = restSubcriterio.findEmAbertoSecretariaExecutiva(this.avaliacao.getAvaliador(), this.avaliacao.getProposta());
+			System.out.println(subcriteriosObject.size());
+			System.out.println("=====================");
 		}else {
-			System.out.println("ctpg ->");
-			subcriteriosObject = restSubcriterio.findEmAberto(this.avaliacao.getAvaliador(), this.avaliacao.getProposta());
+			if( todosSecretariaAvaliaramEm5AB() ) {
+				System.out.println("CTPG");
+				subcriteriosObject = restSubcriterio.findEmAberto(this.avaliacao.getAvaliador(), this.avaliacao.getProposta());
+				System.out.println(subcriteriosObject.size());
+				System.out.println("=====================");
+			}else {
+				subcriteriosObject = new ArrayList<SubcriterioAvaliacao>();
+			}
 		}
 		
-		subcriteriosObject = restSubcriterio.findEmAberto(this.avaliacao.getAvaliador(), this.avaliacao.getProposta());
 		List<SubcriterioAvaliacao> subcriteriosBase = subcriteriosObject; //TODO: Substituir pelo subcriteriosObject?
 		
 		if(subcriteriosBase.size() <= 0)
 		{
+			System.out.println("vazio - return");
 			return;
 		}
 		

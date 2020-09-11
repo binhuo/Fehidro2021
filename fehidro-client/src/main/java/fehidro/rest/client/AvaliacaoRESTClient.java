@@ -36,6 +36,19 @@ public class AvaliacaoRESTClient extends BaseRESTClient implements RESTClientInt
 		
 		//return avaliacoes;
 	}
+	
+	public List<Avaliacao> findAllAvaliacaoSubcriterioSecretaria(Proposta proposta) {
+		//List<Avaliacao> avaliacoes = ClientBuilder.newClient().target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL).request(MediaType.APPLICATION_JSON).get().readEntity(new GenericType<List<Avaliacao>> () {});
+
+		Client c = ClientBuilder.newClient();
+		WebTarget t = c.target(REST_WEBSERVICE_URL + REST_AVALIACAO_URL + "findAllAvaliacaoSubcriterioSecretaria/" + proposta.getId());
+		Builder b = t.request(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, authToken);
+		Response r = b.get();
+		List<Avaliacao> out = r.readEntity(new GenericType<List<Avaliacao>> () {});
+		return out;
+		
+		//return avaliacoes;
+	}
 
 	@Override
 	public Avaliacao find(Long id) {
