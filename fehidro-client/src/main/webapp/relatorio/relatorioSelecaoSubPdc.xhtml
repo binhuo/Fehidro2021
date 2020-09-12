@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:body>
+	<ui:composition template="/shared/template.xhtml">
+		<ui:define name="content">
+			<h:inputHidden value="Relatorio" id="menuAtual"/>
+			<h:form id="formProposta" enctype="multipart/form-data">
+				<h:panelGroup layout="block" class="form-group row">
+					<h:panelGroup layout="block" class="col">
+						<h:outputLabel for="txtSubPDC">SubPDC</h:outputLabel>
+						<h:selectOneMenu id="txtSubPDC" redisplay="false" value="#{relatorioParcial.subPdc.id}" 
+						class="form-control" required="true" requiredMessage="Informe o subPDC!">
+							<f:selectItems value="#{relatorioParcial.subPdcs}" />
+						</h:selectOneMenu>
+						<h:message for="txtSubPDC" styleClass="erro" />
+					</h:panelGroup>
+				</h:panelGroup>
+				
+				<h:panelGroup layout="block" class="col text-left">
+					<h:commandButton id="btnCadastrar" class="btn btn-outline-success"
+						value="Relatório" action="#{relatorioParcial.getUrl}">
+						<h:message for="btnCadastrar" styleClass="erro" />
+					</h:commandButton>
+				</h:panelGroup>
+				
+				</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

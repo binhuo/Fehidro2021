@@ -14,17 +14,23 @@
 				
 				<h:panelGroup layout="block" class="form-group row">			
 					<h:panelGroup layout="block" class="col">
-						<h:outputLabel for="txtProposta">Proposta</h:outputLabel>
-						<h:selectOneMenu id="txtProposta" redisplay="false"
-							value="#{avaliacaoBean.avaliacao.proposta.id}"
-							class="form-control" required="true"
-							requiredMessage="Informe a instituição!">
-							<f:selectItems value="#{avaliacaoBean.propostas}" />
-						</h:selectOneMenu>
-						<h:message for="txtProposta" styleClass="erro" />
+						<h:outputLabel for="txtNota" value="#{avaliacaoBean.stringSubcriteiroAtual}"/>
 					</h:panelGroup>				
 				</h:panelGroup>
-				
+
+				<h:panelGroup layout="block" class="form-group row">			
+					<h:panelGroup layout="block" class="col">
+						<h:outputLabel for="txtNota">Nota</h:outputLabel>
+						<h:selectOneMenu id="txtNota" redisplay="false"
+							value="#{avaliacaoBean.avaliacao.nota.id}"
+							class="form-control" required="true"
+							requiredMessage="Informe a nota!">
+							<f:selectItems value="#{avaliacaoBean.pontuacoes}" />
+						</h:selectOneMenu>
+						<h:message for="txtNota" styleClass="erro" />
+					</h:panelGroup>				
+				</h:panelGroup>
+
 
 				<h:panelGroup layout="block" class="form-row mt-5">
 					<h:panelGroup layout="block" class="col text-right">
@@ -35,7 +41,7 @@
 					</h:panelGroup>
 					<h:panelGroup layout="block" class="col text-left">
 						<h:commandButton id="btnCadastrar" class="btn btn-outline-success"
-							value="Próximo" action="#{avaliacaoBean.pageSubcriterio}">
+							value="Salvar" action="#{avaliacaoBean.salvar}">
 							<h:message for="btnCadastrar" styleClass="erro" />
 						</h:commandButton>
 					</h:panelGroup>

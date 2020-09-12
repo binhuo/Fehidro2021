@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import fehidro.model.Pontuacao;
+import fehidro.model.SubcriterioAvaliacao;
 
 public class PontuacaoRESTClient extends BaseRESTClient implements RESTClientInterface<Pontuacao> {
 	
@@ -17,6 +18,16 @@ public class PontuacaoRESTClient extends BaseRESTClient implements RESTClientInt
 		List<Pontuacao> pontuacaos = 	
 				ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_PONTUACAO_URL).
+				request(MediaType.APPLICATION_JSON).get().
+				readEntity(new GenericType<List<Pontuacao>> () {});
+		
+		return pontuacaos;
+	}
+	
+	public List<Pontuacao> findAllBySubcriterio(SubcriterioAvaliacao subcriterio){
+		List<Pontuacao> pontuacaos = 	
+				ClientBuilder.newClient().
+				target(REST_WEBSERVICE_URL + REST_PONTUACAO_URL + "subcriterio/" + subcriterio.getId()).
 				request(MediaType.APPLICATION_JSON).get().
 				readEntity(new GenericType<List<Pontuacao>> () {});
 		

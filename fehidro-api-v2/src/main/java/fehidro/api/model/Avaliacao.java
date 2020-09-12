@@ -30,10 +30,10 @@ public class Avaliacao extends AbstractEntity {
     @JoinColumn(name = "subcriterio_avaliacao_id")
     private SubcriterioAvaliacao subcriterio;
     
-    //TODO: Reconsiderar se necessario
-    @ManyToOne
-    @JoinColumn(name = "criterio_avaliacao_id")
-    private CriterioAvaliacao criterio;
+//    //TODO: Reconsiderar se necessario
+//    @ManyToOne
+//    @JoinColumn(name = "criterio_avaliacao_id")
+//    private CriterioAvaliacao criterio;
     
 //    @ManyToOne(cascade=CascadeType.ALL)
 //    @JoinColumn(name = "subPDC_avaliacao_id")
@@ -50,10 +50,10 @@ public class Avaliacao extends AbstractEntity {
 		if(dto != null) {
 			this.setId(dto.getId());
 			this.nota = dto.getNota();
-			this.avaliador = dto.getAvaliador();
+			this.avaliador = new Usuario(dto.getAvaliador());
 			this.proposta = dto.getProposta();
 			this.subcriterio = dto.getSubcriterio();
-			this.criterio = dto.getCriterio();
+//			this.criterio = dto.getCriterio();
 		}
 	}
 
@@ -89,13 +89,13 @@ public class Avaliacao extends AbstractEntity {
 		this.subcriterio = subcriterio;
 	}
 
-	public CriterioAvaliacao getCriterio() {
-		return criterio;
-	}
-
-	public void setCriterio(CriterioAvaliacao criterio) {
-		this.criterio = criterio;
-	}
+//	public CriterioAvaliacao getCriterio() {
+//		return criterio;
+//	}
+//
+//	public void setCriterio(CriterioAvaliacao criterio) {
+//		this.criterio = criterio;
+//	}
 	
 	
 
