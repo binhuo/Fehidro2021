@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.event.AjaxBehaviorEvent;
 
 import fehidro.rest.client.PDCRESTClient;
 import fehidro.model.Meta;
@@ -23,8 +24,6 @@ public class PDCBean  implements Serializable {
 	private PDCRESTClient restPDC;
 	private PDC pdc;
 	private List<PDC> pdcs;
-	private int ordemListagemSubpdcNovaMeta;
-	private int idSubpdcNovaMeta;
 	
 	public PDCBean() {
 		startView(true);
@@ -64,7 +63,7 @@ public class PDCBean  implements Serializable {
 		return null;
 	}
 	
-	public String addSubPDC() {
+	public void addSubPDC(AjaxBehaviorEvent event) {
 		
 		int qtSubPDCs = 0;
 		
@@ -79,17 +78,18 @@ public class PDCBean  implements Serializable {
 		novo.setMetas(new ArrayList<Meta>());
 		
 		this.pdc.getSubPDCs().add(novo);
-		 
-		return null;
 	}
 	
-	public String addMetaSubpdc() {
+	public void addMetaSubpdc(AjaxBehaviorEvent event) {
+		int ordemListagemSubpdcNovaMeta = (int) event.getComponent().getAttributes().get("ordemListagemSubpdcNovaMeta");
+		Long idSubpdcNovaMeta = (Long) event.getComponent().getAttributes().get("idSubpdcNovaMeta");
+		
 		if (this.pdc.getId() == null || this.pdc.getId() == 0) {
-			this.pdc.getSubPDCs().get(getOrdemListagemSubpdcNovaMeta() - 1).getMetas().add(new Meta());
+			this.pdc.getSubPDCs().get(ordemListagemSubpdcNovaMeta - 1).getMetas().add(new Meta());
 		} else {
 			
 			Optional<SubPDC> optSubpdcNovaMeta = this.pdc.getSubPDCs().stream()
-					.filter(s -> s.getId() == this.idSubpdcNovaMeta)
+					.filter(s -> s.getId() == idSubpdcNovaMeta)
 				    .findFirst();
 			
 			if (optSubpdcNovaMeta.isPresent()) {
@@ -97,8 +97,6 @@ public class PDCBean  implements Serializable {
 				subpdcNovaMeta.getMetas().add(new Meta());
 			}			
 		}
-		
-		return null;
 	}
 	
 	private void startView(boolean setInfo) {
@@ -153,21 +151,5 @@ public class PDCBean  implements Serializable {
 
 	public void setPdcs(List<PDC> pDCs) {
 		pdcs = pDCs;
-	}
-
-	public int getOrdemListagemSubpdcNovaMeta() {
-		return ordemListagemSubpdcNovaMeta;
-	}
-
-	public void setOrdemListagemSubpdcNovaMeta(int ordemListagemSubpdcNovaMeta) {
-		this.ordemListagemSubpdcNovaMeta = ordemListagemSubpdcNovaMeta;
-	}
-
-	public int getIdSubpdcNovaMeta() {
-		return idSubpdcNovaMeta;
-	}
-
-	public void setIdSubpdcNovaMeta(int idSubpdcNovaMeta) {
-		this.idSubpdcNovaMeta = idSubpdcNovaMeta;
 	}
 }
