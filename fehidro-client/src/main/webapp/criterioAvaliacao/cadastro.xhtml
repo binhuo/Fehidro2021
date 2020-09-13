@@ -51,13 +51,17 @@
 					<h:panelGroup layout="block"
 						class="col align-self-end text-right  mt-2">
 						<h:commandButton id="btnNovaPontuacao" immediate="true"
-							class="btn btn-outline-primary mt-1" value="Nova pontuação"
-							action="#{criterioAvaliacaoBean.addPontuacaoCriterio}">
+							class="btn btn-outline-primary mt-1" value="Nova pontuação">
+							<f:ajax listener="#{criterioAvaliacaoBean.addPontuacaoCriterio}" 
+								execute="@all" render="@all" 
+								event="click" onevent="function(data){setCheckboxStyle();}"/>
 						</h:commandButton>
 						<h:commandButton id="btnNovoSubcriterio" immediate="true"
 							class="btn btn-outline-primary mt-1 ml-3"
-							value="Novo subcritério"
-							action="#{criterioAvaliacaoBean.addSubcriterio}">
+							value="Novo subcritério">
+							<f:ajax listener="#{criterioAvaliacaoBean.addSubcriterio}" 
+								execute="@all" render="@all"
+								event="click" onevent="function(data){setCheckboxStyle();}"/>
 						</h:commandButton>
 					</h:panelGroup>
 				</h:panelGroup>
@@ -126,9 +130,8 @@
 										class="form-control numeric" readonly="true" />
 								</h:panelGroup>
 
-								<h:panelGroup layout="block" class="col">
-									<h:outputLabel value="Nome do subcritério"
-										for="txtNomeSubcriterio" />
+								<h:panelGroup layout="block" class="col"> 
+									<h:outputLabel value="Nome do subcritério" for="txtNomeSubcriterio" />
 									<h:inputText id="txtNomeSubcriterio" value="#{s.titulo}"
 										class="form-control alpha" required="true"
 										requiredMessage="Informe o nome do subcritério!">
@@ -161,8 +164,8 @@
 								<h:panelGroup layout="block"
 									class="col custom-control custom-checkbox">
 									<h:selectManyCheckbox value="#{s.tiposProposta}"
-										converter="tipoPropostaConverter" multiple="true">
-										<f:selectItems
+										converter="tipoPropostaConverter" multiple="true" >
+										<f:selectItems 
 											value="#{criterioAvaliacaoBean.tiposPropostasSelecionadosValue}"
 											var="tp" itemLabel="#{tp.nome}" itemValue="#{tp}" />
 									</h:selectManyCheckbox>
@@ -174,11 +177,11 @@
 									class="col align-self-end text-right"
 									id="btNovaPontuacaoSubcriterio">
 									<h:commandButton class="btn btn-primary" immediate="true"
-										action="#{criterioAvaliacaoBean.addPontuacaoSubcriterio}"
 										value="Nova pontuação">
-										<f:setPropertyActionListener
-											target="#{criterioAvaliacaoBean.numeroSubcriterioNovaPontuacao}"
-											value="#{s.numero}" />
+										<f:attribute name="numeroSubcriterioNovaPontuacao" value="#{s.numero}" />
+										<f:ajax listener="#{criterioAvaliacaoBean.addPontuacaoSubcriterio}" 
+											execute="@all" render="@all" 
+											event="click" onevent="function(data){setCheckboxStyle();}"/>
 									</h:commandButton>
 								</h:panelGroup>
 							</h:panelGroup>
@@ -187,6 +190,7 @@
 								id="pontuacaoSubcriterio">
 								<h:panelGroup layout="block" class="form-group row">
 									<h:panelGroup layout="block" class="col mb-3">
+										<h:inputHidden value="#{ps.id}" id="pontuacaoSubcriterioId"/>
 										<h:outputLabel for="txtPontuacaoSubcriterioTitulo"
 											value="Título da pontuação" />
 										<h:inputText id="txtPontuacaoSubcriterioTitulo"

@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import fehidro.api.model.CriterioAvaliacao;
+import fehidro.api.model.Pontuacao;
+import fehidro.api.model.SubcriterioAvaliacao;
 import fehidro.api.repository.CriterioAvaliacaoRepository;
 import io.swagger.annotations.ApiOperation;
 
@@ -55,6 +57,18 @@ public class CriterioAvaliacaoController {
 	@ApiOperation(value = "Atualiza um critério de avaliação")
 	@PutMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<CriterioAvaliacao> update(@RequestBody CriterioAvaliacao criterio) {
+		
+		for (SubcriterioAvaliacao s : criterio.getSubcriterios()) {
+			s.setCriterio(criterio);
+			for (Pontuacao p : s.getPontuacoes()) {
+				p.setSubcriterio(s);
+			}
+		}
+		
+		for (Pontuacao p : criterio.getPontuacoes()) {
+			p.setCriterio(criterio);
+		}
+		
 		CriterioAvaliacao cadastrado =  _criterioAvaliacaoRepository.save(criterio);
 		return ResponseEntity.ok(cadastrado);
 	}
