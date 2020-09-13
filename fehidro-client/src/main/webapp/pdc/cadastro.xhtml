@@ -27,8 +27,8 @@
 				
 				<h:panelGroup layout="block" class="form-group row">
 					<h:panelGroup layout="block" class="col text-right">
-						<h:commandButton id="btnNovoSubPDC" immediate="true" class="btn btn-outline-primary" value="Novo subPDC"
-							action="#{pDCBean.addSubPDC}">
+						<h:commandButton id="btnNovoSubPDC" immediate="true" class="btn btn-outline-primary" value="Novo subPDC">
+							<f:ajax listener="#{pDCBean.addSubPDC}" execute="@all" render="@all" event="click" />
 						</h:commandButton>
 					</h:panelGroup>
 				</h:panelGroup>
@@ -60,12 +60,11 @@
 							
 							<h:panelGroup layout="block" class="form-group row">
 								<h:panelGroup layout="block" class="col align-self-end text-right" id="btNovaMetaSubPDC">
-									<h:commandButton class="btn btn-primary" immediate="true" 
-										action="#{pDCBean.addMetaSubpdc}" value="Nova meta">
-									<f:setPropertyActionListener
-										target="#{pDCBean.ordemListagemSubpdcNovaMeta}" value="#{s.ordemListagem}" />
-									<f:setPropertyActionListener 
-										target="#{pDCBean.idSubpdcNovaMeta}" value="#{s.id}" />
+									<h:commandButton class="btn btn-primary" immediate="true" value="Nova meta">
+									<f:attribute name="idSubpdcNovaMeta" value="#{s.id}" />
+									<f:attribute name="ordemListagemSubpdcNovaMeta" value="#{s.ordemListagem}" />		
+									<f:ajax listener="#{pDCBean.addMetaSubpdc}" execute="@all" render="@all" 
+										event="click" onevent="function(data){startMoneyMask();}"/>	
 									</h:commandButton>
 								</h:panelGroup>	
 							</h:panelGroup>

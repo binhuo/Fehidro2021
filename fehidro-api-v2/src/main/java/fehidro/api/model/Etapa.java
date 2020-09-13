@@ -1,12 +1,10 @@
 package fehidro.api.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -24,10 +22,10 @@ public class Etapa extends AbstractEntity {
 	@Column(name="id_responsavel")
 	private Integer responsavel;
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "etapa_id")
-	private List<Cronograma> cronogramas = new ArrayList<Cronograma>();
-
+	private List<Cronograma> cronogramas;
+	
 	public int getNumero() {
 		return numero;
 	}
@@ -59,5 +57,4 @@ public class Etapa extends AbstractEntity {
 	public void setResponsavel(Integer responsavel) {
 		this.responsavel = responsavel;
 	}
-	
 }

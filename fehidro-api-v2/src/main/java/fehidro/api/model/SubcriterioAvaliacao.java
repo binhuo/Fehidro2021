@@ -42,6 +42,7 @@ public class SubcriterioAvaliacao extends AbstractEntity {
 	private List<TipoProposta> tiposProposta;
 	 
 	@ManyToOne
+	@JoinColumn(name="criterioavaliacao_id")
 	@JsonIgnore
 	private CriterioAvaliacao criterio;
 
