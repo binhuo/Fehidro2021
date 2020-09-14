@@ -237,6 +237,7 @@ public class AvaliacaoBean implements Serializable {
 		
 		if(subcriteriosBase.size() <= 0)
 		{
+			contadorSubcriterio = 0;
 			System.out.println("vazio - return");
 			return;
 		}
