@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 
 import fehidro.model.Cronograma;
@@ -25,7 +26,6 @@ public class DeliberacaoBean implements Serializable {
 	private List<SelectItem> responsaveis;
 	
 	private String consulta;
-	private int numeroEtapaNovoCronograma;
 	private Long idDeliberacao;
 		
 	public DeliberacaoBean() {
@@ -44,7 +44,7 @@ public class DeliberacaoBean implements Serializable {
 		return "/deliberacao/cadastro?faces-redirect=true";
 	}
 	
-	public String addEtapa() 
+	public void addEtapa(AjaxBehaviorEvent event) 
 	{
 		Deliberacao d = this.getDeliberacao();
 		
@@ -68,15 +68,13 @@ public class DeliberacaoBean implements Serializable {
 		novaEtapa.setCronogramas(c);
 		
 		this.getDeliberacao().getEtapas().add(novaEtapa);
-		return null;
 	}
 	
-	public String addCronograma() 
+	public void addCronograma(AjaxBehaviorEvent event) 
 	{		
+		int numeroEtapaNovoCronograma = (int) event.getComponent().getAttributes().get("numeroEtapaNovoCronograma");
 		Cronograma novoCronograma = new Cronograma();
-		this.getDeliberacao().getEtapas().get(getNumeroEtapaNovoCronograma() - 1).getCronogramas().add(novoCronograma);		
-		
-		return null;
+		this.getDeliberacao().getEtapas().get(numeroEtapaNovoCronograma - 1).getCronogramas().add(novoCronograma);		
 	}
 	
 	public String salvar() 
@@ -112,7 +110,6 @@ public class DeliberacaoBean implements Serializable {
 		d.setEtapas(e);
 		this.setDeliberacao(d);
 		this.restDeliberacao = new DeliberacaoRESTClient();
-		this.numeroEtapaNovoCronograma = 0;
 		this.idDeliberacao = null;
 		
 		if(setInfo)
@@ -143,13 +140,6 @@ public class DeliberacaoBean implements Serializable {
 	}
 	public void setConsulta(String consulta) {
 		this.consulta = consulta;
-	}
-	
-	public int getNumeroEtapaNovoCronograma() {
-		return numeroEtapaNovoCronograma;
-	}
-	public void setNumeroEtapaNovoCronograma(int numeroEtapaNovoCronograma) {
-		this.numeroEtapaNovoCronograma = numeroEtapaNovoCronograma;
 	}
 	public List<SelectItem> getResponsaveis() {
 		return responsaveis;

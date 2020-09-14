@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 
 import fehidro.model.CriterioAvaliacao;
@@ -32,7 +33,7 @@ public class CriterioAvaliacaoBean implements Serializable {
 
 	private String consulta;
 	private Long idCriterioAvaliacao;
-	private int numeroSubcriterioNovaPontuacao;
+	//private int numeroSubcriterioNovaPontuacao;
 	private List<TipoProposta> tiposProposta;
 	private TipoProposta[] tiposPropostasSelecionados;
 	private List<SelectItem> perfisAcesso;
@@ -93,7 +94,7 @@ public class CriterioAvaliacaoBean implements Serializable {
 		return null;
 	}
 
-	public String addPontuacaoCriterio () {
+	public void addPontuacaoCriterio (AjaxBehaviorEvent event) {
 		CriterioAvaliacao c = this.getCriterio();
 		List<Pontuacao> p = c.getPontuacoes();
 
@@ -103,10 +104,9 @@ public class CriterioAvaliacaoBean implements Serializable {
 
 		c.getPontuacoes().add(new Pontuacao());
 		this.criterio.setSubcriterios(new ArrayList<SubcriterioAvaliacao>());
-		return null;
 	}
 
-	public String addSubcriterio() {
+	public void addSubcriterio(AjaxBehaviorEvent event) {
 		CriterioAvaliacao c = this.getCriterio();
 		c.setPerfilAcesso(null);
 		c.setPontuacoes(new ArrayList<Pontuacao>());
@@ -133,12 +133,11 @@ public class CriterioAvaliacaoBean implements Serializable {
 
 		c.getSubcriterios().add(novoSubcriterio);
 		novoSubcriterio.setPontuacoes(new ArrayList<Pontuacao>());
-		return null;
 	}
 
-	public String addPontuacaoSubcriterio() {
-		this.getCriterio().getSubcriterios().get(getNumeroSubcriterioNovaPontuacao() - 1).getPontuacoes().add(new Pontuacao());
-		return null;
+	public void addPontuacaoSubcriterio(AjaxBehaviorEvent event) {
+		int numeroSubcriterioNovaPontuacao = (int) event.getComponent().getAttributes().get("numeroSubcriterioNovaPontuacao");
+		this.getCriterio().getSubcriterios().get(numeroSubcriterioNovaPontuacao - 1).getPontuacoes().add(new Pontuacao());
 	}
 
 	private void startView(boolean setInfo) {
@@ -148,7 +147,8 @@ public class CriterioAvaliacaoBean implements Serializable {
 		this.criterio.setSubcriterios(new ArrayList<SubcriterioAvaliacao>());
 		this.criterio.setPontuacoes(new ArrayList<Pontuacao>());
 		this.criterio.setPerfilAcesso(new PerfilAcesso());
-
+		setIdCriterioAvaliacao(null);
+		
 		if (setInfo)
 			setInfo();
 	}
@@ -188,14 +188,6 @@ public class CriterioAvaliacaoBean implements Serializable {
 	}
 	public void setConsulta(String consulta) {
 		this.consulta = consulta;
-	}
-
-	public int getNumeroSubcriterioNovaPontuacao() {
-		return numeroSubcriterioNovaPontuacao;
-	}
-
-	public void setNumeroSubcriterioNovaPontuacao(int numeroSubcriterioNovaPontuacao) {
-		this.numeroSubcriterioNovaPontuacao = numeroSubcriterioNovaPontuacao;
 	}
 
 	public List<TipoProposta> getTiposProposta() {

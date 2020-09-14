@@ -39,8 +39,8 @@
 
 					<h:panelGroup layout="block" class="col align-self-end text-right">
 						<h:commandButton id="btnNovaEtapa" immediate="true"
-							class="btn btn-outline-primary" value="Nova etapa"
-							action="#{deliberacaoBean.addEtapa}">
+							class="btn btn-outline-primary" value="Nova etapa">		
+						<f:ajax listener="#{deliberacaoBean.addEtapa}" execute="@all" render="@all" event="click" />	
 						</h:commandButton>
 					</h:panelGroup>
 				</h:panelGroup>
@@ -98,8 +98,9 @@
 									</h:panelGroup>
 
 									<h:panelGroup layout="block" class="col-3 align-self-end" id="btNovoCronograma" rendered="#{statusC.last}">
-										<h:commandButton class="btn btn-primary" immediate="true" action="#{deliberacaoBean.addCronograma}" value="+"> 
-											<f:setPropertyActionListener target="#{deliberacaoBean.numeroEtapaNovoCronograma}" value="#{e.numero}" /> 
+										<h:commandButton class="btn btn-primary" immediate="true" value="+"> 
+											<f:attribute name="numeroEtapaNovoCronograma" value="#{e.numero}" />		
+											<f:ajax listener="#{deliberacaoBean.addCronograma}" execute="@all" render="@all" event="click" />	 
 										</h:commandButton>
 									</h:panelGroup>
 								</h:panelGroup>

@@ -1,12 +1,10 @@
 package fehidro.api.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -21,9 +19,9 @@ public class Deliberacao extends AbstractEntity {
 	@Column(name="nr_deliberacao")
 	private Integer numero;
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "deliberacao_id")
-	private List<Etapa> etapas = new ArrayList<Etapa>();
+	private List<Etapa> etapas;
 
 	
 	public Integer getAno() {

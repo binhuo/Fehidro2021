@@ -1,4 +1,8 @@
 $(document).ready(function () {
+	startMoneyMask();
+});
+
+function startMoneyMask(){
 	$("input[name*='hdnValorMeta']").each(function(index) {
 		var idHidden = $(this).attr("id");
 		var idTxt = idHidden.replace("hdnValorMeta", "txtValorMeta");
@@ -20,5 +24,4 @@ $(document).ready(function () {
 		//setar no hidden referente
 		$(`#${idHidden}`).val(valueUnmasked);
 	});
-
-});
+}
