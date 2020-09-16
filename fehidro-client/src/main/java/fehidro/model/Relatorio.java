@@ -221,7 +221,20 @@ class QuickSort
                 ItemRelatorio temp = arr[i]; 
                 arr[i] = arr[j]; 
                 arr[j] = temp; 
-            } 
+            }else {
+            	//CRITERIO DE DESEMPATE
+            	if(arr[j].getSoma() == pivot.getSoma()) {
+            		//Desempate criterio cinco
+	            	if(isDesempateCritCinco(arr[j], pivot)) {
+	            		i++; 
+	            		  
+	                    ItemRelatorio temp = arr[i]; 
+	                    arr[i] = arr[j]; 
+	                    arr[j] = temp; 
+	            	}
+            	}
+            	
+            }
         } 
   
         ItemRelatorio temp = arr[i+1]; 
@@ -229,7 +242,24 @@ class QuickSort
         arr[high] = temp; 
   
         return i+1; 
-    } 
+    }
+    
+    private boolean isDesempateCritCinco(ItemRelatorio arr, ItemRelatorio pivot) {
+    	int somaCritCincoJ = 0;
+    	int somaCritCincoPivot = 0;
+    	for(int av=0;av<arr.getAvaliacoes().size();av++) {
+    		if(arr.getAvaliacoes().get(av).getSubcriterio().getNumero() == 5) {
+    			somaCritCincoJ += arr.getAvaliacoes().get(av).getNota().getPontos();
+    		}
+    	}
+    	for(int av=0;av<pivot.getAvaliacoes().size();av++) {
+    		if(pivot.getAvaliacoes().get(av).getSubcriterio().getNumero() == 5) {
+    			somaCritCincoPivot += pivot.getAvaliacoes().get(av).getNota().getPontos();
+    		}
+    	}
+    	
+    	return (somaCritCincoJ < somaCritCincoPivot); 
+    }
   
     public void sort(ItemRelatorio arr[], int low, int high) 
     { 
