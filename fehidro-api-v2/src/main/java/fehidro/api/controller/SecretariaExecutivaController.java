@@ -19,6 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import fehidro.api.model.SecretariaExecutiva;
 import fehidro.api.repository.SecretariaExecutivaRepository;
+import fehidro.api.util.email.EmailService;
 import fehidro.api.util.password.Password;
 import fehidro.model.dto.secretariaExecutiva.CadastroSecretariaExecutivaDTO;
 import io.swagger.annotations.ApiOperation;
@@ -32,6 +33,9 @@ public class SecretariaExecutivaController {
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired 
+	private EmailService _emailService;
 	
 	@ApiOperation(value = "Retorna um usuário da Secretaria Executiva encontrada por seu id")
 	@GetMapping(value = "/{id}", produces="application/json")
@@ -54,8 +58,7 @@ public class SecretariaExecutivaController {
 			novo.setSenha(passwordEncoder.encode(senha));
 			SecretariaExecutiva usuario = _secretariaExecRepository.save(novo);
 			CadastroSecretariaExecutivaDTO cadastrado = new CadastroSecretariaExecutivaDTO(usuario);
-			//TODO Migrar para spring-boot-starter-mail
-			//EmailUtil.sendMail(usuario.getEmail(), usuario.getNome(), usuario.getLogin(), senha);
+			_emailService.sendMailUserSignUp(cadastrado, senha);
 			URI uri = uriBuilder.path("/{id}").buildAndExpand(cadastrado.getId()).toUri();
 			return ResponseEntity.created(uri).body(cadastrado);
 		} catch(Exception e) {

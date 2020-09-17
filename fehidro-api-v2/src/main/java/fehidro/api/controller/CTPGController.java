@@ -18,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import fehidro.api.model.CTPG;
 import fehidro.api.repository.CTPGRepository;
+import fehidro.api.util.email.EmailService;
 import fehidro.api.util.password.Password;
 import fehidro.model.dto.ctpg.CadastroCtpgDTO;
 import io.swagger.annotations.ApiOperation;
@@ -31,6 +32,9 @@ public class CTPGController {
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired 
+	private EmailService _emailService;
 
 	@ApiOperation(value = "Retorna um usuário CT-PG encontrado por seu id")
 	@GetMapping(value = "/{id}", produces="application/json")
@@ -52,11 +56,11 @@ public class CTPGController {
 
 			novo.setLogin();
 			novo.setSenha(passwordEncoder.encode(senha));
-			CTPG cadastrado = _ctpgRepository.save(novo);
-			//TODO Migrar para spring-boot-starter-mail
-			//EmailUtil.sendMail(usuario.getEmail(), usuario.getNome(), usuario.getLogin(), senha);
-			URI uri = uriBuilder.path("/{id}").buildAndExpand(cadastrado.getId()).toUri();
-			return ResponseEntity.created(uri).body(new CadastroCtpgDTO(cadastrado));
+			CTPG usuario = _ctpgRepository.save(novo);
+			CadastroCtpgDTO cadastrado = new CadastroCtpgDTO(usuario);			
+			_emailService.sendMailUserSignUp(cadastrado, senha);
+			URI uri = uriBuilder.path("/{id}").buildAndExpand(usuario.getId()).toUri();
+			return ResponseEntity.created(uri).body(cadastrado);
 		} catch(Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
