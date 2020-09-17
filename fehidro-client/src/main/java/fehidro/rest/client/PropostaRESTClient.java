@@ -9,8 +9,6 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import fehidro.model.Proposta;
-import fehidro.model.SubcriterioAvaliacao;
-import fehidro.model.Usuario;
 
 public class PropostaRESTClient extends BaseRESTClient implements RESTClientInterface<Proposta>{
 
