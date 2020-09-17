@@ -143,6 +143,7 @@ public class AvaliacaoBean implements Serializable {
 	
 	public String pageSubcriterio() {
 		this.setSubcriterios();
+		this.avaliacao.setProposta(restProposta.find(this.avaliacao.getProposta().getId()));
 		if(subcriterios == null) {
 			return index();
 		}else {
@@ -177,6 +178,7 @@ public class AvaliacaoBean implements Serializable {
 		
 		this.propostas = propostas;
 	}
+	
 	//Pontuacoes
 	public List<SelectItem> getPontuacoes() {
 		return pontuacoes;
@@ -219,16 +221,16 @@ public class AvaliacaoBean implements Serializable {
 		
 		if(SessionContext.getInstance().usuarioLogado().getPerfilAcesso() == CodigoPerfilAcessoEnum.SecretariaExecutiva.getCodigo()) {
 			//Secretaria Executiva
-			System.out.println("Secretaria Executiva");
+//			System.out.println("Secretaria Executiva");
 			subcriteriosObject = restSubcriterio.findEmAbertoSecretariaExecutiva(this.avaliacao.getAvaliador(), this.avaliacao.getProposta());
-			System.out.println(subcriteriosObject.size());
-			System.out.println("=====================");
+//			System.out.println(subcriteriosObject.size());
+//			System.out.println("=====================");
 		}else {
 			if( todosSecretariaAvaliaramEm5AB() ) {
-				System.out.println("CTPG");
+//				System.out.println("CTPG");
 				subcriteriosObject = restSubcriterio.findEmAberto(this.avaliacao.getAvaliador(), this.avaliacao.getProposta());
-				System.out.println(subcriteriosObject.size());
-				System.out.println("=====================");
+//				System.out.println(subcriteriosObject.size());
+//				System.out.println("=====================");
 			}else {
 				subcriteriosObject = new ArrayList<SubcriterioAvaliacao>();
 			}

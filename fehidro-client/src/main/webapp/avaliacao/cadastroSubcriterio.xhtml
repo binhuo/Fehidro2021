@@ -12,7 +12,10 @@
 			<h:form id="formAvaliacao" enctype="multipart/form-data">
 				<h:inputHidden value="#{avaliacaoBean.avaliacao.id}" id="avaliacaoId" />
 				
-				<h:panelGroup layout="block" class="form-group row">			
+				<h:panelGroup layout="block" class="form-group row">
+					<h:outputText layout="block" value="#{avaliacaoBean.avaliacao.proposta.nomeProjeto}" class="col"/>
+				</h:panelGroup>
+				<h:panelGroup layout="block" class="form-group row">
 					<h:panelGroup layout="block" class="col">
 						<h:outputLabel for="txtNota" value="#{avaliacaoBean.stringSubcriteiroAtual}"/>
 					</h:panelGroup>				
