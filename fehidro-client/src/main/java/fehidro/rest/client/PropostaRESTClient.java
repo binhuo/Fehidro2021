@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 
 import fehidro.model.PerfilAcesso;
 import fehidro.model.Proposta;
+import fehidro.model.Usuario;
 
 public class PropostaRESTClient extends BaseRESTClient implements RESTClientInterface<Proposta>{
 
