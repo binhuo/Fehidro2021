@@ -18,7 +18,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import fehidro.api.model.PerfilAcesso;
 import fehidro.api.model.Proposta;
-import fehidro.api.model.Usuario;
 import fehidro.api.repository.PropostaRepository;
 import io.swagger.annotations.ApiOperation;
 
