@@ -30,7 +30,7 @@ public class PropostaRESTClient extends BaseRESTClient implements RESTClientInte
 		
 		List<Proposta> propostas = 
 				ClientBuilder.newClient().
-				target(REST_WEBSERVICE_URL + REST_PROPOSTA_URL + "emAberto/" + usuario.getPerfilAcesso() ).
+				target(REST_WEBSERVICE_URL + REST_PROPOSTA_URL + "emAberto/" + usuario.getId() ).
 				request(MediaType.APPLICATION_JSON).
 				header(HttpHeaders.AUTHORIZATION, authToken).get().
 				readEntity(new GenericType<List<Proposta>> () {});

@@ -168,7 +168,7 @@ public class AvaliacaoBean implements Serializable {
 	public void setPropostas() {
 		this.restProposta = new PropostaRESTClient();
 
-		List<Proposta> propostasBase = this.restProposta.findEmAberto(this.avaliacao.getAvaliador()); //TODO: substituir por proposta que faltam avaliar
+		List<Proposta> propostasBase = this.restProposta.findEmAberto(this.avaliacao.getAvaliador());
 		List<SelectItem> propostas = new ArrayList<>();
 
 		for (Proposta i : propostasBase) 

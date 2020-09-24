@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import fehidro.api.model.PerfilAcesso;
 import fehidro.api.model.Proposta;
+import fehidro.api.model.Usuario;
 import fehidro.api.repository.PropostaRepository;
 import io.swagger.annotations.ApiOperation;
 
@@ -35,9 +35,9 @@ public class PropostaController {
 	}
 	
 	@ApiOperation(value = "Retorna uma lista de propostas")
-	@GetMapping(value = "/emAberto/{perfilacesso}" ,produces="application/json")
-	public ResponseEntity<List<Proposta>> findEmAberto(@PathVariable(value = "perfilacesso") PerfilAcesso perfilacesso) {		
-		return ResponseEntity.ok(_propostaRepository.findEmAberto(perfilacesso));
+	@GetMapping(value = "/emAberto/{avaliador}" ,produces="application/json")
+	public ResponseEntity<List<Proposta>> findEmAberto(@PathVariable(value = "avaliador") Usuario avaliador) {		
+		return ResponseEntity.ok(_propostaRepository.findEmAberto(avaliador));
 	}
 
 	@ApiOperation(value = "Retorna uma proposta encontrada por seu id")
