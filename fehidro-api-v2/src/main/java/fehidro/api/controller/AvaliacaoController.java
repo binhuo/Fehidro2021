@@ -54,6 +54,13 @@ public class AvaliacaoController {
 		}
 	}
 	
+	@ApiOperation(value = "Retorna todas as avaliacoes feita por um usuario")
+	@GetMapping(value="/findAllUsuario/{usuario}" , produces="application/json")
+	public ResponseEntity<List<CadastroAvaliacaoDTO>> findAllUsuario(@PathVariable(value = "usuario") Usuario usuario) {
+		List<Avaliacao> list = _avaliacaoRepository.findAllUsuario(usuario);
+		List<CadastroAvaliacaoDTO> resul = list.stream().map(u -> {return new CadastroAvaliacaoDTO(u);}).collect(Collectors.toList());
+		return ResponseEntity.ok().body(resul);
+	}
 	
 	@ApiOperation(value = "Retorna todas as avaliacoes onde a avaliacao no subcriterio e feito pela Secretaria Executiva")
 	@GetMapping(value="/findAllAvaliacaoSubcriterioSecretaria/{proposta}" , produces="application/json")
