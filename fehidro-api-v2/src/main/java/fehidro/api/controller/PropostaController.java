@@ -34,7 +34,7 @@ public class PropostaController {
 		return ResponseEntity.ok(_propostaRepository.findAll());
 	}
 	
-	@ApiOperation(value = "Retorna uma lista de propostas")
+	@ApiOperation(value = "Retorna a lista de propostas que podem ser avaliadas pelo usuario especificado")
 	@GetMapping(value = "/emAberto/{avaliador}" ,produces="application/json")
 	public ResponseEntity<List<Proposta>> findEmAberto(@PathVariable(value = "avaliador") Usuario avaliador) {		
 		return ResponseEntity.ok(_propostaRepository.findEmAberto(avaliador));

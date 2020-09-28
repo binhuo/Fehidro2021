@@ -222,7 +222,8 @@ public class AvaliacaoBean implements Serializable {
 		if(SessionContext.getInstance().usuarioLogado().getPerfilAcesso() == CodigoPerfilAcessoEnum.SecretariaExecutiva.getCodigo()) {
 			//Secretaria Executiva
 //			System.out.println("Secretaria Executiva");
-			subcriteriosObject = restSubcriterio.findEmAbertoSecretariaExecutiva(this.avaliacao.getAvaliador(), this.avaliacao.getProposta());
+			//subcriteriosObject = restSubcriterio.findEmAbertoSecretariaExecutiva(this.avaliacao.getAvaliador(), this.avaliacao.getProposta());
+			subcriteriosObject = restSubcriterio.findEmAberto(this.avaliacao.getAvaliador(), this.avaliacao.getProposta());
 //			System.out.println(subcriteriosObject.size());
 //			System.out.println("=====================");
 		}else {
