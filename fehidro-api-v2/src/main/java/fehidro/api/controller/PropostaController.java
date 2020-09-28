@@ -35,10 +35,17 @@ public class PropostaController {
 	}
 	
 	@ApiOperation(value = "Retorna a lista de propostas que podem ser avaliadas pelo usuario especificado")
+	@GetMapping(value = "/emAberto/{avaliador}/{instituicao}" ,produces="application/json")
+    public ResponseEntity<List<Proposta>> findEmAberto(@PathVariable(value = "avaliador") Usuario avaliador, @PathVariable(value = "instituicao") long instituicao) {
+        System.out.println("instituicao = " + instituicao);
+		return ResponseEntity.ok(_propostaRepository.findEmAberto(avaliador, instituicao));
+    }
+	
+	@ApiOperation(value = "Retorna a lista de propostas que podem ser avaliadas pelo usuario especificado")
 	@GetMapping(value = "/emAberto/{avaliador}" ,produces="application/json")
-	public ResponseEntity<List<Proposta>> findEmAberto(@PathVariable(value = "avaliador") Usuario avaliador) {		
-		return ResponseEntity.ok(_propostaRepository.findEmAberto(avaliador));
-	}
+    public ResponseEntity<List<Proposta>> findEmAberto(@PathVariable(value = "avaliador") Usuario avaliador) {
+        return ResponseEntity.ok(_propostaRepository.findEmAberto(avaliador));
+    }
 
 	@ApiOperation(value = "Retorna uma proposta encontrada por seu id")
 	@GetMapping(value = "/{id}", produces="application/json")

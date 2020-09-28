@@ -26,17 +26,30 @@ public class PropostaRESTClient extends BaseRESTClient implements RESTClientInte
 		return propostas;		
 	} 
 	
+	public List<Proposta> findEmAberto(Usuario usuario, long instituicao) {
+		System.out.println("ctpg!");
+        List<Proposta> propostas = 
+                ClientBuilder.newClient().
+                target(REST_WEBSERVICE_URL + REST_PROPOSTA_URL + "emAberto/" + usuario.getId() + "/" + instituicao).
+                request(MediaType.APPLICATION_JSON).
+                header(HttpHeaders.AUTHORIZATION, authToken).get().
+                readEntity(new GenericType<List<Proposta>> () {});
+
+        return propostas;
+    }
+	
 	public List<Proposta> findEmAberto(Usuario usuario) {
-		
-		List<Proposta> propostas = 
-				ClientBuilder.newClient().
-				target(REST_WEBSERVICE_URL + REST_PROPOSTA_URL + "emAberto/" + usuario.getId() ).
-				request(MediaType.APPLICATION_JSON).
-				header(HttpHeaders.AUTHORIZATION, authToken).get().
-				readEntity(new GenericType<List<Proposta>> () {});
-		
-		return propostas;		
-	}
+		System.out.println("secretaria!");
+        List<Proposta> propostas = 
+                ClientBuilder.newClient().
+                target(REST_WEBSERVICE_URL + REST_PROPOSTA_URL + "emAberto/" + usuario.getId() ).
+                request(MediaType.APPLICATION_JSON).
+                header(HttpHeaders.AUTHORIZATION, authToken).get().
+                readEntity(new GenericType<List<Proposta>> () {});
+
+        return propostas;
+    }
+ 
  
 	@Override
 	public Proposta find(Long id) {

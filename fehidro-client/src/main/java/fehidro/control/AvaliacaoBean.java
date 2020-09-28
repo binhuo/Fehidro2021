@@ -9,6 +9,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.model.SelectItem;
 
 import fehidro.model.Avaliacao;
+import fehidro.model.CTPG;
 import fehidro.model.CriterioAvaliacao;
 import fehidro.model.Pontuacao;
 import fehidro.model.Proposta;
@@ -19,9 +20,11 @@ import fehidro.model.dto.SubcriterioExibicaoDTO;
 import fehidro.model.enums.CodigoPerfilAcessoEnum;
 import fehidro.model.enums.PerfilAcessoEnum;
 import fehidro.rest.client.AvaliacaoRESTClient;
+import fehidro.rest.client.CTPGRESTClient;
 import fehidro.rest.client.CriterioAvaliacaoRESTClient;
 import fehidro.rest.client.PontuacaoRESTClient;
 import fehidro.rest.client.PropostaRESTClient;
+import fehidro.rest.client.RESTClientInterface;
 import fehidro.rest.client.SubcriterioAvaliacaoRESTClient;
 import fehidro.rest.client.UsuarioRESTClient;
 import fehidro.util.SessionContext;
@@ -34,6 +37,7 @@ public class AvaliacaoBean implements Serializable {
 	//Proposta
 	private PropostaRESTClient restProposta;
 	private List<SelectItem> propostas;
+	private CTPGRESTClient restCTPG;
 	//Subcriterio
 	private SubcriterioAvaliacaoRESTClient restSubcriterio;
 	private List<SubcriterioAvaliacao> subcriteriosObject;
@@ -166,18 +170,26 @@ public class AvaliacaoBean implements Serializable {
 		return propostas;
 	}
 	public void setPropostas() {
-		this.restProposta = new PropostaRESTClient();
+        this.restProposta = new PropostaRESTClient();
+        List<Proposta> propostasBase;
+        List<SelectItem> propostas = new ArrayList<>();
 
-		List<Proposta> propostasBase = this.restProposta.findEmAberto(this.avaliacao.getAvaliador());
-		List<SelectItem> propostas = new ArrayList<>();
+        if(this.avaliacao.getAvaliador().getPerfilAcesso() == 1) {
+            propostasBase = this.restProposta.findEmAberto(this.avaliacao.getAvaliador()); 
+            
+        }else {
+            this.restCTPG = new CTPGRESTClient();
+            CTPG user = this.restCTPG.find(this.avaliacao.getAvaliador().getId());
+            propostasBase = this.restProposta.findEmAberto(this.avaliacao.getAvaliador(), user.getInstituicao().getId());
+        }
 
-		for (Proposta i : propostasBase) 
-		{
-			propostas.add(new SelectItem(i.getId(), i.getNomeProjeto()));
-		}
-		
-		this.propostas = propostas;
-	}
+        for (Proposta i : propostasBase) 
+        {
+            propostas.add(new SelectItem(i.getId(), i.getNomeProjeto()));
+        }
+
+        this.propostas = propostas;
+    }
 	
 	//Pontuacoes
 	public List<SelectItem> getPontuacoes() {
@@ -219,25 +231,14 @@ public class AvaliacaoBean implements Serializable {
 		this.restSubcriterio = new SubcriterioAvaliacaoRESTClient();
 		//List<SubcriterioExibicaoDTO> dtos = restSubcriterio.obterSubcriteriosDTO();
 		
-		if(SessionContext.getInstance().usuarioLogado().getPerfilAcesso() == CodigoPerfilAcessoEnum.SecretariaExecutiva.getCodigo()) {
+//		if(SessionContext.getInstance().usuarioLogado().getPerfilAcesso() == CodigoPerfilAcessoEnum.SecretariaExecutiva.getCodigo()) {
 			//Secretaria Executiva
-//			System.out.println("Secretaria Executiva");
-			//subcriteriosObject = restSubcriterio.findEmAbertoSecretariaExecutiva(this.avaliacao.getAvaliador(), this.avaliacao.getProposta());
 			subcriteriosObject = restSubcriterio.findEmAberto(this.avaliacao.getAvaliador(), this.avaliacao.getProposta());
-//			System.out.println(subcriteriosObject.size());
-//			System.out.println("=====================");
-		}else {
-			if( todosSecretariaAvaliaramEm5AB() ) {
-//				System.out.println("CTPG");
-				subcriteriosObject = restSubcriterio.findEmAberto(this.avaliacao.getAvaliador(), this.avaliacao.getProposta());
-//				System.out.println(subcriteriosObject.size());
-//				System.out.println("=====================");
-			}else {
-				subcriteriosObject = new ArrayList<SubcriterioAvaliacao>();
-			}
-		}
+//		}else { 
+//			subcriteriosObject = restSubcriterio.findEmAberto(this.avaliacao.getAvaliador(), this.avaliacao.getProposta());
+//		}
 		
-		List<SubcriterioAvaliacao> subcriteriosBase = subcriteriosObject; //TODO: Substituir pelo subcriteriosObject?
+		List<SubcriterioAvaliacao> subcriteriosBase = subcriteriosObject;
 		
 		if(subcriteriosBase.size() <= 0)
 		{
