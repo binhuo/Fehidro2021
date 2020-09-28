@@ -56,7 +56,8 @@ public class ItemRelatorio {
 	 * Seta esse ItemRelatorio como desclassificado
 	 * @return
 	 */
-	public void desclassificar() {
+	private void desclassificar() {
+		System.out.println("deslcasificado");
 		this.desclassificado = true;
 	}
 	
@@ -96,32 +97,36 @@ public class ItemRelatorio {
 	 */
 	protected boolean checkDesclassificacao(Avaliacao a) {
 		
+		this.desclassificado = false;
+		
 		//--- DESCLASSIFICACAO ---
 		//Desclassificacao automatica por subcriteiro
 		if(a.getNota().isDesclassificavel()) {
+			System.out.println("desclassifcacao automatica");
 			this.desclassificar();
 		}
 		
 		//Desclassificacao por nota total < 120
 		if(this.soma < 120) {
+			System.out.println("this.soma = " + this.soma);
 			this.desclassificar();
 		}
 		
-		//Desclassificacao por subcriterio 1A a 1J (RN06)
-		int cDesclassificacaoUm = 0;
-		for(int i=0; i<this.avaliacoes.size();i++) {
-			SubcriterioAvaliacao s = this.avaliacoes.get(i).getSubcriterio();
-			if( s.getNumero() == 1 ) {
-				if( s.getLetra() >= 'a' && s.getLetra() <= 'j') {
-					if(this.avaliacoes.get(i).getNota().getPontos() == 0) {
-						cDesclassificacaoUm++;
-					}
-				}
-			}
-		}
-		if(cDesclassificacaoUm >= 3) {
-			this.desclassificar();
-		}
+//		//Desclassificacao por subcriterio 1A a 1J (RN06)
+//		int cDesclassificacaoUm = 0;
+//		for(int i=0; i<this.avaliacoes.size();i++) {
+//			SubcriterioAvaliacao s = this.avaliacoes.get(i).getSubcriterio();
+//			if( s.getNumero() == 1 ) {
+//				if( s.getLetra() >= 'a' && s.getLetra() <= 'j') {
+//					if(this.avaliacoes.get(i).getNota().getPontos() == 0) {
+//						cDesclassificacaoUm++;
+//					}
+//				}
+//			}
+//		}
+//		if(cDesclassificacaoUm >= 3) {
+//			this.desclassificar();
+//		}
 		
 		return this.desclassificado;
 	}
