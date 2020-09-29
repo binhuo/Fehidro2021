@@ -27,7 +27,6 @@ public class PropostaRESTClient extends BaseRESTClient implements RESTClientInte
 	} 
 	
 	public List<Proposta> findEmAberto(Usuario usuario, long instituicao) {
-		System.out.println("ctpg!");
         List<Proposta> propostas = 
                 ClientBuilder.newClient().
                 target(REST_WEBSERVICE_URL + REST_PROPOSTA_URL + "emAberto/" + usuario.getId() + "/" + instituicao).
@@ -39,7 +38,6 @@ public class PropostaRESTClient extends BaseRESTClient implements RESTClientInte
     }
 	
 	public List<Proposta> findEmAberto(Usuario usuario) {
-		System.out.println("secretaria!");
         List<Proposta> propostas = 
                 ClientBuilder.newClient().
                 target(REST_WEBSERVICE_URL + REST_PROPOSTA_URL + "emAberto/" + usuario.getId() ).

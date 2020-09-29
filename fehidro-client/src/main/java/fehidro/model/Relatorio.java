@@ -39,7 +39,7 @@ public class Relatorio  {
 	 * @param listaFiltrar - A lista a ser filtrada
 	 * @return ItemRelatorio[] - Array de todos os items de relatorio pertencentes ao subPDC especificado
 	 */
-	//TODO: considerar substituir tipo do id de Long para Subpdc
+	//TODO: CONSIDERAR substituir tipo do id de Long para Subpdc
 	public static ItemRelatorio[] itensPorSubpdc(Long id, ArrayList<ItemRelatorio> listaFiltrar)	{
 		ArrayList<ItemRelatorio> auxOut = new ArrayList<>();
 		for(int i=0;i<listaFiltrar.size();i++)
@@ -130,7 +130,7 @@ public class Relatorio  {
 				idPropostaAtual = avaliacaoAtual.getProposta().getId();
 				idSubpdcAtual = avaliacaoAtual.getProposta().getSubPDC().getId();
 				//Se nao existir um itemRelatorio para a proposta nao existir, crie um itemRelatorio
-				if(this.itensRelatorio.get(idPropostaAtual) == null) //TODO:  || this.itensRelatorio.size() <= 0 ????
+				if(this.itensRelatorio.get(idPropostaAtual) == null)
 				{
 					this.itensRelatorio.put(idPropostaAtual, new ItemRelatorio() );
 					this.idsPropostas.add(idPropostaAtual);
