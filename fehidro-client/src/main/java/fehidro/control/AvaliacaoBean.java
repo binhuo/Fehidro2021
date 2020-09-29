@@ -95,8 +95,10 @@ public class AvaliacaoBean implements Serializable {
 	
 	private void setInfo() {
 		if(SessionContext.getInstance().usuarioLogado().getPerfilAcesso() == CodigoPerfilAcessoEnum.SecretariaExecutiva.getCodigo()) {
+			//Pega todas as avaliacoes
 			this.setAvaliacoes(this.restAvaliacao.findAll());
 		}else {
+			//Pega somente as avaliacoes do usuario
 			this.setAvaliacoes(this.restAvaliacao.findAllUsuario( SessionContext.getInstance().usuarioLogado() ));
 		}
 		this.setPropostas();

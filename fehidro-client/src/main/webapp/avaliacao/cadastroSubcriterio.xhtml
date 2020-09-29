@@ -15,6 +15,7 @@
 				<h:panelGroup layout="block" class="form-group row">
 					<h:outputText layout="block" value="#{avaliacaoBean.avaliacao.proposta.nomeProjeto}" class="col"/>
 				</h:panelGroup>
+				
 				<h:panelGroup layout="block" class="form-group row">
 					<h:panelGroup layout="block" class="col">
 						<h:outputLabel for="txtNota" value="#{avaliacaoBean.stringSubcriteiroAtual}"/>
@@ -30,6 +31,15 @@
 							requiredMessage="Informe a nota!">
 							<f:selectItems value="#{avaliacaoBean.pontuacoes}" />
 						</h:selectOneMenu>
+						<h:message for="txtNota" styleClass="erro" />
+					</h:panelGroup>				
+				</h:panelGroup>
+				
+				<h:panelGroup layout="block" class="form-group row">			
+					<h:panelGroup layout="block" class="col">
+						<h:outputLabel for="txtNota">Comentario</h:outputLabel>
+						<br/>
+						<h:inputTextarea value="#{avaliacaoBean.avaliacao.comentario}"></h:inputTextarea>
 						<h:message for="txtNota" styleClass="erro" />
 					</h:panelGroup>				
 				</h:panelGroup>
