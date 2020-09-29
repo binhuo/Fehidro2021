@@ -32,7 +32,6 @@ public class Relatorio  {
 	}
 	
 	//////Metodos
-	
 	/**
 	 * Retorna todos os itens pertencentes ao subpdc especificado dentro de listaFiltrar
 	 * @param id - id do SubPdc
