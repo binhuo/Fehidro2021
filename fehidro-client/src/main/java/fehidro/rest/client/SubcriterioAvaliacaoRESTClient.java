@@ -29,8 +29,6 @@ public class SubcriterioAvaliacaoRESTClient extends BaseRESTClient implements RE
 	}
 	
 	public List<SubcriterioAvaliacao> findEmAberto(Usuario usuario, Proposta proposta) {
-		System.out.println(usuario.getId());
-		System.out.println(proposta.getId());
 		List<SubcriterioAvaliacao> subcriterios = 
 				ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_SUBCRITERIO_URL + "emAberto/" + usuario.getId() + "/" + proposta.getId()).
@@ -38,9 +36,21 @@ public class SubcriterioAvaliacaoRESTClient extends BaseRESTClient implements RE
 				header(HttpHeaders.AUTHORIZATION, authToken).get().
 				readEntity(new GenericType<List<SubcriterioAvaliacao>> () {});
 		
-		return subcriterios;		
+		return subcriterios;
 	}
 	
+//	public List<SubcriterioAvaliacao> findEmAbertoSecretariaExecutiva(Usuario usuario, Proposta proposta) {
+//		List<SubcriterioAvaliacao> subcriterios = 
+//				ClientBuilder.newClient().
+//				target(REST_WEBSERVICE_URL + REST_SUBCRITERIO_URL + "emAbertoSecretariaExecutiva/" + usuario.getId() + "/" + proposta.getId()).
+//				request(MediaType.APPLICATION_JSON).
+//				header(HttpHeaders.AUTHORIZATION, authToken).get().
+//				readEntity(new GenericType<List<SubcriterioAvaliacao>> () {});
+//		
+//		return subcriterios;		
+//	}
+	
+	//TODO: Remover se nao estiver sendo usado
 	public List<SubcriterioExibicaoDTO> obterSubcriteriosDTO() {
 		List<SubcriterioExibicaoDTO> subcriterios = 
 				ClientBuilder.newClient().
@@ -52,6 +62,7 @@ public class SubcriterioAvaliacaoRESTClient extends BaseRESTClient implements RE
 		return subcriterios;		
 	}
 	
+	//TODO: Remover se nao estiver sendo usado
 	public List<SubcriterioExibicaoDTO> obterSubcriteriosDTOPorSubcriterio(Long id) {
 		List<SubcriterioExibicaoDTO> subcriterios = 
 				ClientBuilder.newClient().

@@ -8,7 +8,9 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
+import fehidro.model.PerfilAcesso;
 import fehidro.model.Proposta;
+import fehidro.model.Usuario;
 
 public class PropostaRESTClient extends BaseRESTClient implements RESTClientInterface<Proposta>{
 
@@ -24,16 +26,28 @@ public class PropostaRESTClient extends BaseRESTClient implements RESTClientInte
 		return propostas;		
 	} 
 	
-//	public List<SubcriterioAvaliacao> findEmAberto(Usuario usuario) {
-//		List<SubcriterioAvaliacao> subcriterios = 
-//				ClientBuilder.newClient().
-//				target(REST_WEBSERVICE_URL + REST_PROPOSTA_URL + "emAberto/" + usuario.getId()).
-//				request(MediaType.APPLICATION_JSON).
-//				header(HttpHeaders.AUTHORIZATION, authToken).get().
-//				readEntity(new GenericType<List<SubcriterioAvaliacao>> () {});
-//		
-//		return subcriterios;		
-//	}
+	public List<Proposta> findEmAberto(Usuario usuario, long instituicao) {
+        List<Proposta> propostas = 
+                ClientBuilder.newClient().
+                target(REST_WEBSERVICE_URL + REST_PROPOSTA_URL + "emAberto/" + usuario.getId() + "/" + instituicao).
+                request(MediaType.APPLICATION_JSON).
+                header(HttpHeaders.AUTHORIZATION, authToken).get().
+                readEntity(new GenericType<List<Proposta>> () {});
+
+        return propostas;
+    }
+	
+	public List<Proposta> findEmAberto(Usuario usuario) {
+        List<Proposta> propostas = 
+                ClientBuilder.newClient().
+                target(REST_WEBSERVICE_URL + REST_PROPOSTA_URL + "emAberto/" + usuario.getId() ).
+                request(MediaType.APPLICATION_JSON).
+                header(HttpHeaders.AUTHORIZATION, authToken).get().
+                readEntity(new GenericType<List<Proposta>> () {});
+
+        return propostas;
+    }
+ 
  
 	@Override
 	public Proposta find(Long id) {

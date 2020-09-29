@@ -22,6 +22,12 @@ public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long>{
 	public List<Avaliacao> findAllBySubcriterio(SubcriterioAvaliacao subcriterio);
 	public List<Avaliacao> findAllByProposta(Proposta proposta);
 	
+	@Query("select a from Avaliacao a where a.avaliador =?1")
+	public List<Avaliacao> findAllUsuario(Usuario usuario);
+	
+	@Query("select a from Avaliacao a where a.proposta = ?1 AND a.subcriterio in (select id from SubcriterioAvaliacao s where s.perfilAcesso = '1')")
+	public List<Avaliacao> findAllAvaliacaoSubcriterioSecretaria(Proposta proposta);
+	
 	@Query("select a from Avaliacao a where a.proposta = ?1 and a.avaliador = ?2")
 	public List<Avaliacao> findAllByAvaliadorProposta(Proposta proposta,Usuario avaliador);
 //	

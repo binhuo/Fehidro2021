@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import fehidro.api.model.Avaliacao;
+import fehidro.api.model.PerfilAcesso;
 //import fehidro.api.model.CriterioAvaliacao;
 import fehidro.api.model.Proposta;
 import fehidro.api.model.SubPDC;
@@ -51,6 +52,22 @@ public class AvaliacaoController {
 		} else {
 			return ResponseEntity.notFound().build();
 		}
+	}
+	
+	@ApiOperation(value = "Retorna todas as avaliacoes feita por um usuario")
+	@GetMapping(value="/findAllUsuario/{usuario}" , produces="application/json")
+	public ResponseEntity<List<CadastroAvaliacaoDTO>> findAllUsuario(@PathVariable(value = "usuario") Usuario usuario) {
+		List<Avaliacao> list = _avaliacaoRepository.findAllUsuario(usuario);
+		List<CadastroAvaliacaoDTO> resul = list.stream().map(u -> {return new CadastroAvaliacaoDTO(u);}).collect(Collectors.toList());
+		return ResponseEntity.ok().body(resul);
+	}
+	
+	@ApiOperation(value = "Retorna todas as avaliacoes onde a avaliacao no subcriterio e feito pela Secretaria Executiva")
+	@GetMapping(value="/findAllAvaliacaoSubcriterioSecretaria/{proposta}" , produces="application/json")
+	public ResponseEntity<List<CadastroAvaliacaoDTO>> findAllAvaliacaoSubcriterioSecretaria(@PathVariable(value = "proposta") Proposta proposta) {
+		List<Avaliacao> list = _avaliacaoRepository.findAllAvaliacaoSubcriterioSecretaria(proposta);
+		List<CadastroAvaliacaoDTO> resul = list.stream().map(u -> {return new CadastroAvaliacaoDTO(u);}).collect(Collectors.toList());
+		return ResponseEntity.ok().body(resul);
 	}
 	
 	@ApiOperation(value = "Retorna todas avaliação efetuada pelo avaliador especificado")
@@ -107,10 +124,12 @@ public class AvaliacaoController {
 		
 		try {
 			Avaliacao novo = new Avaliacao(avaliacao);
+
 			Avaliacao aval = _avaliacaoRepository.save(novo);
 			CadastroAvaliacaoDTO cadastrado = new CadastroAvaliacaoDTO(aval);
 			URI uri = uriBuilder.path("/{id}").buildAndExpand(cadastrado.getId()).toUri();
 			return ResponseEntity.created(uri).body(cadastrado);
+
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import fehidro.api.model.Proposta;
+import fehidro.api.model.Usuario;
 import fehidro.api.repository.PropostaRepository;
 import io.swagger.annotations.ApiOperation;
 
@@ -33,11 +34,17 @@ public class PropostaController {
 		return ResponseEntity.ok(_propostaRepository.findAll());
 	}
 	
-//	@ApiOperation(value = "Retorna uma lista de propostas")
-//	@GetMapping(value = "/{usuario}" ,produces="application/json")
-//	public ResponseEntity<List<Proposta>> findEmAberto(@PathVariable(value = "usuario") Usuario usuario) {		
-//		return ResponseEntity.ok(_propostaRepository.findEmAberto(usuario));
-//	}
+	@ApiOperation(value = "Retorna a lista de propostas que podem ser avaliadas pelo usuario especificado")
+	@GetMapping(value = "/emAberto/{avaliador}/{instituicao}" ,produces="application/json")
+    public ResponseEntity<List<Proposta>> findEmAberto(@PathVariable(value = "avaliador") Usuario avaliador, @PathVariable(value = "instituicao") long instituicao) {
+		return ResponseEntity.ok(_propostaRepository.findEmAberto(avaliador, instituicao));
+    }
+	
+	@ApiOperation(value = "Retorna a lista de propostas que podem ser avaliadas pelo usuario especificado")
+	@GetMapping(value = "/emAberto/{avaliador}" ,produces="application/json")
+    public ResponseEntity<List<Proposta>> findEmAberto(@PathVariable(value = "avaliador") Usuario avaliador) {
+        return ResponseEntity.ok(_propostaRepository.findEmAberto(avaliador));
+    }
 
 	@ApiOperation(value = "Retorna uma proposta encontrada por seu id")
 	@GetMapping(value = "/{id}", produces="application/json")

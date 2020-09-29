@@ -36,11 +36,13 @@ public class SubcriterioAvaliacaoController {
 		return ResponseEntity.ok(_subcriterioAvaliacaoRepository.findAll());
 	}
 	
+	@ApiOperation(value = "Retorna a lista de subcritérios disponiveis para avaliacao pelo usuario especificado")
 	@GetMapping(value="/emAberto/{usuario}/{proposta}", produces="application/json")
-	public ResponseEntity<List<SubcriterioAvaliacao>> findEmAberto(@PathVariable(value = "usuario") Usuario usuario, @PathVariable(value = "proposta") Proposta proposta) {	
+	public ResponseEntity<List<SubcriterioAvaliacao>> findEmAberto(@PathVariable(value = "usuario") Usuario usuario, @PathVariable(value = "proposta") Proposta proposta) {
 		return ResponseEntity.ok(_subcriterioAvaliacaoRepository.findEmAberto(usuario, proposta));
 	}
 	
+	//TODO: Remover se nao estiver sendo usado
 	@GetMapping("/dtoExibicao/")
 	public ResponseEntity<List<SubcriterioExibicaoDTO>> obterDtosExibicao() {
 		List<SubcriterioAvaliacao> list = _subcriterioAvaliacaoRepository.findAll();
@@ -48,6 +50,7 @@ public class SubcriterioAvaliacaoController {
 		return ResponseEntity.ok().body(resul);
 	}
 	
+	//TODO: Remover se nao estiver sendo usado
 	@GetMapping("/dtoExibicao/{id}")
 	public ResponseEntity<SubcriterioExibicaoDTO> obterPorDtoExibicao(@PathVariable(value = "id") long id) {
 		Optional<SubcriterioAvaliacao> subcriteiro = _subcriterioAvaliacaoRepository.findById(id);

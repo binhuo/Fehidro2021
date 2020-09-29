@@ -3,26 +3,27 @@ package fehidro.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import fehidro.control.ItemRelatorio;
 
-//TODO: REFATORAR
 public class Relatorio  {
 	
 	protected HashMap<Long, ItemRelatorio> itensRelatorio;
-	//TODO: Substituir por Sets para evitar repeticao de calculo de classificacao - vide setItensRelatorio()
-	protected List<Long> idsPropostas; //Lista usada para auxiliar na manipulacao dos itemRelatorio dentro do mapa. Deve ser igual aos Keys do mapa itensRelatorio.
-	protected List<Long> idsSubpdcs;
+	
+	protected HashSet<Long> idsPropostas; //Lista usada para auxiliar na manipulacao dos itemRelatorio dentro do mapa. Deve ser igual aos Keys do mapa itensRelatorio.
+	protected HashSet<Long> idsSubpdcs;
 	protected List<ItemRelatorio> classificacao;
 	
 	//////Construtores
 	public Relatorio()
 	{
 		itensRelatorio = new HashMap<Long, ItemRelatorio>();
-		idsPropostas = new ArrayList<Long>();
-		idsSubpdcs = new ArrayList<Long>();
+		idsPropostas = new HashSet<Long>();
+		idsSubpdcs = new HashSet<Long>();
 		classificacao = new ArrayList<ItemRelatorio>();
 	}
 	public Relatorio(List<Avaliacao> avaliacoes)
@@ -38,7 +39,7 @@ public class Relatorio  {
 	 * @param listaFiltrar - A lista a ser filtrada
 	 * @return ItemRelatorio[] - Array de todos os items de relatorio pertencentes ao subPDC especificado
 	 */
-	//TODO: considerar substituir tipo do id de Long para Subpdc
+	//TODO: CONSIDERAR substituir tipo do id de Long para Subpdc
 	public static ItemRelatorio[] itensPorSubpdc(Long id, ArrayList<ItemRelatorio> listaFiltrar)	{
 		ArrayList<ItemRelatorio> auxOut = new ArrayList<>();
 		for(int i=0;i<listaFiltrar.size();i++)
@@ -88,11 +89,16 @@ public class Relatorio  {
 	 * Calcula a classificacao de todos os itens desse relatorio por subpdc
 	 */
 	public void calcularClassificacaoPorSubpdc() {
-		ItemRelatorio[] arr = new ItemRelatorio[itensRelatorio.size()]; 
+		ItemRelatorio[] arr = new ItemRelatorio[itensRelatorio.size()];
+		Iterator<Long> idsSubPdcsAsIterator = idsSubpdcs.iterator();
 		for(int j=0;j<idsSubpdcs.size();j++)
 		{
 			//Pega todos itens do subpdc atual
-			arr = itensPorSubpdc(idsSubpdcs.get(j), new ArrayList<ItemRelatorio>(this.itensRelatorio.values()));
+			Long auxSubpdc = null;
+			if(idsSubPdcsAsIterator.hasNext()) {
+				auxSubpdc = idsSubPdcsAsIterator.next();
+			}
+			arr = itensPorSubpdc(auxSubpdc, new ArrayList<ItemRelatorio>(this.itensRelatorio.values()));
 			
 			QuickSort q = new QuickSort();
 			q.sort(arr, 0, arr.length-1); //ordena por soma das notas
@@ -115,7 +121,7 @@ public class Relatorio  {
 		Avaliacao avaliacaoAtual;
 		Long idPropostaAtual;
 		Long idSubpdcAtual;
-		idsPropostas = new LinkedList<>(); //Reset dos ids
+		idsPropostas = new HashSet<Long>(); //Reset dos ids
 		if(avaliacoes != null) {
 			for(int i =0;i<avaliacoes.size();i++)
 			{
@@ -124,7 +130,7 @@ public class Relatorio  {
 				idPropostaAtual = avaliacaoAtual.getProposta().getId();
 				idSubpdcAtual = avaliacaoAtual.getProposta().getSubPDC().getId();
 				//Se nao existir um itemRelatorio para a proposta nao existir, crie um itemRelatorio
-				if(this.itensRelatorio.get(idPropostaAtual) == null) //TODO: adicionar || this.itensRelatorio.size() <= 0 ????
+				if(this.itensRelatorio.get(idPropostaAtual) == null)
 				{
 					this.itensRelatorio.put(idPropostaAtual, new ItemRelatorio() );
 					this.idsPropostas.add(idPropostaAtual);
@@ -153,9 +159,14 @@ public class Relatorio  {
 	{
 		LinkedList<ItemRelatorio> classificados = new LinkedList<ItemRelatorio>();
 		ItemRelatorio itemAtual;
+		Iterator<Long> idsPropostasAsIterator = idsPropostas.iterator();
 		for(int i=0;i<this.itensRelatorio.size();i++)//Navegue todos os itens desse relatorio
 		{
-			itemAtual = itensRelatorio.get(idsPropostas.get(i));
+			Long auxIdsPropostas = null;
+			if(idsPropostasAsIterator.hasNext()) {
+				auxIdsPropostas = idsPropostasAsIterator.next();
+			}
+			itemAtual = itensRelatorio.get(auxIdsPropostas);
 			if(!itemAtual.isDesclassificado())//Se NaO for desclassificado, adicione
 			{
 				classificados.add(itemAtual);
@@ -173,9 +184,14 @@ public class Relatorio  {
 	{
 		LinkedList<ItemRelatorio> desclassificados = new LinkedList<ItemRelatorio>();
 		ItemRelatorio itemAtual;
+		Iterator<Long> idsPropostasAsIterator = idsPropostas.iterator();
 		for(int i=0;i<this.itensRelatorio.size();i++)//Navegue todos os itens desse relatorio
 		{
-			itemAtual = itensRelatorio.get(idsPropostas.get(i));
+			Long auxIdsPropostas = null;
+			if(idsPropostasAsIterator.hasNext()) {
+				auxIdsPropostas = idsPropostasAsIterator.next();
+			}
+			itemAtual = itensRelatorio.get(auxIdsPropostas);
 			if(itemAtual.isDesclassificado())//Se for desclassificado, adicione
 			{
 				desclassificados.add(itemAtual);
@@ -205,7 +221,20 @@ class QuickSort
                 ItemRelatorio temp = arr[i]; 
                 arr[i] = arr[j]; 
                 arr[j] = temp; 
-            } 
+            }else {
+//            	//CRITERIO DE DESEMPATE
+//            	if(arr[j].getSoma() == pivot.getSoma()) {
+//            		//Desempate criterio cinco
+//	            	if(isDesempateCritCinco(arr[j], pivot)) {
+//	            		i++; 
+//	            		  
+//	                    ItemRelatorio temp = arr[i]; 
+//	                    arr[i] = arr[j]; 
+//	                    arr[j] = temp; 
+//	            	}
+//            	}
+            	
+            }
         } 
   
         ItemRelatorio temp = arr[i+1]; 
@@ -213,7 +242,24 @@ class QuickSort
         arr[high] = temp; 
   
         return i+1; 
-    } 
+    }
+    
+//    private boolean isDesempateCritCinco(ItemRelatorio arr, ItemRelatorio pivot) {
+//    	int somaCritCincoJ = 0;
+//    	int somaCritCincoPivot = 0;
+//    	for(int av=0;av<arr.getAvaliacoes().size();av++) {
+//    		if(arr.getAvaliacoes().get(av).getSubcriterio().getNumero() == 5) {
+//    			somaCritCincoJ += arr.getAvaliacoes().get(av).getNota().getPontos();
+//    		}
+//    	}
+//    	for(int av=0;av<pivot.getAvaliacoes().size();av++) {
+//    		if(pivot.getAvaliacoes().get(av).getSubcriterio().getNumero() == 5) {
+//    			somaCritCincoPivot += pivot.getAvaliacoes().get(av).getNota().getPontos();
+//    		}
+//    	}
+//    	
+//    	return (somaCritCincoJ < somaCritCincoPivot); 
+//    }
   
     public void sort(ItemRelatorio arr[], int low, int high) 
     { 
