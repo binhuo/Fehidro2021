@@ -30,7 +30,7 @@ public class Avaliacao extends AbstractEntity {
     @JoinColumn(name = "subcriterio_avaliacao_id")
     private SubcriterioAvaliacao subcriterio;
     
-//    //TODO: Reconsiderar se necessario
+  //TODO: CONSIDERAR Reimplementar caso seja necessario para a desclassificacao por criteiro
 //    @ManyToOne
 //    @JoinColumn(name = "criterio_avaliacao_id")
 //    private CriterioAvaliacao criterio;

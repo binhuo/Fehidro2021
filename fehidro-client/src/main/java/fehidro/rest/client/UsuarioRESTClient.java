@@ -51,7 +51,7 @@ public class UsuarioRESTClient extends BaseRESTClient implements RESTClientInter
 	public List<Usuario> obterPorPerfilAcesso(Long perfilacesso) {
 		List<Usuario> usuarios = 
 				ClientBuilder.newClient().
-				target(REST_WEBSERVICE_URL + REST_USUARIO_URL + "obterPorPerfilAcesso/" +perfilacesso).
+				target(REST_WEBSERVICE_URL + REST_USUARIO_URL + "obterPorPerfilAcesso/" + perfilacesso).
 				request(MediaType.APPLICATION_JSON).
 				header(HttpHeaders.AUTHORIZATION, authToken).
 				get().readEntity(new GenericType<List<Usuario>> () {});

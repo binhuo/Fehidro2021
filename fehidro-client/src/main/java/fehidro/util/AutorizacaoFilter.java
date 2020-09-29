@@ -73,6 +73,8 @@ public class AutorizacaoFilter implements Filter {
 			List<String> acessoAvaliadorCtpg = new ArrayList<String>();
 			acessoAvaliadorCtpg.add("/proposta/");
 			acessoAvaliadorCtpg.add("/avaliacao/");
+			acessoAvaliadorCtpg.add("/relatorio/");
+			
 
 			if (user.getPerfilAcesso() == CodigoPerfilAcessoEnum.SecretariaExecutiva.getCodigo()
 					&& !acessoSecretariaExec.stream().anyMatch(uri::contains)) {

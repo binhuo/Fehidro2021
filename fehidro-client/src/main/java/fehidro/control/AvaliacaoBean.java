@@ -9,6 +9,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.model.SelectItem;
 
 import fehidro.model.Avaliacao;
+import fehidro.model.CTPG;
 import fehidro.model.CriterioAvaliacao;
 import fehidro.model.Pontuacao;
 import fehidro.model.Proposta;
@@ -16,11 +17,16 @@ import fehidro.model.SubcriterioAvaliacao;
 import fehidro.model.Usuario;
 //import fehidro.model.SubcriterioAvaliacao;
 import fehidro.model.dto.SubcriterioExibicaoDTO;
+import fehidro.model.enums.CodigoPerfilAcessoEnum;
+import fehidro.model.enums.PerfilAcessoEnum;
 import fehidro.rest.client.AvaliacaoRESTClient;
+import fehidro.rest.client.CTPGRESTClient;
 import fehidro.rest.client.CriterioAvaliacaoRESTClient;
 import fehidro.rest.client.PontuacaoRESTClient;
 import fehidro.rest.client.PropostaRESTClient;
+import fehidro.rest.client.RESTClientInterface;
 import fehidro.rest.client.SubcriterioAvaliacaoRESTClient;
+import fehidro.rest.client.UsuarioRESTClient;
 import fehidro.util.SessionContext;
 
 @ManagedBean
@@ -31,8 +37,10 @@ public class AvaliacaoBean implements Serializable {
 	//Proposta
 	private PropostaRESTClient restProposta;
 	private List<SelectItem> propostas;
+	private CTPGRESTClient restCTPG;
 	//Subcriterio
 	private SubcriterioAvaliacaoRESTClient restSubcriterio;
+	private List<SubcriterioAvaliacao> subcriteriosObject;
 	private List<SelectItem> subcriterios;
 	private int contadorSubcriterio = 0;
 	private String stringSubcriteiroAtual;
@@ -47,6 +55,9 @@ public class AvaliacaoBean implements Serializable {
 	private List<Avaliacao> avaliacoes;
 	
 	private String consulta;
+	
+	//Usuario
+	private UsuarioRESTClient restUsuario;
 	
 
 	public String getConsulta() {
@@ -70,6 +81,7 @@ public class AvaliacaoBean implements Serializable {
 		this.avaliacao = new Avaliacao();
 		this.avaliacao.setProposta(new Proposta());
 		this.avaliacao.setSubcriterio(new SubcriterioAvaliacao());
+		subcriteriosObject = new ArrayList<SubcriterioAvaliacao>();
 		ArrayList<Pontuacao> p = new ArrayList<Pontuacao>();
 		p.add(new Pontuacao());
 		this.avaliacao.getSubcriterio().setPontuacoes(p);
@@ -82,7 +94,11 @@ public class AvaliacaoBean implements Serializable {
 	}
 	
 	private void setInfo() {
-		this.setAvaliacoes(this.restAvaliacao.findAll());
+		if(SessionContext.getInstance().usuarioLogado().getPerfilAcesso() == CodigoPerfilAcessoEnum.SecretariaExecutiva.getCodigo()) {
+			this.setAvaliacoes(this.restAvaliacao.findAll());
+		}else {
+			this.setAvaliacoes(this.restAvaliacao.findAllUsuario( SessionContext.getInstance().usuarioLogado() ));
+		}
 		this.setPropostas();
 //		this.setCriterios();
 		
@@ -108,7 +124,7 @@ public class AvaliacaoBean implements Serializable {
 	
 	public String salvar() {
 		
-		this.avaliacao.getSubcriterio().setId( (Long)subcriterios.get(contadorSubcriterio).getValue() );
+		this.avaliacao.setSubcriterio( subcriteriosObject.get(contadorSubcriterio) );
 		
 		if ( this.avaliacao.getId() == null) {
 			this.restAvaliacao.create(this.avaliacao);
@@ -135,6 +151,7 @@ public class AvaliacaoBean implements Serializable {
 	
 	public String pageSubcriterio() {
 		this.setSubcriterios();
+		this.avaliacao.setProposta(restProposta.find(this.avaliacao.getProposta().getId()));
 		if(subcriterios == null) {
 			return index();
 		}else {
@@ -157,17 +174,27 @@ public class AvaliacaoBean implements Serializable {
 		return propostas;
 	}
 	public void setPropostas() {
-		this.restProposta = new PropostaRESTClient();
-		List<Proposta> propostasBase = this.restProposta.findAll(); //TODO: substituir por proposta que faltam avaliar
-		List<SelectItem> propostas = new ArrayList<>();
+        this.restProposta = new PropostaRESTClient();
+        List<Proposta> propostasBase;
+        List<SelectItem> propostas = new ArrayList<>();
 
-		for (Proposta i : propostasBase) 
-		{
-			propostas.add(new SelectItem(i.getId(), i.getNomeProjeto()));
-		}
-		
-		this.propostas = propostas;
-	}
+        if(this.avaliacao.getAvaliador().getPerfilAcesso() == 1) {
+            propostasBase = this.restProposta.findEmAberto(this.avaliacao.getAvaliador()); 
+            
+        }else {
+            this.restCTPG = new CTPGRESTClient();
+            CTPG user = this.restCTPG.find(this.avaliacao.getAvaliador().getId());
+            propostasBase = this.restProposta.findEmAberto(this.avaliacao.getAvaliador(), user.getInstituicao().getId());
+        }
+
+        for (Proposta i : propostasBase) 
+        {
+            propostas.add(new SelectItem(i.getId(), i.getNomeProjeto()));
+        }
+
+        this.propostas = propostas;
+    }
+	
 	//Pontuacoes
 	public List<SelectItem> getPontuacoes() {
 		return pontuacoes;
@@ -185,17 +212,42 @@ public class AvaliacaoBean implements Serializable {
 		
 		this.pontuacoes = pontuacoes;
 	}
+	
+	
 	//Subcriterios
+	protected boolean todosSecretariaAvaliaramEm5AB() {
+		System.out.println("todosSecretariaAvaliaramEm5AB()");
+		restUsuario = new UsuarioRESTClient();
+		
+		int qtd = restAvaliacao.findAllAvaliacaoSubcriterioSecretaria(this.avaliacao.getProposta()).size();
+		int qtdUsuario = restUsuario.obterPorPerfilAcesso(new Long(1)).size();
+		//TODO: fazer validacao apropriada
+		if(qtd >= (2*qtdUsuario) ) {
+			return true;
+		}
+		
+		return false;
+	}
 	public List<SelectItem> getSubcriterios() {
 		return subcriterios;
 	}
 	public void setSubcriterios() {
 		this.restSubcriterio = new SubcriterioAvaliacaoRESTClient();
 		//List<SubcriterioExibicaoDTO> dtos = restSubcriterio.obterSubcriteriosDTO();
-		List<SubcriterioAvaliacao> subcriteriosBase = restSubcriterio.findEmAberto(this.avaliacao.getAvaliador(), this.avaliacao.getProposta());
+		
+//		if(SessionContext.getInstance().usuarioLogado().getPerfilAcesso() == CodigoPerfilAcessoEnum.SecretariaExecutiva.getCodigo()) {
+			//Secretaria Executiva
+			subcriteriosObject = restSubcriterio.findEmAberto(this.avaliacao.getAvaliador(), this.avaliacao.getProposta());
+//		}else { 
+//			subcriteriosObject = restSubcriterio.findEmAberto(this.avaliacao.getAvaliador(), this.avaliacao.getProposta());
+//		}
+		
+		List<SubcriterioAvaliacao> subcriteriosBase = subcriteriosObject;
 		
 		if(subcriteriosBase.size() <= 0)
 		{
+			contadorSubcriterio = 0;
+			System.out.println("vazio - return");
 			return;
 		}
 		

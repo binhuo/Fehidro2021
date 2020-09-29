@@ -11,6 +11,7 @@ public class Avaliacao {
 		
 	    private Proposta proposta;
 	    private SubcriterioAvaliacao subcriterio;
+	    //TODO: Considerar reimplementar caso seja necessario para a desclassificacao por criteiro
 //	    private CriterioAvaliacao criterio;
 
 	    //Id

@@ -45,14 +45,6 @@
 					<f:facet name="header">Nota</f:facet>
 					<h:outputText value="#{i.nota.titulo}" />
 				</h:column>
-				<h:column>
-					<f:facet name="header"></f:facet>
-					<h:form>				
-						<h:commandButton class="btn btn-outline-primary" value="Editar" action="#{avaliacaoBean.editar}">
-							<f:setPropertyActionListener target="#{avaliacaoBean.avaliacao.id}" value="#{i.id}" />
-					</h:commandButton>
-					</h:form>
-				</h:column>
 			</h:dataTable>
 		</ui:define>
 	</ui:composition>
