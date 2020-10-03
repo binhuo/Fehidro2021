@@ -24,6 +24,7 @@ import fehidro.model.SubPDC;
 import fehidro.model.TipoProposta;
 import fehidro.rest.client.InstituicaoRESTClient;
 import fehidro.rest.client.PropostaRESTClient;
+import fehidro.rest.client.S3RESTClient;
 import fehidro.rest.client.SubPDCRESTClient;
 import fehidro.rest.client.TipoPropostaRESTClient;
 
@@ -40,6 +41,7 @@ public class PropostaBean implements Serializable {
 	private InstituicaoRESTClient restInstituicao;
 	private TipoPropostaRESTClient restTipoProposta;
 	private SubPDCRESTClient restSubPDC;
+	private S3RESTClient restS3;
 	
 	private Proposta proposta;
 	private List<Proposta> propostas;
@@ -172,7 +174,8 @@ public class PropostaBean implements Serializable {
 	
 	private void uploadFile(Part arquivo, String nomeArquivo) {
 		try (InputStream input = arquivo.getInputStream()) {
-			Files.copy(input, new File(folder, nomeArquivo).toPath(), StandardCopyOption.REPLACE_EXISTING);
+			//Files.copy(input, new File(folder, nomeArquivo).toPath(), StandardCopyOption.REPLACE_EXISTING);
+			this.restS3.upload(arquivo);
 	    }
 	    catch (IOException e) {
 	        e.printStackTrace();
@@ -185,6 +188,7 @@ public class PropostaBean implements Serializable {
 	
 	private void startView(boolean setInfo) {
 		this.restProposta = new PropostaRESTClient();
+		this.restS3 = new S3RESTClient();
 		this.idProposta = null;
 		this.proposta = new Proposta();
 		this.proposta.setInstituicao(new Instituicao());
