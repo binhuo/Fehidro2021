@@ -98,6 +98,14 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		
+		<!-- Apache POI (p/ *.XLSX) -->
+		<dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+        	<version>3.10.1</version>
+        </dependency>
+		
 	</dependencies>
 
 	<build>

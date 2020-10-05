@@ -1,37 +1,41 @@
-package fehidro.model;
+package fehidro.api.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import fehidro.control.ItemRelatorio;
+import com.google.common.net.HttpHeaders;
 
+import fehidro.api.model.ItemRelatorio;
+import io.swagger.annotations.ApiOperation;
 
+@RestController
+@RequestMapping("/relatorio")
 public class GeradorRelatorioXLSX {
 	
 	public GeradorRelatorioXLSX() {
 		
 	}
 	
-	public static void gerarRelatorioFinal(ArrayList<ItemRelatorio> itensRelatorio) throws IOException {
+	@ApiOperation(value = "Relatorio *.XLSX para relatorio final.")
+	@GetMapping(value = "/xlsx/final/{itensRelatorio}")
+	public ResponseEntity<StreamingResponseBody> gerarRelatorioFinal(ArrayList<ItemRelatorio> itensRelatorio) {
 		
 		//Filename
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("ddMMyyyyHHmmss");
 		LocalDateTime now = LocalDateTime.now();  
-		String fileName = "relatorio"+ dtf.format(now) +".xlsx";
+		String fileName = "Relatorio"+ dtf.format(now) +".xlsx";
 		
 		HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheetRelatorio = workbook.createSheet("Relatorio Final");
@@ -55,7 +59,7 @@ public class GeradorRelatorioXLSX {
         //Nota
         Cell cellLabelNota = row.createCell(cellnum++);
         cellLabelNota.setCellValue("Nota");
-      //Nota
+        //Status
         Cell cellLabelStatus = row.createCell(cellnum++);
         cellLabelStatus.setCellValue("Status");
         
@@ -83,27 +87,18 @@ public class GeradorRelatorioXLSX {
             cellStatus.setCellValue(item.getStringDesclassificado());
         }
 
-      //Grava o arquivo
-        try {
-            FileOutputStream out = new FileOutputStream(new File(fileName));
-            workbook.write(out);
-            out.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-               System.out.println("Arquivo nao encontrado!");
-        } catch (IOException e) {
-            e.printStackTrace();
-               System.out.println("Erro na edicao do arquivo!");
-        }
+      return ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM).header(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=\"" + fileName + "\"").body(workbook::write);
            
 	}
 	
-	public static void gerarRelatorioSubpdc(ArrayList<ItemRelatorio> itensRelatorio) throws IOException {
+	@ApiOperation(value = "Relatorio *.XLSX para relatorio por subPDC.")
+	@GetMapping(value = "/xlsx/subPdc/{itensRelatorio}")
+	public ResponseEntity<StreamingResponseBody> gerarRelatorioSubpdc(ArrayList<ItemRelatorio> itensRelatorio) {
 		
 		//Filename
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("ddMMyyyyHHmmss");
 		LocalDateTime now = LocalDateTime.now();  
-		String fileName = "relatorio"+ dtf.format(now) +".xlsx";
+		String fileName = "Relatorio"+ dtf.format(now) +".xlsx";
 		
 		HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheetRelatorio = workbook.createSheet("Relatorio por subpdc");
@@ -151,18 +146,7 @@ public class GeradorRelatorioXLSX {
             cellStatus.setCellValue(item.getStringDesclassificado());
         }
 
-      //Grava o arquivo
-        try {
-            FileOutputStream out = new FileOutputStream(new File(fileName));
-            workbook.write(out);
-            out.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-               System.out.println("Arquivo nao encontrado!");
-        } catch (IOException e) {
-            e.printStackTrace();
-               System.out.println("Erro na edicao do arquivo!");
-        }
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_OCTET_STREAM).header(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=\"" + fileName + "\"").body(workbook::write);
 	}
 	
 	
