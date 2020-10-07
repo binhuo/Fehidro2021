@@ -10,27 +10,21 @@ import javax.faces.model.SelectItem;
 
 import fehidro.model.Avaliacao;
 import fehidro.model.CTPG;
-import fehidro.model.CriterioAvaliacao;
 import fehidro.model.Pontuacao;
 import fehidro.model.Proposta;
 import fehidro.model.SubcriterioAvaliacao;
 import fehidro.model.Usuario;
-//import fehidro.model.SubcriterioAvaliacao;
-import fehidro.model.dto.SubcriterioExibicaoDTO;
 import fehidro.model.enums.CodigoPerfilAcessoEnum;
-import fehidro.model.enums.PerfilAcessoEnum;
 import fehidro.rest.client.AvaliacaoRESTClient;
 import fehidro.rest.client.CTPGRESTClient;
-import fehidro.rest.client.CriterioAvaliacaoRESTClient;
 import fehidro.rest.client.PontuacaoRESTClient;
 import fehidro.rest.client.PropostaRESTClient;
-import fehidro.rest.client.RESTClientInterface;
 import fehidro.rest.client.SubcriterioAvaliacaoRESTClient;
 import fehidro.rest.client.UsuarioRESTClient;
 import fehidro.util.SessionContext;
 
 @ManagedBean
-@SessionScoped
+@SessionScoped 
 public class AvaliacaoBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -38,6 +32,7 @@ public class AvaliacaoBean implements Serializable {
 	private PropostaRESTClient restProposta;
 	private List<SelectItem> propostas;
 	private CTPGRESTClient restCTPG;
+	public String isPropostasVazio = "false"; //Usado para desabilitar o botao de cadastro de avaliacao em index.html
 	//Subcriterio
 	private SubcriterioAvaliacaoRESTClient restSubcriterio;
 	private List<SubcriterioAvaliacao> subcriteriosObject;
@@ -54,43 +49,72 @@ public class AvaliacaoBean implements Serializable {
 	private Avaliacao avaliacao;
 	private List<Avaliacao> avaliacoes;
 	
+	//Consulta
 	private String consulta;
 	
 	//Usuario
 	private UsuarioRESTClient restUsuario;
 	
-
-	public String getConsulta() {
-		return consulta;
-	}
-	public void setConsulta(String consulta) {
-		this.consulta = consulta;
-	}
-	
+	//===Construtor===
 	public AvaliacaoBean() {
 		startView(true);
+		//Idealmente qualquer adicao de codigo que voce coloque deve ir dentro de startView, 
+		//se voce colocar mais algo dentro do construtor entao ele sera executado somente uma vez por objeto quando ele eh criado,
+		//mas nao quando voce precisar "resetar" essa classe.
 	}
 	
+	//===METODOS===
+	
+	//Consulta
+		public String getConsulta() {
+			return consulta;
+		}
+		public void setConsulta(String consulta) {
+			this.consulta = consulta;
+		}
+	
 	public String index() {
-		startView(true);
+		startView(true); //TODO: Possivelmente redundante devido a f:viewAction em index.html 
 		return "/avaliacao/index?faces-redirect=true"; 
+	}
+	
+	/**
+	 * Somente utilizado em viewAction em index.html para poder resetar o botao ao utiliza o menu lateral
+	 */
+	public void startView() {
+		//Inicialmente nos definimos esse bean como SessionScoped pois me pareceu a forma mais simples de fazer
+		//porem 
+		//A necessidade desse metodo me faz questionar se esse Bean realmente deve ser SessionScoped, 
+		//porem isso ser SessionScoped trouxe bastante facilidades para manter os dados
+		//entre avaliacao/index.xhtml, avaliacao/cadastro.xhtml e avaliacao/cadastroSubcriterio.xhtml
+		//Nao possuo tempo o suficiente para rever isso no momento, mas caso seja necessario no futuro,
+		//eh possivel que esse bean tenha que ser reestruturado
+		//mas no momento ele cumpre o que precisa. 
+		this.startView(true);
 	}
 	
 	private void startView(boolean setInfo) {
 		this.restAvaliacao = new AvaliacaoRESTClient();
+		
+		//Reset Avaliacao
 		this.avaliacao = new Avaliacao();
 		this.avaliacao.setProposta(new Proposta());
 		this.avaliacao.setSubcriterio(new SubcriterioAvaliacao());
-		subcriteriosObject = new ArrayList<SubcriterioAvaliacao>();
+		this.avaliacao.setNota(new Pontuacao());
+		this.avaliacao.setComentario("");
 		ArrayList<Pontuacao> p = new ArrayList<Pontuacao>();
 		p.add(new Pontuacao());
 		this.avaliacao.getSubcriterio().setPontuacoes(p);
-		this.avaliacao.setNota(new Pontuacao());
+		
 		//Setando avaliador na avaliacao
 		this.avaliacao.setAvaliador( (Usuario)SessionContext.getInstance().usuarioLogado() );
-			
-		if (setInfo)
+		
+		this.subcriteriosObject = new ArrayList<SubcriterioAvaliacao>();
+		
+		//Carrega as informacoes usando o REST
+		if (setInfo) {
 			setInfo();
+		}
 	}
 	
 	private void setInfo() {
@@ -102,16 +126,15 @@ public class AvaliacaoBean implements Serializable {
 			this.setAvaliacoes(this.restAvaliacao.findAllUsuario( SessionContext.getInstance().usuarioLogado() ));
 		}
 		this.setPropostas();
-//		this.setCriterios();
+		//this.setCriterios();
 		
-		//this.setPontuacoes();
 	}
 	
 	public String cadastro() {
-		startView(true);
+		startView(true); //questionavel?
 		return "/avaliacao/cadastro?faces-redirect=true";
 	}
-
+	
 	public String editar() 
 	{
 		if (avaliacao.getId() != null) {
@@ -195,7 +218,18 @@ public class AvaliacaoBean implements Serializable {
         }
 
         this.propostas = propostas;
+        getIsPropostasVazio();
     }
+	
+	public String getIsPropostasVazio() {
+		if(this.propostas.size() <= 0) {
+			this.isPropostasVazio = "true";
+			return "true";
+		}else {
+			this.isPropostasVazio = "false";
+			return "false";
+		}
+	}
 	
 	//Pontuacoes
 	public List<SelectItem> getPontuacoes() {
