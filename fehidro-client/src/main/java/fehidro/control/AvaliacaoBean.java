@@ -82,14 +82,6 @@ public class AvaliacaoBean implements Serializable {
 	 * Somente utilizado em viewAction em index.html para poder resetar o botao ao utiliza o menu lateral
 	 */
 	public void startView() {
-		//Inicialmente nos definimos esse bean como SessionScoped pois me pareceu a forma mais simples de fazer
-		//porem 
-		//A necessidade desse metodo me faz questionar se esse Bean realmente deve ser SessionScoped, 
-		//porem isso ser SessionScoped trouxe bastante facilidades para manter os dados
-		//entre avaliacao/index.xhtml, avaliacao/cadastro.xhtml e avaliacao/cadastroSubcriterio.xhtml
-		//Nao possuo tempo o suficiente para rever isso no momento, mas caso seja necessario no futuro,
-		//eh possivel que esse bean tenha que ser reestruturado
-		//mas no momento ele cumpre o que precisa. 
 		this.startView(true);
 	}
 	
