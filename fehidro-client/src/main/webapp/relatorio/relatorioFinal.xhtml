@@ -10,12 +10,12 @@
 		<ui:define name="content">
 			<h:inputHidden value="Relatorio" id="menuAtual"/>
 			
-			<div class="text-right">
-				<h:commandButton id="btnPlanilha" class="btn btn-outline-success"
-						value="Gerar planilha" actionListener="#{relatorioParcial.downloadXlsxFinal}">
-						<h:message for="btnPlanilha" styleClass="erro" />
-				</h:commandButton>
-			</div>
+<!-- 			<div class="text-right"> -->
+<!-- 				<h:commandButton id="btnPlanilha" class="btn btn-outline-success" -->
+<!-- 						value="Gerar planilha" actionListener="#{relatorioParcial.downloadXlsxFinal}"> -->
+<!-- 						<h:message for="btnPlanilha" styleClass="erro" /> -->
+<!-- 				</h:commandButton> -->
+<!-- 			</div> -->
 			
 			<h:dataTable value="#{relatorioFinal.relatorio.classificacao}" var="itemRelatorio" id="tabela" styleClass="table">
 				<h:column>
