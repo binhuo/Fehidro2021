@@ -71,14 +71,11 @@
 					</h:panelGroup>
 					
 					<h:panelGroup layout="block" class="col-4 text-left align-self-center" rendered="#{propostaBean.proposta.id > 0}">
-						<h:commandLink immediate="true" type="button"
+						<h:outputLink  immediate="true" type="button"
 							class="btn btn-outline-primary" title="Baixar termo referência"
-							action="#{propostaBean.download}">
-							<f:setPropertyActionListener
-								target="#{propostaBean.targetDownload}"
-								value="#{propostaBean.proposta.nomeArquivoTermoReferencia}" />
+							value="#{propostaBean.urlDownload}#{propostaBean.proposta.nomeArquivoTermoReferencia}"> 
 							<i class="fas fa-download"></i>
-						</h:commandLink>
+						</h:outputLink >
 					</h:panelGroup>
 				</h:panelGroup>
 
@@ -96,15 +93,11 @@
 					
 					<h:panelGroup layout="block" class="col-4 text-left align-self-center"
 						rendered="#{propostaBean.proposta.id > 0}">
-						<h:commandLink immediate="true" type="button"
-							class="btn btn-outline-primary"
-							title="Baixar cronograma físico financeiro"
-							action="#{propostaBean.download}">
-							<f:setPropertyActionListener
-								target="#{propostaBean.targetDownload}"
-								value="#{propostaBean.proposta.nomeArquivoCronogramaFisicoFinanceiro}" />
+						<h:outputLink immediate="true" type="button"
+							class="btn btn-outline-primary" title="Baixar cronograma físico financeiro"
+							value="#{propostaBean.urlDownload}#{propostaBean.proposta.nomeArquivoCronogramaFisicoFinanceiro}">
 							<i class="fas fa-download"></i>
-						</h:commandLink>
+						</h:outputLink>
 					</h:panelGroup>
 				</h:panelGroup>
 
@@ -123,15 +116,11 @@
 					<h:panelGroup layout="block"
 						class="col-4 text-left align-self-center"
 						rendered="#{propostaBean.proposta.id > 0}">
-						<h:commandLink immediate="true" type="button"
-							class="btn btn-outline-primary"
-							title="Baixar planilha de orçamento"
-							action="#{propostaBean.download}">
-							<f:setPropertyActionListener
-								target="#{propostaBean.targetDownload}"
-								value="#{propostaBean.proposta.nomeArquivoPlanilhaOrcamento}" />
+						<h:outputLink immediate="true" type="button"
+							class="btn btn-outline-primary" title="Baixar planilha de orçamento"
+							value="#{propostaBean.urlDownload}#{propostaBean.proposta.nomeArquivoPlanilhaOrcamento}">
 							<i class="fas fa-download"></i>
-						</h:commandLink>
+						</h:outputLink>
 					</h:panelGroup>
 				</h:panelGroup>
 
@@ -150,14 +139,11 @@
 					<h:panelGroup layout="block"
 						class="col-4 text-left align-self-center"
 						rendered="#{propostaBean.proposta.id > 0}">
-						<h:commandLink immediate="true" type="button"
+						<h:outputLink immediate="true" type="button"
 							class="btn btn-outline-primary" title="Baixar ficha de resumo"
-							action="#{propostaBean.download}">
-							<f:setPropertyActionListener
-								target="#{propostaBean.targetDownload}"
-								value="#{propostaBean.proposta.nomeArquivoFichaResumo}" />
+							value="#{propostaBean.urlDownload}#{propostaBean.proposta.nomeArquivoFichaResumo}">
 							<i class="fas fa-download"></i>
-						</h:commandLink>
+						</h:outputLink>
 					</h:panelGroup>
 				</h:panelGroup>
 
