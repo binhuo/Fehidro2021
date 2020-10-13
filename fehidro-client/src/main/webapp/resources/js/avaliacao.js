@@ -3,10 +3,15 @@ $(document).ready(function () {
 	$("#formAvaliacao input[type='checkbox']").addClass("custom-control-input");
 	$("#formAvaliacao td").addClass("custom-control custom-checkbox");
 	
-	document.getElementById("formAvaliacao:txtNota").onchange = function() {
-		print("teste");
-		//	document.getElementById("formAvaliacao:txtComentario").disabled = (txtNota.value == txtNota.lenght);
+	//--CAIXA DE COMENTARIO DE AVALIACAO
+	var txtNota = document.getElementById("formAvaliacao:txtNota");
+	//Efetivamente desabilita a caixa quando carregar a pagina se tiver somente 1 opção
+	document.getElementById("formAvaliacao:txtComentario").disabled = ((txtNota.options[txtNota.selectedIndex].index+1) == txtNota.length);
+	//Desabilita caixa de comentario se for o ultimo campo
+	txtNota.onchange = function() {
+		document.getElementById("formAvaliacao:txtComentario").disabled = ((txtNota.options[txtNota.selectedIndex].index+1) == txtNota.length);
 	}
+	
 	
 });
 
