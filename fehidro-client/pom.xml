@@ -32,7 +32,6 @@
 			<version>2.10.3</version>
 		</dependency>
 
-
 		<!-- JSF 2.2 -->
 		<dependency>
 			<groupId>com.sun.faces</groupId>

@@ -15,6 +15,7 @@ public class CadastroAvaliacaoDTO {
     private CadastroUsuarioDTO avaliador;
     private Proposta proposta;
     private SubcriterioAvaliacao subcriterio;
+    private String comentario;
 //    private CriterioAvaliacao criterio;
 
 	public CadastroAvaliacaoDTO() {
@@ -29,6 +30,7 @@ public class CadastroAvaliacaoDTO {
 			this.proposta = model.getProposta();
 			this.subcriterio = model.getSubcriterio();
 //			this.criterio = model.getCriterio();
+			this.comentario = model.getComentario();
 		}
 	}
 
@@ -70,6 +72,13 @@ public class CadastroAvaliacaoDTO {
 
 	public void setSubcriterio(SubcriterioAvaliacao subcriterio) {
 		this.subcriterio = subcriterio;
+	}
+	
+	public String getComentario() {
+		return this.comentario;
+	}
+	public void setComentario(String _comentario) {
+		this.comentario = _comentario;
 	}
 
 //	public CriterioAvaliacao getCriterio() {
