@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.amazonaws.services.s3.model.AmazonS3Exception;
+
 import fehidro.api.services.S3Service;
 import io.swagger.annotations.ApiOperation;
 
@@ -27,25 +29,25 @@ public class S3Controller {
 	@PostMapping(value = "/upload")
 	public ResponseEntity<Void> uploadFile(@RequestParam(name = "file") MultipartFile file) {
 		try {
-		URI uri = service.upload(file);
-		return ResponseEntity.created(uri).build();}
-		catch(Exception e) {
+			URI uri = service.upload(file);
+			return ResponseEntity.created(uri).build();
+		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
 
 	@ApiOperation(value = "Realiza o download de um arquivo no AWS S3")
-	@GetMapping(value = "/download", produces="application/json")
-    public ResponseEntity<ByteArrayResource> downloadFile(@RequestParam(value= "nomeArquivo") final String keyName) {
-        final byte[] data = service.downloadFile(keyName);
-        final ByteArrayResource resource = new ByteArrayResource(data);
-        return ResponseEntity
-                .ok()
-                .contentLength(data.length)
-                .header("Content-type", "application/octet-stream")
-                .header("Content-disposition", "attachment; filename=\"" + keyName + "\"")
-                .body(resource);
-    }
+	@GetMapping(value = "/download", produces = "application/json")
+	public ResponseEntity<ByteArrayResource> downloadFile(@RequestParam(value = "nomeArquivo") final String keyName) {
+		try {
+			final byte[] data = service.downloadFile(keyName);
+			final ByteArrayResource resource = new ByteArrayResource(data);
+			return ResponseEntity.ok().contentLength(data.length).header("Content-type", "application/octet-stream")
+					.header("Content-disposition", "attachment; filename=\"" + keyName + "\"").body(resource);
+		} catch (AmazonS3Exception awsEx) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+	}
 
 }
