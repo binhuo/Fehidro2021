@@ -1,11 +1,11 @@
-package fehidro.control;
+package fehidro.api.model;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import fehidro.model.Avaliacao;
-import fehidro.model.Proposta;
-import fehidro.model.SubcriterioAvaliacao;
+import fehidro.api.model.Avaliacao;
+import fehidro.api.model.Proposta;
+import fehidro.api.model.SubcriterioAvaliacao;
 
 /**
  * Classe usada para representar um item no relatorio (uma proposta)
@@ -57,6 +57,7 @@ public class ItemRelatorio {
 	 * @return
 	 */
 	private void desclassificar() {
+		System.out.println("deslcasificado");
 		this.desclassificado = true;
 	}
 	

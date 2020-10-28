@@ -6,6 +6,11 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:body>
+
+	<f:metadata>
+	    <f:viewAction action="#{avaliacaoBean.startView}" />
+	</f:metadata>
+	
 	<ui:composition template="/shared/template.xhtml">
 		<ui:define name="content">
 			<h:inputHidden value="Avaliacao" id="menuAtual"/>
@@ -22,7 +27,7 @@
 
 			<div class="text-right">
 				<h:form>
-					<h:commandButton id="btnNovaAvaliacao" class="btn btn-outline-primary"
+					<h:commandButton id="btnNovaAvaliacao" class="btn btn-outline-primary" disabled="#{avaliacaoBean.isPropostasVazio}"
 						value="Nova avaliação" action="#{avaliacaoBean.cadastro}" />
 				</h:form>
 			</div>
