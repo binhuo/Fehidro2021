@@ -1,5 +1,6 @@
 package fehidro.api.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -30,6 +31,9 @@ public class Avaliacao extends AbstractEntity {
     @JoinColumn(name = "subcriterio_avaliacao_id")
     private SubcriterioAvaliacao subcriterio;
     
+    @Column(name = "ds_comentario", length = 256) //TODO: Considerar se o tamanho eh muito pequeno
+	private String comentario;
+    
   //TODO: CONSIDERAR Reimplementar caso seja necessario para a desclassificacao por criteiro
 //    @ManyToOne
 //    @JoinColumn(name = "criterio_avaliacao_id")
@@ -54,6 +58,7 @@ public class Avaliacao extends AbstractEntity {
 			this.proposta = dto.getProposta();
 			this.subcriterio = dto.getSubcriterio();
 //			this.criterio = dto.getCriterio();
+			this.comentario = dto.getComentario();
 		}
 	}
 
@@ -87,6 +92,13 @@ public class Avaliacao extends AbstractEntity {
 
 	public void setSubcriterio(SubcriterioAvaliacao subcriterio) {
 		this.subcriterio = subcriterio;
+	}
+	
+	public String getComentario() {
+		return this.comentario;
+	}
+	public void setComentario(String _comentario) {
+		this.comentario = _comentario;
 	}
 
 //	public CriterioAvaliacao getCriterio() {

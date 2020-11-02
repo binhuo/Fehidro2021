@@ -13,6 +13,8 @@ public class Avaliacao {
 	    private SubcriterioAvaliacao subcriterio;
 	    //TODO: Considerar reimplementar caso seja necessario para a desclassificacao por criteiro
 //	    private CriterioAvaliacao criterio;
+	    
+	    private String comentario;
 
 	    //Id
 	    public Long getId()
@@ -56,6 +58,13 @@ public class Avaliacao {
 		}
 		public void setSubcriterio(SubcriterioAvaliacao subcriterio) {
 			this.subcriterio = subcriterio;
+		}
+		//Comentario
+		public String getComentario() {
+			return this.comentario;
+		}
+		public void setComentario(String _comentario) {
+			this.comentario = _comentario;
 		}
 		
 }
