@@ -14,3 +14,4 @@ fehidro-api/target/classes/br/unisantos/fehidro/model/Proposta.class
 fehidro-api/target/classes/br/unisantos/fehidro/model/Pontuacao.class
 fehidro-api/target/classes/br/unisantos/fehidro/model/CTPG.class
 fehidro-api/target/classes/br/unisantos/fehidro/model/CriterioAvaliacao.class
+fehidro-tests/debug.log
