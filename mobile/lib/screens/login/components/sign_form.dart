@@ -1,0 +1,134 @@
+import 'package:flutter/material.dart';
+import 'package:mobile/components/custom_surfix_icon.dart';
+import 'package:mobile/components/form_error.dart';
+import 'package:mobile/http/auth_rest.dart';
+import 'package:mobile/screens/proposta/proposta_screen.dart';
+
+import '../../../components/default_button.dart';
+import '../../../constants.dart';
+import '../../../size_config.dart';
+
+class SignForm extends StatefulWidget {
+  @override
+  _SignFormState createState() => _SignFormState();
+}
+
+class _SignFormState extends State<SignForm> {
+  final _formKey = GlobalKey<FormState>();
+  String username;
+  String password;
+  bool remember = false;
+  final List<String> errors = [];
+
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  void addError({String error}) {
+    if (!errors.contains(error))
+      setState(() {
+        errors.add(error);
+      });
+  }
+
+  void removeError({String error}) {
+    if (errors.contains(error))
+      setState(() {
+        errors.remove(error);
+      });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          buildUsernameFormField(),
+          SizedBox(height: getProportionateScreenHeight(30)),
+          buildPasswordFormField(),
+          SizedBox(height: getProportionateScreenHeight(30)),
+          FormError(errors: errors),
+          SizedBox(height: getProportionateScreenHeight(20)),
+          DefaultButton(
+            text: "Login",
+            press: () {
+              if (_formKey.currentState.validate()) {
+                _formKey.currentState.save();
+                final AuthRestClient _authRest = AuthRestClient();
+                final String login = _usernameController.text;
+                final String senha = _passwordController.text;
+                try {
+                  _authRest.realizarLogin(login, senha).then((ok) {
+                    if (ok)
+                      Navigator.pushNamed(context, PropostaScreen.routeName);
+                    else {
+                      addError(error: loginError);
+                      return "";
+                    }
+                  });
+                } catch (e) {
+                  addError(error: "Falha ao realizar login");
+                  return "";
+                }
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  TextFormField buildPasswordFormField() {
+    return TextFormField(
+      controller: _passwordController,
+      obscureText: true,
+      onSaved: (newValue) => password = newValue,
+      onChanged: (value) {
+        if (value.isNotEmpty) {
+          removeError(error: passNullError);
+        }
+        return null;
+      },
+      validator: (value) {
+        if (value.isEmpty) {
+          addError(error: passNullError);
+          return "";
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        labelText: "Senha",
+        hintText: passInfo,
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/lock.svg"),
+      ),
+    );
+  }
+
+  TextFormField buildUsernameFormField() {
+    return TextFormField(
+      controller: _usernameController,
+      keyboardType: TextInputType.text,
+      onSaved: (newValue) => username = newValue,
+      onChanged: (value) {
+        if (value.isNotEmpty) {
+          removeError(error: usernameNullError);
+        }
+        return null;
+      },
+      validator: (value) {
+        if (value.isEmpty) {
+          addError(error: usernameNullError);
+          return "";
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        labelText: "Usuário",
+        hintText: usernameInfo,
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/user.svg"),
+      ),
+    );
+  }
+}
