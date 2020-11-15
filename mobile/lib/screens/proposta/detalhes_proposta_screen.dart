@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/components/base.dart';
+import 'package:mobile/components/base_component.dart';
 
 import 'components/detalhes_body.dart';
 
