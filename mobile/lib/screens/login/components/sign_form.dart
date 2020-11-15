@@ -51,6 +51,7 @@ class _SignFormState extends State<SignForm> {
           FormError(errors: errors),
           SizedBox(height: getProportionateScreenHeight(20)),
           DefaultButton(
+            key: Key('btnLogin'),
             text: "Login",
             press: () {
               if (_formKey.currentState.validate()) {
@@ -82,6 +83,7 @@ class _SignFormState extends State<SignForm> {
 
   TextFormField buildPasswordFormField() {
     return TextFormField(
+      key: Key('txtPasswordLogin'),
       controller: _passwordController,
       obscureText: true,
       onSaved: (newValue) => password = newValue,
@@ -109,6 +111,7 @@ class _SignFormState extends State<SignForm> {
 
   TextFormField buildUsernameFormField() {
     return TextFormField(
+      key: Key('txtUsernameLogin'),
       controller: _usernameController,
       keyboardType: TextInputType.text,
       onSaved: (newValue) => username = newValue,

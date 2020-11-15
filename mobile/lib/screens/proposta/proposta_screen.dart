@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/components/base.dart';
+import 'package:mobile/components/base_component.dart';
 import 'components/body.dart';
 
 class PropostaScreen extends StatelessWidget {
@@ -8,7 +8,7 @@ class PropostaScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseComponent(
-      body: Body(),
+      body: PropostaBody(),
     );
   }
 

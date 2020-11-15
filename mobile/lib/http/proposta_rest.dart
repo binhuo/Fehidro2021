@@ -14,7 +14,7 @@ class PropostaRestClient extends BaseRestClient {
     );
 
     if (response.statusCode == 200) {
-      return Proposta.fromJson(jsonDecode(response.body));
+      return Proposta.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
     } else {
       throw Exception('Falha ao obter dados da proposta.');
     }
