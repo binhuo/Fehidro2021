@@ -39,6 +39,7 @@ class _SignFormState extends State<SignForm> {
 
   @override
   Widget build(BuildContext context) {
+    errors.clear();
     return Form(
       key: _formKey,
       child: Column(
@@ -53,6 +54,7 @@ class _SignFormState extends State<SignForm> {
             text: "Login",
             press: () {
               if (_formKey.currentState.validate()) {
+                errors.clear();
                 _formKey.currentState.save();
                 final AuthRestClient _authRest = AuthRestClient();
                 final String login = _usernameController.text;
@@ -116,6 +118,7 @@ class _SignFormState extends State<SignForm> {
         }
         return null;
       },
+      autocorrect: false,
       validator: (value) {
         if (value.isEmpty) {
           addError(error: usernameNullError);

@@ -5,13 +5,22 @@ import 'package:mobile/models/proposta.dart';
 
 import '../detalhes_proposta_screen.dart';
 
-class PropostaList extends StatelessWidget {
+class PropostaList extends StatefulWidget {
   const PropostaList({
     Key key,
     @required this.size,
   }) : super(key: key);
 
   final Size size;
+
+  @override
+  State<StatefulWidget> createState() => _PropostaList(size);
+}
+
+class _PropostaList extends State<PropostaList> {
+  final Size size;
+
+  _PropostaList(this.size);
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +75,6 @@ class PropostaList extends StatelessWidget {
 
 class _PropostaItem extends StatelessWidget {
   final Proposta _proposta;
-
   _PropostaItem(this._proposta);
 
   @override
@@ -75,7 +83,11 @@ class _PropostaItem extends StatelessWidget {
       title: _proposta.nomeProjeto,
       subtitle: _proposta.instituicao.nome,
       press: () {
-        Navigator.pushNamed(context, DetalhesPropostaScreen.routeName);
+        Navigator.pushNamed(
+            context,
+            DetalhesPropostaScreen.routeName,
+            arguments: _proposta.id
+        );
       },
     );
   }
