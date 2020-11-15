@@ -9,7 +9,9 @@ import 'package:http/http.dart' as http;
 class PropostaRestClient extends BaseRestClient {
   Future<Proposta> find(int id) async {
     final response = await http.get(
-        "${BaseRestClient.REST_WEBSERVICE_URL}/${BaseRestClient.REST_PROPOSTA_URL}/$id");
+        "${BaseRestClient.REST_WEBSERVICE_URL}${BaseRestClient.REST_PROPOSTA_URL}$id",
+        headers: {HttpHeaders.authorizationHeader: BaseRestClient.authToken},
+    );
 
     if (response.statusCode == 200) {
       return Proposta.fromJson(jsonDecode(response.body));
