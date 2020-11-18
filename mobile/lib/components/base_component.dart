@@ -26,7 +26,11 @@ class BaseComponent extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              child: Center(child: Text('Bem-vindo(a) ao Portal CBH-BS!')),
+              child: Center(
+                  child: Text(
+                'Bem-vindo(a) ao\n Portal CBH-BS!',
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              )),
               decoration: BoxDecoration(
                 color: primaryColor,
                 borderRadius: BorderRadius.only(
@@ -37,7 +41,19 @@ class BaseComponent extends StatelessWidget {
             ListTile(
               title: Text('Propostas'),
               onTap: () {
-                Navigator.pushNamed(context, PropostaScreen.routeName);
+                final destination = PropostaScreen.routeName;
+                bool isDestinationSameAsCurrent = false;
+
+                Navigator.popUntil(context, (route) {
+                  if (route.settings.name == destination) {
+                    isDestinationSameAsCurrent = true;
+                  }
+                  return true;
+                });
+
+                if (!isDestinationSameAsCurrent) {
+                  Navigator.pushNamed(context, destination);
+                }
               },
             ),
             ListTile(
