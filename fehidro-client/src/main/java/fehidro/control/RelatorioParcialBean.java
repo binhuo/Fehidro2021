@@ -17,8 +17,8 @@ import fehidro.model.Relatorio;
 import fehidro.model.SubPDC;
 import fehidro.rest.client.AvaliacaoRESTClient;
 import fehidro.rest.client.PropostaRESTClient;
-import fehidro.rest.client.RelatorioRESTClient;
 import fehidro.rest.client.SubPDCRESTClient;
+//import fehidro.rest.client.RelatorioRESTClient;
 
 //TODO: Renomear de Parcial para SubPDC
 @ManagedBean(name="relatorioParcial")
@@ -31,7 +31,7 @@ public class RelatorioParcialBean implements Serializable {
 	private SubPDCRESTClient restSubpdc;
 	private List<SelectItem> subPdcs;
 	private SubPDC subPdc;
-	private RelatorioRESTClient restRelatorio; //Para geracao de arquivo
+	//private RelatorioRESTClient restRelatorio; //Para geracao de relatorio
 	
 	public Relatorio getRelatorio() {
 		return relatorio;
@@ -42,7 +42,7 @@ public class RelatorioParcialBean implements Serializable {
 	}
 
 	public RelatorioParcialBean() {
-		RelatorioRESTClient r = new RelatorioRESTClient();
+		//RelatorioRESTClient r = new RelatorioRESTClient();
 		relatorio = new Relatorio();
 		rest  = new AvaliacaoRESTClient();
 		this.restSubpdc = new SubPDCRESTClient();
@@ -89,37 +89,36 @@ public class RelatorioParcialBean implements Serializable {
 		this.subPdc = subPdc;
 	}
 	
-	public void downloadXlsxFinal(ActionEvent e) {
-		
-		
-		System.out.println("geracao xlsx final 1");
-		
-		Object[] objectArray = this.relatorio.getItensRelatorio().toArray();
-		int length = objectArray.length;
-	    ItemRelatorio [] itensRelatorio = new ItemRelatorio[length];
-	      for(int i =0; i < length; i++) {
-	    	  itensRelatorio[i] = (ItemRelatorio) objectArray[i];
-	      }
-		
-		restRelatorio.relatorioXLSXFinal(itensRelatorio);
-		
-		System.out.println("geracao xlsx final 2");
-		
-	}
-	
-	public void downloadXlsxSubPdc() {
-		RelatorioRESTClient r = new RelatorioRESTClient();
-		
-		Object[] objectArray = this.relatorio.getItensRelatorio().toArray();
-		int length = objectArray.length;
-	    ItemRelatorio [] itensRelatorio = new ItemRelatorio[length];
-	      for(int i =0; i < length; i++) {
-	    	  itensRelatorio[i] = (ItemRelatorio) objectArray[i];
-	      }
-		
-		r.relatorioXLSXSubPdc(itensRelatorio);
-		
-	}
+//	public void downloadXlsxFinal(ActionEvent e) {
+//		
+//		System.out.println("geracao xlsx final 1");
+//		
+//		Object[] objectArray = this.relatorio.getItensRelatorio().toArray();
+//		int length = objectArray.length;
+//	    ItemRelatorio [] itensRelatorio = new ItemRelatorio[length];
+//	      for(int i =0; i < length; i++) {
+//	    	  itensRelatorio[i] = (ItemRelatorio) objectArray[i];
+//	      }
+//		
+//		restRelatorio.relatorioXLSXFinal(itensRelatorio);
+//		
+//		System.out.println("geracao xlsx final 2");
+//		
+//	}
+//	
+//	public void downloadXlsxSubPdc() {
+//		RelatorioRESTClient r = new RelatorioRESTClient();
+//		
+//		Object[] objectArray = this.relatorio.getItensRelatorio().toArray();
+//		int length = objectArray.length;
+//	    ItemRelatorio [] itensRelatorio = new ItemRelatorio[length];
+//	      for(int i =0; i < length; i++) {
+//	    	  itensRelatorio[i] = (ItemRelatorio) objectArray[i];
+//	      }
+//		
+//		r.relatorioXLSXSubPdc(itensRelatorio);
+//		
+//	}
 	
 	
 }

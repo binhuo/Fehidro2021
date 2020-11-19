@@ -57,7 +57,6 @@ public class ItemRelatorio {
 	 * @return
 	 */
 	private void desclassificar() {
-		System.out.println("deslcasificado");
 		this.desclassificado = true;
 	}
 	
@@ -102,13 +101,11 @@ public class ItemRelatorio {
 		//--- DESCLASSIFICACAO ---
 		//Desclassificacao automatica por subcriteiro
 		if(a.getNota().isDesclassificavel()) {
-			System.out.println("desclassifcacao automatica");
 			this.desclassificar();
 		}
 		
 		//Desclassificacao por nota total < 120
 		if(this.soma < 120) {
-			System.out.println("this.soma = " + this.soma);
 			this.desclassificar();
 		}
 		
