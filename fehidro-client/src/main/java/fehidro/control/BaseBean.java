@@ -16,6 +16,7 @@ public class BaseBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private Usuario usuarioLogado = SessionContext.getInstance().usuarioLogado();
+	private String nomeUsuario = usuarioLogado.getNome();
 	private boolean isSecExecutiva = usuarioLogado.getPerfilAcesso() == CodigoPerfilAcessoEnum.SecretariaExecutiva.getCodigo();
 	private boolean isAvaliadorCtpg = usuarioLogado.getPerfilAcesso() == CodigoPerfilAcessoEnum.AvaliadorCtpg.getCodigo();
 	
@@ -31,7 +32,8 @@ public class BaseBean implements Serializable {
 	public boolean getIsAvaliadorCtpg() {
 		return isAvaliadorCtpg;
 	}
-
 	
-	
+	public String getNomeUsuario() {
+		return this.nomeUsuario;
+	}
 }

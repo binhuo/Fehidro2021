@@ -9,6 +9,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import fehidro.exception.CpfJaCadastradoException;
 import fehidro.model.CTPG;
 
 public class CTPGRESTClient extends BaseRESTClient implements RESTClientInterface<CTPG> {
@@ -38,16 +39,22 @@ public class CTPGRESTClient extends BaseRESTClient implements RESTClientInterfac
 	}
 
 	@Override
-	public CTPG create(CTPG obj) {
-		CTPG usuario = ClientBuilder.newClient().
+	public CTPG create(CTPG obj) throws CpfJaCadastradoException {
+		Response response = ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_CTPG_URL).
 				queryParam("usuario", obj).
 				request(MediaType.APPLICATION_JSON).
 				header(HttpHeaders.AUTHORIZATION, authToken).
-				post(Entity.entity(obj, MediaType.APPLICATION_JSON)).
+				post(Entity.entity(obj, MediaType.APPLICATION_JSON));
+		
+		if (response.getStatus() == 400) {
+			throw new CpfJaCadastradoException("CPF já cadastrado!");
+		} else {
+			CTPG usuario = response.
 				readEntity(CTPG.class);	
 		
-		return usuario;
+			return usuario;
+		}
 	}
 
 	@Override

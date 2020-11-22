@@ -11,7 +11,8 @@
 			<h:inputHidden value="Usuario" id="menuAtual"/>
 			<h:form id="formUsuario">
 			<h:inputHidden value="#{usuarioBean.usuario.id}" id="usuarioId"/>
-			
+			<h:message id="msgCadastroUsuario" for="msgCadastroUsuario" 
+							styleClass="erro" />
 				<h:panelGroup layout="block" class="form-group row">
 					<h:panelGroup layout="block" class="col">
 						<h:outputLabel for="txtNome" value="Nome" />
@@ -47,7 +48,8 @@
 						<h:inputText id="txtCPF" value="#{usuarioBean.usuario.CPF}"
 							class="form-control numeric" 
 							required="true" requiredMessage="Informe o CPF!" maxlength="11"
-							validator="#{usuarioBean.validaCPF}">
+							validator="#{usuarioBean.validaCPF}"
+							disabled="#{usuarioBean.usuario.id > 0}">
 							<f:passThroughAttribute name="placeholder" value="CPF" />
 						</h:inputText>						
 						<h:message for="txtCPF" styleClass="erro" />

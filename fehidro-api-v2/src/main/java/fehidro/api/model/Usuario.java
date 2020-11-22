@@ -9,6 +9,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import fehidro.api.model.AbstractEntity;
+import fehidro.api.repository.UsuarioRepository;
 import fehidro.model.dto.usuario.CadastroUsuarioDTO;
 
 @Table(name = "tb_usuario")
@@ -104,21 +105,7 @@ public class Usuario extends AbstractEntity {
 	}
 
 	public void setLogin() {
-//		char space = 32;
-//		String nomeUsuario = this.nome.replace(space, '.').toLowerCase();
-//		String sobrenomeUsuario = this.sobrenome.replace(space, '.').toLowerCase();
-//		String login = String.join(".", nomeUsuario, sobrenomeUsuario);
-
-		/**
-		 * Se existir um usuario com o mesmo login que outro usuario adicionar um valor
-		 * inteiro no final
-		 */
-
-		String[] nomes = this.nome.toLowerCase().split(" ");
-		String[] sobrenomes = this.sobrenome.toLowerCase().split(" ");
-		String login = nomes[0] + "." + sobrenomes[sobrenomes.length - 1];
-		
-		this.login = login;
+		this.login = this.CPF;
 	}
 
 	public String getSenha() {
@@ -157,6 +144,10 @@ public class Usuario extends AbstractEntity {
 		this.perfilAcesso = perfilAcesso;
 	}
 
+	
+	public boolean CpfJaCadastrado(UsuarioRepository _usuarioRepository) {
+		return _usuarioRepository.findByCPF(this.CPF).isPresent();
+	}
 	
 
 	@Override

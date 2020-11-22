@@ -19,6 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import fehidro.api.model.SecretariaExecutiva;
 import fehidro.api.repository.SecretariaExecutivaRepository;
+import fehidro.api.repository.UsuarioRepository;
 import fehidro.api.util.email.EmailService;
 import fehidro.api.util.password.Password;
 import fehidro.model.dto.secretariaExecutiva.CadastroSecretariaExecutivaDTO;
@@ -30,6 +31,9 @@ public class SecretariaExecutivaController {
 
 	@Autowired
 	private SecretariaExecutivaRepository _secretariaExecRepository;
+	
+	@Autowired
+	private UsuarioRepository _usuarioRepository;
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -53,14 +57,20 @@ public class SecretariaExecutivaController {
 	public ResponseEntity<CadastroSecretariaExecutivaDTO> add(@RequestBody CadastroSecretariaExecutivaDTO user, UriComponentsBuilder uriBuilder) {
 		try {
 			SecretariaExecutiva novo = new SecretariaExecutiva(user);
-			String senha = Password.generateRandomPassword(10);
-			novo.setLogin();
-			novo.setSenha(passwordEncoder.encode(senha));
-			SecretariaExecutiva usuario = _secretariaExecRepository.save(novo);
-			CadastroSecretariaExecutivaDTO cadastrado = new CadastroSecretariaExecutivaDTO(usuario);
-			_emailService.sendMailUserSignUp(cadastrado, senha);
-			URI uri = uriBuilder.path("/{id}").buildAndExpand(cadastrado.getId()).toUri();
-			return ResponseEntity.created(uri).body(cadastrado);
+			
+			if (novo.CpfJaCadastrado(_usuarioRepository)) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+			} else {
+				String senha = Password.generateRandomPassword(10);
+				novo.setLogin();
+				novo.setSenha(passwordEncoder.encode(senha));
+				SecretariaExecutiva usuario = _secretariaExecRepository.save(novo);
+				CadastroSecretariaExecutivaDTO cadastrado = new CadastroSecretariaExecutivaDTO(usuario);
+				_emailService.sendMailUserSignUp(cadastrado, senha);
+				URI uri = uriBuilder.path("/{id}").buildAndExpand(cadastrado.getId()).toUri();
+				return ResponseEntity.created(uri).body(cadastrado);
+			}
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

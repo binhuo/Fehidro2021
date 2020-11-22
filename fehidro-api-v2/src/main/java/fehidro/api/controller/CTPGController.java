@@ -18,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import fehidro.api.model.CTPG;
 import fehidro.api.repository.CTPGRepository;
+import fehidro.api.repository.UsuarioRepository;
 import fehidro.api.util.email.EmailService;
 import fehidro.api.util.password.Password;
 import fehidro.model.dto.ctpg.CadastroCtpgDTO;
@@ -29,10 +30,13 @@ public class CTPGController {
 
 	@Autowired
 	private CTPGRepository _ctpgRepository;
-	
+
+	@Autowired
+	private UsuarioRepository _usuarioRepository;
+
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
-	
+
 	@Autowired 
 	private EmailService _emailService;
 
@@ -52,15 +56,19 @@ public class CTPGController {
 	public ResponseEntity<CadastroCtpgDTO> add(@RequestBody CadastroCtpgDTO user, UriComponentsBuilder uriBuilder) {
 		try {
 			CTPG novo = new CTPG(user);
-			String senha = Password.generateRandomPassword(10);
 
-			novo.setLogin();
-			novo.setSenha(passwordEncoder.encode(senha));
-			CTPG usuario = _ctpgRepository.save(novo);
-			CadastroCtpgDTO cadastrado = new CadastroCtpgDTO(usuario);			
-			_emailService.sendMailUserSignUp(cadastrado, senha);
-			URI uri = uriBuilder.path("/{id}").buildAndExpand(usuario.getId()).toUri();
-			return ResponseEntity.created(uri).body(cadastrado);
+			if (novo.CpfJaCadastrado(_usuarioRepository)) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+			} else {
+				String senha = Password.generateRandomPassword(10);
+				novo.setLogin();
+				novo.setSenha(passwordEncoder.encode(senha));
+				CTPG usuario = _ctpgRepository.save(novo);
+				CadastroCtpgDTO cadastrado = new CadastroCtpgDTO(usuario);			
+				_emailService.sendMailUserSignUp(cadastrado, senha);
+				URI uri = uriBuilder.path("/{id}").buildAndExpand(usuario.getId()).toUri();
+				return ResponseEntity.created(uri).body(cadastrado);
+			}
 		} catch(Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -82,7 +90,7 @@ public class CTPGController {
 			} 
 			CTPG cadastrado =  _ctpgRepository.save(new CTPG(user));
 			return ResponseEntity.ok(new CadastroCtpgDTO(cadastrado));
-			
+
 		} catch(Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}

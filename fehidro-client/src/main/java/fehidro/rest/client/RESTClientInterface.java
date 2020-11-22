@@ -21,8 +21,8 @@ public interface RESTClientInterface<T> {
 
     public List<T> findAll();
     public T find(Long id);
-    public T create(T obj);
-    public T edit(T obj);
+    public T create(T obj) throws Exception;
+    public T edit(T obj) throws Exception;
     public boolean delete(Long id);        
 }
 
