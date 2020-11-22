@@ -133,6 +133,10 @@ public class CriterioAvaliacaoBean implements Serializable {
 
 		c.getSubcriterios().add(novoSubcriterio);
 		novoSubcriterio.setPontuacoes(new ArrayList<Pontuacao>());
+		
+		//Adiciona 1 pontuacao pra nao ficar sem
+		novoSubcriterio.getPontuacoes().add(new Pontuacao());
+		
 	}
 
 	public void addPontuacaoSubcriterio(AjaxBehaviorEvent event) {
