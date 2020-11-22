@@ -6,15 +6,19 @@ class SubPdc {
   SubPdc({this.id, this.numero, this.titulo});
 
   factory SubPdc.fromJson(Map<String, dynamic> json) {
-    return SubPdc(
+    if (json != null) {
+      return SubPdc(
         id: json['id'],
         numero: json['numero'],
         titulo: json['titulo'],
-    );
+      );
+    }
+
+    return null;
   }
 
   @override
-  String toString(){
+  String toString() {
     return 'SubPdc #${this.id}: ${this.numero}.${this.titulo}';
   }
 }

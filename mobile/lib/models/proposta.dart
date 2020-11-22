@@ -18,16 +18,20 @@ class Proposta {
       this.tiposProposta});
 
   factory Proposta.fromJson(Map<String, dynamic> json) {
-    var tiposProposta = (json['tiposProposta'])
-        .map<TipoProposta>((item) => TipoProposta.fromJson(item))
-        .toList();
+    if (json != null) {
+      var tiposProposta = (json['tiposProposta'])
+          .map<TipoProposta>((item) => TipoProposta.fromJson(item))
+          .toList();
 
-    return Proposta(
-        id: json['id'],
-        nomeProjeto: json['nomeProjeto'],
-        instituicao: Instituicao.fromJson(json['instituicao']),
-        subPdc: SubPdc.fromJson(json['subPDC']),
-        tiposProposta: tiposProposta);
+      return Proposta(
+          id: json['id'],
+          nomeProjeto: json['nomeProjeto'],
+          instituicao: Instituicao.fromJson(json['instituicao']),
+          subPdc: SubPdc.fromJson(json['subPDC']),
+          tiposProposta: tiposProposta);
+    }
+
+    return null;
   }
 
   @override

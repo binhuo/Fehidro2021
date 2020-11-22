@@ -70,7 +70,7 @@ class _DetalhePropostaBody extends State<DetalhePropostaBody> {
         TextEditingController(text: proposta.instituicao.nome);
 
     TextEditingController _subPdcController =
-        TextEditingController(text: proposta.subPdc.titulo);
+        TextEditingController(text: proposta.subPdc != null ? proposta.subPdc.titulo : "Não informado");
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../constants.dart';
 
-class SearchBox extends StatelessWidget {
-  const SearchBox({
+class PropostaHeader extends StatelessWidget {
+  const PropostaHeader({
     Key key,
     @required this.size,
   }) : super(key: key);
