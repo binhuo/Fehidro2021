@@ -6,11 +6,15 @@ class Instituicao {
   Instituicao({this.id, this.nome, this.tipo});
 
   factory Instituicao.fromJson(Map<String, dynamic> json) {
-    return Instituicao(
-      id: json['id'],
-      nome: json['nome'],
-      tipo: json['tipo'],
-    );
+    if (json != null) {
+      return Instituicao(
+        id: json['id'],
+        nome: json['nome'],
+        tipo: json['tipo'],
+      );
+    }
+
+    return null;
   }
 
   @override

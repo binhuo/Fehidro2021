@@ -28,7 +28,7 @@
                	<h:form id="formLogin">
                   <h:panelGroup layout="block" class="form-group">
                      <h:outputLabel for="txtLogin" value="Usuário"/>
-                      <h:inputText id="txtLogin" value="#{loginBean.usuario.login}" class="form-control" required="true"  requiredMessage="Informe o login!">
+                      <h:inputText id="txtLogin" value="#{loginBean.usuario.login}" class="form-control numeric" required="true"  requiredMessage="Informe o login!">
                       	<f:passThroughAttribute name="placeholder" value="Usuário"/>
                       </h:inputText> 
 					<h:message for="txtLogin" styleClass="erro"/>
@@ -46,10 +46,11 @@
 	                  </h:commandButton>
                   </h:panelGroup>
 					<h:panelGroup layout="block" class="form-group">
-						<h:message id="msgLogin" for="msgLogin"
-							styleClass="erro" />
+						<h:message id="msgLogin" for="msgLogin" styleClass="erro" />
 					</h:panelGroup>
 				</h:form>
+				<h:outputScript library="webjars" name="jquery/3.1.1/jquery.js" target="head" />
+				<h:outputScript library="js" name="shared/site.js" target="head" />
             </div>
          </div>
 	</div>

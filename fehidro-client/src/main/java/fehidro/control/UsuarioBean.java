@@ -14,6 +14,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.validator.ValidatorException;
 
+import fehidro.exception.CpfJaCadastradoException;
 import fehidro.model.CTPG;
 import fehidro.model.Instituicao;
 import fehidro.model.PerfilAcesso;
@@ -88,11 +89,11 @@ public class UsuarioBean implements Serializable {
 			map(usuario, secretaria);
 			if (secretaria.getId() == null)
 			{
-				this.restSecretaria.create(secretaria);	
+				return salvarSecretariaExecutiva(true);		
 			}
 			else
 			{
-				this.restSecretaria.edit(secretaria);
+				return salvarSecretariaExecutiva(false);		
 			}
 		} 
 		else 
@@ -101,16 +102,13 @@ public class UsuarioBean implements Serializable {
 			map(usuario, ctpg);
 			if (ctpg.getId() == null)
 			{
-				this.restCTPG.create(ctpg);
+				return salvarAvaliadorCTPG(true);
 			}
 			else
 			{
-				this.restCTPG.edit(ctpg);
+				return salvarAvaliadorCTPG(false);
 			}
 		}
-		
-		startView(true);
-		return null;		
 	}
 
 	public String editar() 
@@ -172,6 +170,39 @@ public class UsuarioBean implements Serializable {
 		this.setPerfisAcesso();
 		this.setInstituicoes();
 		this.setTiposAvaliadores();
+	}
+	
+	private String salvarSecretariaExecutiva(boolean novo) {
+		try {
+			if (novo)
+				this.restSecretaria.create(secretaria);
+			else 
+				this.restSecretaria.edit(secretaria);
+			return refresh();				
+		} catch (CpfJaCadastradoException e) {
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage("formUsuario:msgCadastroUsuario", new FacesMessage("Erro: " + e.getMessage()));
+			return null;
+		}
+	}
+	
+	private String salvarAvaliadorCTPG(boolean novo) {
+		try {
+			if (novo)
+				this.restCTPG.create(ctpg);
+			else 
+				this.restCTPG.edit(ctpg);
+			return refresh();			
+		} catch (CpfJaCadastradoException e) {
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage("formUsuario:msgCadastroUsuario", new FacesMessage("Erro: " + e.getMessage()));
+			return null;
+		}
+	}
+	
+	private String refresh() {
+		startView(true);
+		return null;
 	}
 	
 	private void map(Usuario u, CTPG c) 

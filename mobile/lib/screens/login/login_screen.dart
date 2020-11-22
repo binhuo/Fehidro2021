@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../size_config.dart';
-import 'components/body.dart';
+import 'components/login_body.dart';
 
 class LoginScreen extends StatelessWidget {
   static String routeName = "/login";

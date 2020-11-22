@@ -9,6 +9,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import fehidro.exception.CpfJaCadastradoException;
 import fehidro.model.SecretariaExecutiva;
 
 public class SecretariaExecutivaRESTClient extends BaseRESTClient implements RESTClientInterface<SecretariaExecutiva>{
@@ -38,17 +39,23 @@ public class SecretariaExecutivaRESTClient extends BaseRESTClient implements RES
 	}
 
 	@Override
-	public SecretariaExecutiva create(SecretariaExecutiva obj) {
-		SecretariaExecutiva usuario = 
-				ClientBuilder.newClient().
+	public SecretariaExecutiva create(SecretariaExecutiva obj) throws CpfJaCadastradoException {
+		Response response = ClientBuilder.newClient().
 				target(REST_WEBSERVICE_URL + REST_SECRETARIA_URL).
 				queryParam("usuario", obj).
 				request(MediaType.APPLICATION_JSON).
 				header(HttpHeaders.AUTHORIZATION, authToken).
-				post(Entity.entity(obj, MediaType.APPLICATION_JSON)).
-				readEntity(SecretariaExecutiva.class);	
+				post(Entity.entity(obj, MediaType.APPLICATION_JSON));
 		
-		return usuario;
+		//CPF já cadastrado
+		if (response.getStatus() == 400) {
+			throw new CpfJaCadastradoException("CPF já cadastrado!");
+		} else {
+			SecretariaExecutiva usuario = 
+					response.
+					readEntity(SecretariaExecutiva.class);	
+			return usuario;		
+		}		
 	}
 
 	@Override

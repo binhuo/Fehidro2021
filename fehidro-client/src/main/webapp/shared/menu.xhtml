@@ -18,7 +18,7 @@
 		</div>
 
 		<ul id="lstMenus" class="list-unstyled components">
-			<p>Bem-vindo(a)!</p>
+			<p><h:outputText value="Bem-vindo(a), #{baseBean.nomeUsuario}!"/></p>
 			<li id="menuDeliberacao">
 				<h:outputLink value="../deliberacao/index.xhtml" rendered="#{baseBean.isSecExecutiva}">Deliberações</h:outputLink>
 			</li>
