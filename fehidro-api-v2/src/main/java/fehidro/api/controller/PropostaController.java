@@ -68,8 +68,19 @@ public class PropostaController {
 	@ApiOperation(value = "Atualiza uma proposta")
 	@PutMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<Proposta> update(@RequestBody Proposta proposta) {
-		Proposta cadastrado =  _propostaRepository.save(proposta);
-		return ResponseEntity.ok(cadastrado);
+		Optional<Proposta> propostaBase = _propostaRepository.findById(proposta.getId());
+		
+		if(propostaBase.isPresent()) {
+			Proposta base = propostaBase.get();
+			proposta.setInstituicao(base.getInstituicao());
+			proposta.setSubPDC(base.getSubPDC());
+			proposta.setTiposProposta(base.getTiposProposta());
+			
+			Proposta cadastrado =  _propostaRepository.save(proposta);
+			return ResponseEntity.ok(cadastrado);
+		}
+		
+		return ResponseEntity.notFound().build();
 	}
 
 	@ApiOperation(value = "Deleta uma proposta pelo seu id")
