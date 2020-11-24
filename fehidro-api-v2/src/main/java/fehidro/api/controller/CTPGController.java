@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import fehidro.api.model.CTPG;
+import fehidro.api.model.Instituicao;
 import fehidro.api.repository.CTPGRepository;
+import fehidro.api.repository.InstituicaoRepository;
 import fehidro.api.repository.UsuarioRepository;
 import fehidro.api.util.email.EmailService;
 import fehidro.api.util.password.Password;
@@ -33,6 +35,9 @@ public class CTPGController {
 
 	@Autowired
 	private UsuarioRepository _usuarioRepository;
+	
+	@Autowired
+	private InstituicaoRepository _instituicaoRepository;
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -60,6 +65,11 @@ public class CTPGController {
 			if (novo.CpfJaCadastrado(_usuarioRepository)) {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 			} else {
+				Optional<Instituicao> instituicaoBase = _instituicaoRepository.findById(novo.getInstituicao().getId());
+				if (instituicaoBase.isPresent()) {
+					novo.setInstituicao(instituicaoBase.get());	
+				}
+				
 				String senha = Password.generateRandomPassword(10);
 				novo.setLogin();
 				novo.setSenha(passwordEncoder.encode(senha));
@@ -87,8 +97,16 @@ public class CTPGController {
 				if(user.getSenha() != null && !userBase.getSenha().equals(user.getSenha())) {
 					user.setSenha(passwordEncoder.encode(user.getSenha()));
 				}
-			} 
-			CTPG cadastrado =  _ctpgRepository.save(new CTPG(user));
+			}
+			
+			CTPG usuarioEdicao = new CTPG(user); 
+			
+			Optional<Instituicao> instituicaoBase = _instituicaoRepository.findById(usuarioEdicao.getInstituicao().getId());
+			if (instituicaoBase.isPresent()) {
+				usuarioEdicao.setInstituicao(instituicaoBase.get());	
+			}
+			
+			CTPG cadastrado =  _ctpgRepository.save(usuarioEdicao);
 			return ResponseEntity.ok(new CadastroCtpgDTO(cadastrado));
 
 		} catch(Exception e) {

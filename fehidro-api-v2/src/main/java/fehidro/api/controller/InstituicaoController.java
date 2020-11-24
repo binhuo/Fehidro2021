@@ -54,7 +54,15 @@ public class InstituicaoController {
 	@ApiOperation(value = "Atualiza uma instituição")
 	@PutMapping(produces="application/json", consumes="application/json")
 	public ResponseEntity<Instituicao> update(@RequestBody Instituicao instituicao) {
-		Instituicao cadastrado =  _instituicaoRepository.save(instituicao);
-		return ResponseEntity.ok(cadastrado);
+		Optional<Instituicao> instituicaoBase = _instituicaoRepository.findById(instituicao.getId());
+		if(instituicaoBase.isPresent()) {
+			Instituicao base = instituicaoBase.get();
+			instituicao.setPropostas(base.getPropostas());
+			
+			Instituicao cadastrado =  _instituicaoRepository.save(instituicao);
+			return ResponseEntity.ok(cadastrado);
+		}
+		
+		return ResponseEntity.notFound().build();
 	}
 }
