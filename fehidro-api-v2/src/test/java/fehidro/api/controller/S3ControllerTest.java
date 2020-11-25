@@ -24,7 +24,6 @@ public class S3ControllerTest {
 	private MockMvc mockMvc;
 
 	@Test
-	@Ignore
 	public void uploadOk() throws Exception {
 		File fileTest = new File("C:\\Users\\FCamara\\Documents\\GitHub\\fehidro\\fehidro-api-v2\\src\\test\\java\\resources\\teste-1.pdf");
 		

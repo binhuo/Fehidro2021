@@ -23,8 +23,8 @@ public class LoginTest {
 
 	@Test
 	public void realizarLogin() {
-		driver.get("https://portalcbhbs.herokuapp.com/login/index.xhtml");
-		driver.findElement(By.id("formLogin:txtLogin")).sendKeys("vivian.teste1");
+		driver.get("http://localhost:8080/fehidro-client/login/index.xhtml");
+		driver.findElement(By.id("formLogin:txtLogin")).sendKeys("42387203690");
 		driver.findElement(By.id("formLogin:txtSenha")).sendKeys("unisantos123");
 		driver.findElement(By.id("formLogin:submitLogin")).click();
 	}
