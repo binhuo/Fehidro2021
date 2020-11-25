@@ -16,6 +16,21 @@ public class Relatorio  {
 	protected HashSet<Long> idsSubpdcs;
 	protected List<ItemRelatorio> classificacao;
 	
+	
+	public HashMap<Long, ItemRelatorio> getItensRelatorio() {
+		return itensRelatorio;
+	}
+	public HashSet<Long> getIdsPropostas() {
+		return idsPropostas;
+	}
+	public HashSet<Long> getIdsSubpdcs() {
+		return idsSubpdcs;
+	}
+	public List<ItemRelatorio> getClassificacao() {
+		return classificacao;
+	}
+	
+	
 	//////Construtores
 	public Relatorio()
 	{
@@ -78,7 +93,7 @@ public class Relatorio  {
 			
 	}
 	
-	public List<ItemRelatorio> getClassificacao() {
+	public List<ItemRelatorio> classificacao() {
 		return classificacao;
 	}
 	
@@ -144,7 +159,7 @@ public class Relatorio  {
 		}
 	}
 	
-	public LinkedList<ItemRelatorio> getItensRelatorio()
+	public LinkedList<ItemRelatorio> itensRelatorio()
 	{
 		return new LinkedList<ItemRelatorio>(this.itensRelatorio.values());
 	}
@@ -153,7 +168,7 @@ public class Relatorio  {
 	 * Retorna lista de ItemRelatorio com os itens de relatorio das propostas que foram classificadas
 	 * @return
 	 */
-	public LinkedList<ItemRelatorio> getItensRelatorioClassificado()
+	public LinkedList<ItemRelatorio> itensRelatorioClassificado()
 	{
 		LinkedList<ItemRelatorio> classificados = new LinkedList<ItemRelatorio>();
 		ItemRelatorio itemAtual;
@@ -178,7 +193,7 @@ public class Relatorio  {
 	 * Retorna lista de ItemRelatorio com os itens de relatorio das propostas que foram desclassificadas
 	 * @return LinkedList<ItemRelatorio>
 	 */
-	public LinkedList<ItemRelatorio> getItensRelatorioDesclassificado()
+	public LinkedList<ItemRelatorio> itensRelatorioDesclassificado()
 	{
 		LinkedList<ItemRelatorio> desclassificados = new LinkedList<ItemRelatorio>();
 		ItemRelatorio itemAtual;
