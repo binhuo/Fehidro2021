@@ -103,6 +103,7 @@ class _PropostaItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CardListItem(
+      id: _proposta.id,
       title: _proposta.nomeProjeto,
       subtitle: _proposta.instituicao.nome,
       press: () {
