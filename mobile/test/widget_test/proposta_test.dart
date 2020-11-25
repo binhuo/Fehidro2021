@@ -2,11 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mobile/components/card_list_item.dart';
 import 'package:mobile/constants.dart';
-import 'package:mobile/http/base_rest.dart';
-import 'package:mobile/main.dart';
+import 'package:mobile/http/proposta_rest.dart';
+import 'package:mobile/models/instituicao.dart';
+import 'package:mobile/models/proposta.dart';
+import 'package:mobile/models/subpdc.dart';
+import 'package:mobile/models/tipo_proposta.dart';
 import 'package:mobile/screens/proposta/proposta_screen.dart';
+import 'package:mockito/mockito.dart';
+
+import '../mocks/rest/proposta_rest_mock.dart';
+
+PropostaRestClient propostaRestClient;
+MockPropostaRest mockProposta;
 
 void main() {
+
+  setUp(() {
+    propostaRestClient = MockPropostaRest();
+
+    when(propostaRestClient.findAll())
+        .thenAnswer((_) => Future(() => mockProposta.mockListaPropostas()));
+  });
+
+
   testWidgets('Não encontra propostas - erro http 400 apenas nos testes', (WidgetTester tester) async {
 
     Widget testWidget = new MediaQuery(
