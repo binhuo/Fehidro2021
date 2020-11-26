@@ -17,17 +17,8 @@ public class Relatorio  {
 	protected List<ItemRelatorio> classificacao;
 	
 	
-	public HashMap<Long, ItemRelatorio> getItensRelatorio() {
-		return itensRelatorio;
-	}
-	public HashSet<Long> getIdsPropostas() {
-		return idsPropostas;
-	}
-	public HashSet<Long> getIdsSubpdcs() {
-		return idsSubpdcs;
-	}
-	public List<ItemRelatorio> getClassificacao() {
-		return classificacao;
+	public ArrayList<ItemRelatorio> getItensRelatorio() {
+		return new ArrayList<ItemRelatorio>(itensRelatorio.values());
 	}
 	
 	
