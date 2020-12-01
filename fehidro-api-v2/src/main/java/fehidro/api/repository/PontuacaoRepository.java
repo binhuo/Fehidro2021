@@ -12,7 +12,7 @@ import fehidro.api.model.SubcriterioAvaliacao;
 @Repository
 public interface PontuacaoRepository extends JpaRepository<Pontuacao, Long>{
 	
-	@Query(" select p from Pontuacao p order by p.pontos")
+	//@Query(" select p from Pontuacao p order by p.pontos")
 	public List<Pontuacao> findAllBySubcriterio(SubcriterioAvaliacao subcriterio );
 	
 }
