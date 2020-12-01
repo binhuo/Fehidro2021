@@ -230,12 +230,6 @@ public class AvaliacaoBean implements Serializable {
 	public void setPontuacoes() {
 		this.restPontuacao = new PontuacaoRESTClient();
 		
-		if(this.avaliacao.getSubcriterio() == null ) {
-			System.out.println("subcriterio eh null");
-		}else {
-			System.out.println("subcriteiro = " + this.avaliacao.getSubcriterio().getId());
-		}
-		
 		List<Pontuacao> pontuacaoBase = this.restPontuacao.findAllBySubcriterio(this.avaliacao.getSubcriterio());
 		List<SelectItem> pontuacoes = new ArrayList<>();
 
