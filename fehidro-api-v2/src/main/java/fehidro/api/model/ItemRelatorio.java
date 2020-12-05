@@ -57,7 +57,7 @@ public class ItemRelatorio {
 	 * @return
 	 */
 	private void desclassificar() {
-		System.out.println("deslcasificado");
+		//System.out.println("deslcasificado");
 		this.desclassificado = true;
 	}
 	

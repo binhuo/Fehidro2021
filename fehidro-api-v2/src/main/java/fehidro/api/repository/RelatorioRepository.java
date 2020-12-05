@@ -1,0 +1,38 @@
+//package fehidro.api.repository;
+//
+//import fehidro.api.model.Avaliacao;
+//import fehidro.api.model.CriterioAvaliacao;
+//import fehidro.api.model.Proposta;
+//import fehidro.api.model.Relatorio;
+//import fehidro.api.model.SubPDC;
+//import fehidro.api.model.SubcriterioAvaliacao;
+//import fehidro.api.model.Usuario;
+//
+//import java.util.List;
+//import java.util.Optional;
+//
+//import org.springframework.data.jpa.repository.JpaRepository;
+//import org.springframework.data.jpa.repository.Query;
+//import org.springframework.stereotype.Repository;
+//
+//@Repository
+//public interface RelatorioRepository extends JpaRepository<Relatorio, Long>{
+//	
+//	@Query("select a from Avaliacao a where a.avaliador =?1")
+//	public List<Avaliacao> findAllUsuario(Usuario usuario);
+//	
+//	@Query("select a from Avaliacao a where a.proposta = ?1 AND a.subcriterio in (select id from SubcriterioAvaliacao s where s.perfilAcesso = '1')")
+//	public List<Avaliacao> findAllAvaliacaoSubcriterioSecretaria(Proposta proposta);
+//	
+//	@Query("select a from Avaliacao a where a.proposta = ?1 and a.avaliador = ?2")
+//	public List<Avaliacao> findAllByAvaliadorProposta(Proposta proposta,Usuario avaliador);
+////	
+////	@Query("select a from Avaliacao a where a.proposta = ?1 and a.criterio = ?2")
+////	public List<Avaliacao> findAllByCriterioProposta(Proposta proposta,CriterioAvaliacao criterio);
+////	
+//	@Query("select a from Avaliacao a where a.proposta = ?1 and a.subcriterio = ?2")
+//	public List<Avaliacao> findAllBySubcriterioProposta(Proposta proposta,SubcriterioAvaliacao subcriterio);
+//	
+//	@Query("select a from Avaliacao a inner join Proposta p on a.proposta = p.id where p.subPDC = (select id from SubPDC s where s =?1)"  )
+//	public List<Avaliacao> findAllBySubPdc(SubPDC subpdc);
+//}
