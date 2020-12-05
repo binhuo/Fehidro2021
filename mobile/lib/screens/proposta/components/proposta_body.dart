@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/screens/proposta/components/search_box.dart';
+import 'package:mobile/screens/proposta/components/proposta_header.dart';
 
-import 'list.dart';
+import 'proposta_list.dart';
 
 class PropostaBody extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     //Obtém a altura e largura da tela atual tela
@@ -13,7 +14,7 @@ class PropostaBody extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          SearchBox(size: size),
+          PropostaHeader(size: size),
           PropostaList(size: size)
         ],
       ),

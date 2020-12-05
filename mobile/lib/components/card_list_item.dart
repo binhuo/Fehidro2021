@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 
 class CardListItem extends StatelessWidget {
+  final int id;
   final String title;
   final String subtitle;
   final Function press;
 
   const CardListItem({
     Key key,
+    this.id,
     this.title,
     this.subtitle,
     this.press,
@@ -52,6 +54,7 @@ class CardListItem extends StatelessWidget {
           ),
           Spacer(),
           IconButton(
+            key: Key("detalhe_proposta_$id"),
             icon: Icon(
               Icons.arrow_forward_ios,
               size: 18,

@@ -27,3 +27,9 @@ const String passInfo = "Informe a sua senha";
 const double defaultPadding = 20.0;
 
 const double defaultFontSize = 20;
+
+const keyListaPropostas = 'lstPropostas';
+const keyTxtUsernameLogin = 'txtUsernameLogin';
+const keyTxtPasswordLogin = 'txtPasswordLogin';
+const keyBtnLogin = 'btnLogin';
+

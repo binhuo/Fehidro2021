@@ -5,10 +5,14 @@ class TipoProposta {
   TipoProposta({this.id, this.nome});
 
   factory TipoProposta.fromJson(Map<String, dynamic> json) {
-    return TipoProposta(
-      id: json['id'],
-      nome: json['nome'],
-    );
+    if (json != null) {
+      return TipoProposta(
+        id: json['id'],
+        nome: json['nome'],
+      );
+    }
+
+    return null;
   }
 
   @override

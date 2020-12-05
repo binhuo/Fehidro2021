@@ -39,7 +39,6 @@ class _SignFormState extends State<SignForm> {
 
   @override
   Widget build(BuildContext context) {
-    errors.clear();
     return Form(
       key: _formKey,
       child: Column(
@@ -51,7 +50,7 @@ class _SignFormState extends State<SignForm> {
           FormError(errors: errors),
           SizedBox(height: getProportionateScreenHeight(20)),
           DefaultButton(
-            key: Key('btnLogin'),
+            key: Key(keyBtnLogin),
             text: "Login",
             press: () {
               if (_formKey.currentState.validate()) {
@@ -61,6 +60,7 @@ class _SignFormState extends State<SignForm> {
                 final String login = _usernameController.text;
                 final String senha = _passwordController.text;
                 try {
+                  print('Init login');
                   _authRest.realizarLogin(login, senha).then((ok) {
                     if (ok)
                       Navigator.pushNamed(context, PropostaScreen.routeName);
@@ -83,7 +83,7 @@ class _SignFormState extends State<SignForm> {
 
   TextFormField buildPasswordFormField() {
     return TextFormField(
-      key: Key('txtPasswordLogin'),
+      key: Key(keyTxtPasswordLogin),
       controller: _passwordController,
       obscureText: true,
       onSaved: (newValue) => password = newValue,
@@ -111,9 +111,9 @@ class _SignFormState extends State<SignForm> {
 
   TextFormField buildUsernameFormField() {
     return TextFormField(
-      key: Key('txtUsernameLogin'),
+      key: Key(keyTxtUsernameLogin),
       controller: _usernameController,
-      keyboardType: TextInputType.text,
+      keyboardType: TextInputType.number,
       onSaved: (newValue) => username = newValue,
       onChanged: (value) {
         if (value.isNotEmpty) {
